@@ -28,12 +28,11 @@ import org.bitcoinj.core.TransactionConfidence.ConfidenceType;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
+import org.bitcoinj.core.TransactionWitness;
 import org.bitcoinj.crypto.KeyCrypter;
 import org.bitcoinj.crypto.KeyCrypterScrypt;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptException;
-import org.bitcoinj.signers.LocalTransactionSigner;
-import org.bitcoinj.signers.TransactionSigner;
 import org.bitcoinj.utils.ExchangeRate;
 import org.bitcoinj.utils.Fiat;
 import org.bitcoinj.wallet.Protos.Wallet.EncryptionType;
@@ -235,16 +234,6 @@ public class WalletProtobufSerializer {
             walletBuilder.addTags(tag);
         }
 
-        for (TransactionSigner signer : wallet.getTransactionSigners()) {
-            // do not serialize LocalTransactionSigner as it's being added implicitly
-            if (signer instanceof LocalTransactionSigner)
-                continue;
-            Protos.TransactionSigner.Builder protoSigner = Protos.TransactionSigner.newBuilder();
-            protoSigner.setClassName(signer.getClass().getName());
-            protoSigner.setData(ByteString.copyFrom(signer.serialize()));
-            walletBuilder.addTransactionSigners(protoSigner);
-        }
-
         // Populate the wallet version.
         walletBuilder.setVersion(wallet.getVersion());
 
@@ -287,6 +276,14 @@ public class WalletProtobufSerializer {
                 inputBuilder.setSequence((int) input.getSequenceNumber());
             if (input.getValue() != null)
                 inputBuilder.setValue(input.getValue().value);
+            if (input.hasWitness()) {
+                TransactionWitness witness = input.getWitness();
+                Protos.ScriptWitness.Builder witnessBuilder = Protos.ScriptWitness.newBuilder();
+                int pushCount = witness.getPushCount();
+                for (int i = 0; i < pushCount; i++)
+                    witnessBuilder.addData(ByteString.copyFrom(witness.getPush(i)));
+                inputBuilder.setWitness(witnessBuilder);
+            }
             txBuilder.addTransactionInput(inputBuilder);
         }
 
@@ -567,18 +564,6 @@ public class WalletProtobufSerializer {
             wallet.setTag(tag.getTag(), tag.getData());
         }
 
-        for (Protos.TransactionSigner signerProto : walletProto.getTransactionSignersList()) {
-            try {
-                Class signerClass = Class.forName(signerProto.getClassName());
-                TransactionSigner signer = (TransactionSigner)signerClass.newInstance();
-                signer.deserialize(signerProto.getData().toByteArray());
-                wallet.addTransactionSigner(signer);
-            } catch (Exception e) {
-                throw new UnreadableWalletException("Unable to deserialize TransactionSigner instance: " +
-                        signerProto.getClassName(), e);
-            }
-        }
-
         if (walletProto.hasVersion()) {
             wallet.setVersion(walletProto.getVersion());
         }
@@ -664,6 +649,15 @@ public class WalletProtobufSerializer {
             TransactionInput input = new TransactionInput(params, tx, scriptBytes, outpoint, value);
             if (inputProto.hasSequence())
                 input.setSequenceNumber(0xffffffffL & inputProto.getSequence());
+            if (inputProto.hasWitness()) {
+                Protos.ScriptWitness witnessProto = inputProto.getWitness();
+                if (witnessProto.getDataCount() > 0) {
+                    TransactionWitness witness = new TransactionWitness(witnessProto.getDataCount());
+                    for (int j = 0; j < witnessProto.getDataCount(); j++)
+                        witness.setPush(j, witnessProto.getData(j).toByteArray());
+                    input.setWitness(witness);
+                }
+            }
             tx.addInput(input);
         }
 

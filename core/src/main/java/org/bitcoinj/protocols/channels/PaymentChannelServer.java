@@ -17,24 +17,32 @@
 package org.bitcoinj.protocols.channels;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.util.concurrent.AsyncFunction;
-import org.bitcoinj.core.*;
-import org.bitcoinj.protocols.channels.PaymentChannelCloseException.CloseReason;
-import org.bitcoinj.utils.Threading;
-import org.bitcoinj.wallet.Wallet;
-
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
+
 import net.jcip.annotations.GuardedBy;
+
 import org.bitcoin.paymentchannel.Protos;
+import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.InsufficientMoneyException;
+import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.Transaction;
+import org.bitcoinj.core.TransactionBroadcaster;
+import org.bitcoinj.core.Utils;
+import org.bitcoinj.core.VerificationException;
+import org.bitcoinj.protocols.channels.PaymentChannelCloseException.CloseReason;
+import org.bitcoinj.utils.Threading;
+import org.bitcoinj.wallet.Wallet;
 import org.slf4j.LoggerFactory;
 import org.spongycastle.crypto.params.KeyParameter;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -553,14 +561,14 @@ public class PaymentChannelServer {
         // TODO: Strongly separate the lifecycle of the payment channel from the TCP connection in these classes.
         channelSettling = true;
         ListenableFuture<KeyParameter> keyFuture = conn.getUserKey();
-        ListenableFuture<Transaction> result;
+        ListenableFuture<Transaction> result = null;
         if (keyFuture != null) {
-            result = Futures.transformAsync(conn.getUserKey(), new AsyncFunction<KeyParameter, Transaction>() {
+            /*result = Futures.transformAsync(conn.getUserKey(), new AsyncFunction<KeyParameter, Transaction>() {
                 @Override
                 public ListenableFuture<Transaction> apply(KeyParameter userKey) throws Exception {
                     return state.close(userKey);
                 }
-            });
+            });*/
         } else {
             result = state.close();
         }
