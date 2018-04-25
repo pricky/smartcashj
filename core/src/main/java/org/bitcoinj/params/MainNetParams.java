@@ -37,7 +37,7 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         interval = INTERVAL;
         targetTimespan = TARGET_TIMESPAN;
         maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
-        dumpedPrivateKeyHeader = 128;
+        dumpedPrivateKeyHeader = 191;
         addressHeader = 0;
         p2shHeader = 5;
         segwitAddressHrp = "bc";
