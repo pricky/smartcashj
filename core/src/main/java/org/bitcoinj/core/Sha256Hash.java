@@ -18,7 +18,7 @@
 package org.bitcoinj.core;
 
 import com.google.common.io.ByteStreams;
-import com.google.common.primitives.Ints;
+import com.google.common.primitives.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,8 +28,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
-import fr.cryptohash.Keccak256;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -208,7 +206,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
      * @return the double-hash (in big-endian order)
      */
     public static byte[] hashTwice(byte[] input, int offset, int length) {
-        Keccak256 digest = new Keccak256();
+        MessageDigest digest = newDigest();
         digest.update(input, offset, length);
         return digest.digest(digest.digest());
     }
@@ -219,7 +217,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
      */
     public static byte[] hashTwice(byte[] input1, int offset1, int length1,
                                    byte[] input2, int offset2, int length2) {
-        Keccak256 digest = new Keccak256();
+        MessageDigest digest = newDigest();
         digest.update(input1, offset1, length1);
         digest.update(input2, offset2, length2);
         return digest.digest(digest.digest());
