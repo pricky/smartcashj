@@ -191,6 +191,89 @@ public class BIP38PrivateKey extends PrefixedChecksummedBytes {
         }
     }
 
+    /**
+     * Use this function to pass {N, r, p} params to scrypt if your app uses non standard bip38 scrypt params
+     */
+    public ECKey decryptWithParams(String passphrase, @Nullable int N,  @Nullable int r, @Nullable int p) throws BadPassphraseException {
+        N = (N == null ? 16384 : N);
+        r = (r == null ? 8 : r);
+        p = (p == null ? 8 : p);
+        String normalizedPassphrase = Normalizer.normalize(passphrase, Normalizer.Form.NFC);
+        ECKey key = ecMultiply ? decryptECWithParams(normalizedPassphrase) : decryptNoECWithParams(normalizedPassphrase);
+        Sha256Hash hash = Sha256Hash.twiceOf(LegacyAddress.fromKey(params, key).toString().getBytes(StandardCharsets.US_ASCII));
+        byte[] actualAddressHash = Arrays.copyOfRange(hash.getBytes(), 0, 4);
+        if (!Arrays.equals(actualAddressHash, addressHash))
+            throw new BadPassphraseException();
+        return key;
+    }
+
+    private ECKey decryptNoECWithParams(String normalizedPassphrase, int N, int r, int p) {
+        try {
+            byte[] derived = SCrypt.scrypt(normalizedPassphrase.getBytes(StandardCharsets.UTF_8), addressHash, N, r, p, 64);
+            byte[] key = Arrays.copyOfRange(derived, 32, 64);
+            SecretKeySpec keyspec = new SecretKeySpec(key, "AES");
+
+            DRMWorkaround.maybeDisableExportControls();
+            Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+
+            cipher.init(Cipher.DECRYPT_MODE, keyspec);
+            byte[] decrypted = cipher.doFinal(content, 0, 32);
+            for (int i = 0; i < 32; i++)
+                decrypted[i] ^= derived[i];
+            return ECKey.fromPrivate(decrypted, compressed);
+        } catch (GeneralSecurityException x) {
+            throw new RuntimeException(x);
+        }
+    }
+
+    private ECKey decryptECWithParams(String normalizedPassphrase, int N, int r, int p) {
+        try {
+            byte[] ownerEntropy = Arrays.copyOfRange(content, 0, 8);
+            byte[] ownerSalt = hasLotAndSequence ? Arrays.copyOfRange(ownerEntropy, 0, 4) : ownerEntropy;
+
+            byte[] passFactorBytes = SCrypt.scrypt(normalizedPassphrase.getBytes(StandardCharsets.UTF_8), ownerSalt, N, r, p, 32);
+            if (hasLotAndSequence) {
+                byte[] hashBytes = Bytes.concat(passFactorBytes, ownerEntropy);
+                checkState(hashBytes.length == 40);
+                passFactorBytes = Sha256Hash.hashTwice(hashBytes);
+            }
+            BigInteger passFactor = new BigInteger(1, passFactorBytes);
+            ECKey k = ECKey.fromPrivate(passFactor, true);
+
+            byte[] salt = Bytes.concat(addressHash, ownerEntropy);
+            checkState(salt.length == 12);
+            byte[] derived = SCrypt.scrypt(k.getPubKey(), salt, 1024, 1, 1, 64);
+            byte[] aeskey = Arrays.copyOfRange(derived, 32, 64);
+
+            SecretKeySpec keyspec = new SecretKeySpec(aeskey, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, keyspec);
+
+            byte[] encrypted2 = Arrays.copyOfRange(content, 16, 32);
+            byte[] decrypted2 = cipher.doFinal(encrypted2);
+            checkState(decrypted2.length == 16);
+            for (int i = 0; i < 16; i++)
+                decrypted2[i] ^= derived[i + 16];
+
+            byte[] encrypted1 = Bytes.concat(Arrays.copyOfRange(content, 8, 16), Arrays.copyOfRange(decrypted2, 0, 8));
+            byte[] decrypted1 = cipher.doFinal(encrypted1);
+            checkState(decrypted1.length == 16);
+            for (int i = 0; i < 16; i++)
+                decrypted1[i] ^= derived[i];
+
+            byte[] seed = Bytes.concat(decrypted1, Arrays.copyOfRange(decrypted2, 8, 16));
+            checkState(seed.length == 24);
+            BigInteger seedFactor = new BigInteger(1, Sha256Hash.hashTwice(seed));
+            checkState(passFactor.signum() >= 0);
+            checkState(seedFactor.signum() >= 0);
+            BigInteger priv = passFactor.multiply(seedFactor).mod(ECKey.CURVE.getN());
+
+            return ECKey.fromPrivate(priv, compressed);
+        } catch (GeneralSecurityException x) {
+            throw new RuntimeException(x);
+        }
+    }
+
     @Override
     public String toString() {
         return toBase58();
