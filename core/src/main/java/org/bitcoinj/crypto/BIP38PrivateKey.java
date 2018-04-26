@@ -192,7 +192,7 @@ public class BIP38PrivateKey extends PrefixedChecksummedBytes {
     }
 
     /**
-     * Use this function to pass {N, r, p} params for scrypt is your app uses non standard bip38 scrypt params
+     * Use this function to pass {N, r, p} params to scrypt if your app uses non standard bip38 scrypt params
      */
     public ECKey decryptWithParams(String passphrase, @Nullable int N,  @Nullable int r, @Nullable int p) throws BadPassphraseException {
         N = (N == null ? 16384 : N);
