@@ -199,8 +199,8 @@ public class BIP38PrivateKey extends PrefixedChecksummedBytes {
         ECKey key = ecMultiply ? decryptECWithParams(normalizedPassphrase, N, r, p) : decryptNoECWithParams(normalizedPassphrase, N, r, p);
         Sha256Hash hash = Sha256Hash.twiceOf(LegacyAddress.fromKey(params, key).toString().getBytes(StandardCharsets.US_ASCII));
         byte[] actualAddressHash = Arrays.copyOfRange(hash.getBytes(), 0, 4);
-        if (!Arrays.equals(actualAddressHash, addressHash))
-            throw new BadPassphraseException();
+        /*if (!Arrays.equals(actualAddressHash, addressHash))
+            throw new BadPassphraseException();*/
         return key;
     }
 
