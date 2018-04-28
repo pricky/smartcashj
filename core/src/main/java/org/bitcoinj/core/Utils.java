@@ -268,17 +268,6 @@ public class Utils {
     }
 
     /**
-     * Calculates RIPEMD160(input)
-     */
-    public static byte[] hash160(byte[] input) {
-        RIPEMD160Digest digest = new RIPEMD160Digest();
-        digest.update(input, 0, input.length);
-        byte[] out = new byte[20];
-        digest.doFinal(out, 0);
-        return out;
-    }
-
-    /**
      * MPI encoded numbers are produced by the OpenSSL BN_bn2mpi function. They consist of
      * a 4 byte big endian length field, followed by the stated number of bytes representing
      * the number in big endian format (with a sign bit).
