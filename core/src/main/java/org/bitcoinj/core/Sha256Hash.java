@@ -182,7 +182,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
      * @return the hash (in big-endian order)
      */
     public static byte[] hash(byte[] input, int offset, int length) {
-        Keccak256 digest = new Keccak256();
+        MessageDigest digest = newDigest();
         digest.update(input, offset, length);
         return digest.digest();
     }
