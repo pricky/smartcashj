@@ -1181,7 +1181,7 @@ public class Transaction extends ChildMessage {
             uint32ToByteStreamLE(0x000000ff & sigHashType, bos);
             // Note that this is NOT reversed to ensure it will be signed correctly. If it were to be printed out
             // however then we would expect that it is IS reversed.
-            Sha256Hash hash = Sha256Hash.hash(bos.toByteArray());
+            Sha256Hash hash = Sha256Hash.wrap(Sha256Hash.hash(bos.toByteArray()));
             bos.close();
 
             return hash;
