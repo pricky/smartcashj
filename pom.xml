@@ -21,12 +21,12 @@
 
   <groupId>org.smartcashj</groupId>
   <artifactId>smartcashj-parent</artifactId>
-  <version>0.15-SNAPSHOT</version>
+  <version>0.16.0</version>
   <packaging>pom</packaging>
 
   <modules>
     <module>core</module>
-    <module>examples</module>
+    <!--<module>examples</module>-->
     <module>tools</module>
     <module>wallettemplate</module>
   </modules>
@@ -43,7 +43,7 @@
     <url>scm:git:https://github.com/bitcoinj/bitcoinj</url>
   </scm>
 
-  <name>smartcashj Parent</name>
+  <name>smartcashj parent</name>
   <description>Provides the common configuration for the smartcashj modules</description>
   <url>http://www.smartcash.cc/</url>
 
@@ -268,7 +268,7 @@
                       <executions>
                           <execution>
                               <id>sign-artifacts</id>
-                              <phase>verify</phase>
+                              <phase>deploy</phase>
                               <goals>
                                   <goal>sign</goal>
                               </goals>

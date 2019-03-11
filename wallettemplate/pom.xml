@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.smartcashj</groupId>
         <artifactId>smartcashj-parent</artifactId>
-        <version>0.15-SNAPSHOT</version>
+        <version>0.16.0</version>
     </parent>
 
     <artifactId>wallettemplate</artifactId>
@@ -73,7 +73,7 @@
     <dependencies>
         <dependency>
             <groupId>org.smartcashj</groupId>
-            <artifactId>bitcoinj-core</artifactId>
+            <artifactId>smartcashj-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

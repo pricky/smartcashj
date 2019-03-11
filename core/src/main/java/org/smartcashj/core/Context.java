@@ -44,7 +44,7 @@ import static com.google.common.base.Preconditions.*;
 public class Context {
     private static final Logger log = LoggerFactory.getLogger(Context.class);
 
-    public static final int DEFAULTEVENT_HORIZON = 100;
+    public static final int DEFAULT_EVENT_HORIZON = 100;
 
     final private TxConfidenceTable confidenceTable;
     final private NetworkParameters params;
