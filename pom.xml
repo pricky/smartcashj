@@ -21,7 +21,7 @@
 
   <groupId>org.smartcashj</groupId>
   <artifactId>smartcashj-parent</artifactId>
-  <version>0.16.0</version>
+  <version>v0.16.0</version>
   <packaging>pom</packaging>
 
   <modules>
