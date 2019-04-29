@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.core.*;
+import cc.smartcash.smartcashj.core.*;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.net.InetAddress;

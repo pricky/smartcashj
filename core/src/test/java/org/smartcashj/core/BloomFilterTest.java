@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.wallet.KeyChainGroup;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.wallet.KeyChainGroup;
+import cc.smartcash.smartcashj.wallet.Wallet;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static org.junit.Assert.*;
 
 public class BloomFilterTest {

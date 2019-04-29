@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.tools;
+package cc.smartcash.smartcashj.tools;
 
 public enum NetworkEnum {
     MAIN,

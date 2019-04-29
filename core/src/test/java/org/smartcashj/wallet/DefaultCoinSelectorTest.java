@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package org.smartcashj.wallet;
+package cc.smartcash.smartcashj.wallet;
 
-import org.smartcashj.core.*;
-import org.smartcashj.params.*;
-import org.smartcashj.testing.*;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.params.*;
+import cc.smartcash.smartcashj.testing.*;
 import org.junit.*;
 
 import java.net.*;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.*;
-import static org.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
 import static org.junit.Assert.*;
 
 public class DefaultCoinSelectorTest extends TestWithWallet {

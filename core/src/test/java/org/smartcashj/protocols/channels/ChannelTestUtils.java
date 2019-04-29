@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.channels;
+package cc.smartcash.smartcashj.protocols.channels;
 
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.core.TransactionBroadcaster;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.core.TransactionBroadcaster;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import com.google.common.base.Objects;
 import com.google.common.util.concurrent.Futures;

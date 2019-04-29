@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.core.listeners.TransactionConfidenceEventListener;
-import org.smartcashj.core.TransactionConfidence.ConfidenceType;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.testing.FakeTxBuilder;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.WalletTransaction;
-import org.smartcashj.wallet.listeners.WalletChangeEventListener;
-import org.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
-import org.smartcashj.wallet.listeners.WalletReorganizeEventListener;
+import cc.smartcash.smartcashj.core.listeners.TransactionConfidenceEventListener;
+import cc.smartcash.smartcashj.core.TransactionConfidence.ConfidenceType;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.WalletTransaction;
+import cc.smartcash.smartcashj.wallet.listeners.WalletChangeEventListener;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
+import cc.smartcash.smartcashj.wallet.listeners.WalletReorganizeEventListener;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.junit.Assert.*;
 

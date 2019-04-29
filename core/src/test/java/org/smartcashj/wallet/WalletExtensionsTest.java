@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.smartcashj.wallet;
+package cc.smartcash.smartcashj.wallet;
 
-import org.smartcashj.testing.FooWalletExtension;
-import org.smartcashj.testing.TestWithWallet;
+import cc.smartcash.smartcashj.testing.FooWalletExtension;
+import cc.smartcash.smartcashj.testing.TestWithWallet;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.smartcashj.utils;
+package cc.smartcash.smartcashj.utils;
 
-import org.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.Coin;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -29,12 +29,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.core.NetworkParameters.MAX_MONEY;
-import static org.smartcashj.utils.BtcAutoFormat.Style.CODE;
-import static org.smartcashj.utils.BtcAutoFormat.Style.SYMBOL;
-import static org.smartcashj.utils.BtcFixedFormat.REPEATING_DOUBLETS;
-import static org.smartcashj.utils.BtcFixedFormat.REPEATING_TRIPLETS;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.NetworkParameters.MAX_MONEY;
+import static cc.smartcash.smartcashj.utils.BtcAutoFormat.Style.CODE;
+import static cc.smartcash.smartcashj.utils.BtcAutoFormat.Style.SYMBOL;
+import static cc.smartcash.smartcashj.utils.BtcFixedFormat.REPEATING_DOUBLETS;
+import static cc.smartcash.smartcashj.utils.BtcFixedFormat.REPEATING_TRIPLETS;
 import static java.text.NumberFormat.Field.DECIMAL_SEPARATOR;
 import static java.util.Locale.*;
 import static org.junit.Assert.*;

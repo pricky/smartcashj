@@ -15,48 +15,48 @@
  * limitations under the License.
  */
 
-package org.smartcashj.store;
+package cc.smartcash.smartcashj.store;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Block;
-import org.smartcashj.core.BlockChain;
-import org.smartcashj.core.BlockTest;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.Context;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.PeerAddress;
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.core.Transaction.Purpose;
-import org.smartcashj.core.TransactionConfidence;
-import org.smartcashj.core.TransactionConfidence.ConfidenceType;
-import org.smartcashj.core.TransactionInput;
-import org.smartcashj.core.Utils;
-import org.smartcashj.crypto.DeterministicKey;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.testing.FakeTxBuilder;
-import org.smartcashj.testing.FooWalletExtension;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.DeterministicKeyChain;
-import org.smartcashj.wallet.KeyChain;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Block;
+import cc.smartcash.smartcashj.core.BlockChain;
+import cc.smartcash.smartcashj.core.BlockTest;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.Context;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.PeerAddress;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.core.Transaction.Purpose;
+import cc.smartcash.smartcashj.core.TransactionConfidence;
+import cc.smartcash.smartcashj.core.TransactionConfidence.ConfidenceType;
+import cc.smartcash.smartcashj.core.TransactionInput;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.crypto.DeterministicKey;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.testing.FooWalletExtension;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.DeterministicKeyChain;
+import cc.smartcash.smartcashj.wallet.KeyChain;
 
 import com.google.common.io.ByteStreams;
 import com.google.protobuf.ByteString;
 
-import org.smartcashj.wallet.MarriedKeyChain;
-import org.smartcashj.wallet.Protos;
-import org.smartcashj.wallet.UnreadableWalletException;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.WalletExtension;
-import org.smartcashj.wallet.WalletProtobufSerializer;
-import org.smartcashj.wallet.WalletTransaction;
-import org.smartcashj.wallet.WalletTransaction.Pool;
-import org.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
+import cc.smartcash.smartcashj.wallet.MarriedKeyChain;
+import cc.smartcash.smartcashj.wallet.Protos;
+import cc.smartcash.smartcashj.wallet.UnreadableWalletException;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.WalletExtension;
+import cc.smartcash.smartcashj.wallet.WalletProtobufSerializer;
+import cc.smartcash.smartcashj.wallet.WalletTransaction;
+import cc.smartcash.smartcashj.wallet.WalletTransaction.Pool;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,8 +70,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.testing.FakeTxBuilder.createFakeTx;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeTx;
 import static org.junit.Assert.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 

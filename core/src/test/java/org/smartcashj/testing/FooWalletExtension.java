@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.WalletExtension;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.WalletExtension;
 
 import java.util.Arrays;
 

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
 import org.junit.Test;
 
 public class UTXOTest {

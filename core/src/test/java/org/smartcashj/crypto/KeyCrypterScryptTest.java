@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
-import org.smartcashj.core.Utils;
-import org.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
 import com.google.protobuf.ByteString;
 
-import org.smartcashj.wallet.Protos;
-import org.smartcashj.wallet.Protos.ScryptParameters;
+import cc.smartcash.smartcashj.wallet.Protos;
+import cc.smartcash.smartcashj.wallet.Protos.ScryptParameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;

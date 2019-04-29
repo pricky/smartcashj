@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package org.smartcashj.net;
+package cc.smartcash.smartcashj.net;
 
-import org.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.core.Utils;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.protobuf.ByteString;
 import org.bitcoin.paymentchannel.Protos;

@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-package org.smartcashj.wallet;
+package cc.smartcash.smartcashj.wallet;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.BloomFilter;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.core.Utils;
-import org.smartcashj.crypto.*;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.listeners.AbstractKeyChainEventListener;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.BloomFilter;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.crypto.*;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.listeners.AbstractKeyChainEventListener;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;

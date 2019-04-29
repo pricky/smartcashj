@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;

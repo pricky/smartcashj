@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.utils;
+package cc.smartcash.smartcashj.utils;
 
-import static org.smartcashj.core.Coin.CENT;
-import static org.smartcashj.core.Coin.COIN;
-import static org.smartcashj.core.Coin.SATOSHI;
-import static org.smartcashj.core.Coin.ZERO;
+import static cc.smartcash.smartcashj.core.Coin.CENT;
+import static cc.smartcash.smartcashj.core.Coin.COIN;
+import static cc.smartcash.smartcashj.core.Coin.SATOSHI;
+import static cc.smartcash.smartcashj.core.Coin.ZERO;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Locale;
 
 import org.junit.Test;
 
-import org.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.Coin;
 
 public class MonetaryFormatTest {
 

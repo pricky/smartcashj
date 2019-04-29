@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.RegTestParams;
-import org.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.RegTestParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
 
 public enum NetworkEnum {
     MAIN,

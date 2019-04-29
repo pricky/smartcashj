@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package org.smartcashj.tools;
+package cc.smartcash.smartcashj.tools;
 
-import org.smartcashj.core.listeners.NewBestBlockListener;
-import org.smartcashj.core.*;
-import org.smartcashj.net.discovery.DnsDiscovery;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.RegTestParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.core.listeners.NewBestBlockListener;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.net.discovery.DnsDiscovery;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.RegTestParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.utils.Threading;
 import com.google.common.io.Resources;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;

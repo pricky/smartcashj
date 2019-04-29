@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.core.AbstractBlockChain;
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Block;
-import org.smartcashj.core.BlockChain;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.Context;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.core.VerificationException;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.AbstractBlockChain;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Block;
+import cc.smartcash.smartcashj.core.BlockChain;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.Context;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.core.VerificationException;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import javax.annotation.Nullable;
 
-import static org.smartcashj.testing.FakeTxBuilder.createFakeBlock;
-import static org.smartcashj.testing.FakeTxBuilder.createFakeTx;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeBlock;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeTx;
 
 // TODO: This needs to be somewhat rewritten - the "sendMoneyToWallet" methods aren't sending via the block chain object
 

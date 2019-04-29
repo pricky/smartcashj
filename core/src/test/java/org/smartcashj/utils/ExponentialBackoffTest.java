@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.smartcashj.utils;
+package cc.smartcash.smartcashj.utils;
 
-import org.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.core.Utils;
 
 import org.junit.Before;
 import org.junit.Test;

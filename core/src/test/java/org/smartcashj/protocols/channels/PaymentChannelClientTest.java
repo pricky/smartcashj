@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.channels;
+package cc.smartcash.smartcashj.protocols.channels;
 
-import org.smartcashj.core.*;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.WalletExtension;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.WalletExtension;
 import org.bitcoin.paymentchannel.Protos;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -34,9 +34,9 @@ import java.util.HashMap;
 
 import static org.bitcoin.paymentchannel.Protos.TwoWayChannelMessage;
 import static org.bitcoin.paymentchannel.Protos.TwoWayChannelMessage.MessageType.*;
-import static org.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.VERSION_1;
-import static org.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.VERSION_2;
-import static org.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.VERSION_2_ALLOW_1;
+import static cc.smartcash.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.VERSION_1;
+import static cc.smartcash.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.VERSION_2;
+import static cc.smartcash.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.VERSION_2_ALLOW_1;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;

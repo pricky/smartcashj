@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
-import org.smartcashj.core.Base58;
+import cc.smartcash.smartcashj.core.Base58;
 import com.google.common.base.Functions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static org.junit.Assert.assertEquals;
 
 /**

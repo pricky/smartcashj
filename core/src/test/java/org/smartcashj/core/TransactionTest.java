@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.core.TransactionConfidence.*;
-import org.smartcashj.crypto.TransactionSignature;
-import org.smartcashj.params.*;
-import org.smartcashj.script.*;
-import org.smartcashj.testing.*;
+import cc.smartcash.smartcashj.core.TransactionConfidence.*;
+import cc.smartcash.smartcashj.crypto.TransactionSignature;
+import cc.smartcash.smartcashj.params.*;
+import cc.smartcash.smartcashj.script.*;
+import cc.smartcash.smartcashj.testing.*;
 import org.easymock.*;
 import org.junit.*;
 
 import java.math.BigInteger;
 import java.util.*;
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;

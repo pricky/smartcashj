@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import java.math.BigInteger;
 import java.util.Arrays;

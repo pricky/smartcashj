@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.listeners.PeerConnectedEventListener;
-import org.smartcashj.core.listeners.PeerDisconnectedEventListener;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Peer;
-import org.smartcashj.core.PeerAddress;
-import org.smartcashj.core.VersionMessage;
-import org.smartcashj.net.discovery.DnsDiscovery;
-import org.smartcashj.net.discovery.PeerDiscoveryException;
-import org.smartcashj.net.NioClientManager;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.core.listeners.PeerConnectedEventListener;
+import cc.smartcash.smartcashj.core.listeners.PeerDisconnectedEventListener;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Peer;
+import cc.smartcash.smartcashj.core.PeerAddress;
+import cc.smartcash.smartcashj.core.VersionMessage;
+import cc.smartcash.smartcashj.net.discovery.DnsDiscovery;
+import cc.smartcash.smartcashj.net.discovery.PeerDiscoveryException;
+import cc.smartcash.smartcashj.net.NioClientManager;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;

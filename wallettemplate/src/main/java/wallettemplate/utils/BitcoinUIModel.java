@@ -16,11 +16,11 @@
 
 package wallettemplate.utils;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.listeners.DownloadProgressTracker;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.listeners.WalletChangeEventListener;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.listeners.DownloadProgressTracker;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.listeners.WalletChangeEventListener;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;

@@ -16,8 +16,8 @@
 
 package wallettemplate.controls;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.uri.BitcoinURI;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.uri.BitcoinURI;
 import de.jensd.fx.fontawesome.AwesomeDude;
 import de.jensd.fx.fontawesome.AwesomeIcon;
 import javafx.beans.binding.StringExpression;

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.channels;
+package cc.smartcash.smartcashj.protocols.channels;
 
-import org.smartcashj.core.*;
-import org.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector;
-import org.smartcashj.script.ScriptPattern;
-import org.smartcashj.testing.TestWithWallet;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.WalletExtension;
-import org.smartcashj.wallet.WalletFiles;
-import org.smartcashj.wallet.WalletProtobufSerializer;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector;
+import cc.smartcash.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.testing.TestWithWallet;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.WalletExtension;
+import cc.smartcash.smartcashj.wallet.WalletFiles;
+import cc.smartcash.smartcashj.wallet.WalletProtobufSerializer;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -49,10 +49,10 @@ import java.util.Collection;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.*;
-import static org.smartcashj.protocols.channels.PaymentChannelCloseException.CloseReason;
-import static org.smartcashj.testing.FakeTxBuilder.createFakeBlock;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.protocols.channels.PaymentChannelClient.VersionSelector.*;
+import static cc.smartcash.smartcashj.protocols.channels.PaymentChannelCloseException.CloseReason;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeBlock;
 import static org.bitcoin.paymentchannel.Protos.TwoWayChannelMessage.MessageType;
 import static org.junit.Assert.*;
 
@@ -558,7 +558,7 @@ public class ChannelConnectionTest extends TestWithWallet {
     private static Wallet roundTripClientWallet(Wallet wallet) throws Exception {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         new WalletProtobufSerializer().writeWallet(wallet, bos);
-        org.smartcashj.wallet.Protos.Wallet proto = WalletProtobufSerializer.parseToProto(new ByteArrayInputStream(bos.toByteArray()));
+        cc.smartcash.smartcashj.wallet.Protos.Wallet proto = WalletProtobufSerializer.parseToProto(new ByteArrayInputStream(bos.toByteArray()));
         StoredPaymentChannelClientStates state = new StoredPaymentChannelClientStates(null, failBroadcaster);
         return new WalletProtobufSerializer().readWallet(wallet.getParams(), new WalletExtension[] { state }, proto);
     }
@@ -567,7 +567,7 @@ public class ChannelConnectionTest extends TestWithWallet {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         new WalletProtobufSerializer().writeWallet(wallet, bos);
         StoredPaymentChannelServerStates state = new StoredPaymentChannelServerStates(null, failBroadcaster);
-        org.smartcashj.wallet.Protos.Wallet proto = WalletProtobufSerializer.parseToProto(new ByteArrayInputStream(bos.toByteArray()));
+        cc.smartcash.smartcashj.wallet.Protos.Wallet proto = WalletProtobufSerializer.parseToProto(new ByteArrayInputStream(bos.toByteArray()));
         return new WalletProtobufSerializer().readWallet(wallet.getParams(), new WalletExtension[] { state }, proto);
     }
 

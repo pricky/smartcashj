@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
 import org.junit.Test;
 

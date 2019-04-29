@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Base58;
-import org.smartcashj.core.BlockChain;
-import org.smartcashj.core.DumpedPrivateKey;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.PeerAddress;
-import org.smartcashj.core.PeerGroup;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Base58;
+import cc.smartcash.smartcashj.core.BlockChain;
+import cc.smartcash.smartcashj.core.DumpedPrivateKey;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.PeerAddress;
+import cc.smartcash.smartcashj.core.PeerGroup;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import java.math.BigInteger;
 import java.net.InetAddress;

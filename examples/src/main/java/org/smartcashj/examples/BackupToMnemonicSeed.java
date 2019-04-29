@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Utils;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.wallet.DeterministicSeed;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.wallet.DeterministicSeed;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 /**
  * The following example shows you how to create a deterministic seed from a hierarchical deterministic wallet represented as a mnemonic code.

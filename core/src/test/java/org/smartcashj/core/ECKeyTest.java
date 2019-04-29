@@ -15,25 +15,25 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.core.ECKey.ECDSASignature;
-import org.smartcashj.crypto.EncryptedData;
-import org.smartcashj.crypto.KeyCrypter;
-import org.smartcashj.crypto.KeyCrypterScrypt;
-import org.smartcashj.crypto.TransactionSignature;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.core.ECKey.ECDSASignature;
+import cc.smartcash.smartcashj.crypto.EncryptedData;
+import cc.smartcash.smartcashj.crypto.KeyCrypter;
+import cc.smartcash.smartcashj.crypto.KeyCrypterScrypt;
+import cc.smartcash.smartcashj.crypto.TransactionSignature;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.ByteString;
-import org.smartcashj.wallet.Protos;
-import org.smartcashj.wallet.Protos.ScryptParameters;
+import cc.smartcash.smartcashj.wallet.Protos;
+import cc.smartcash.smartcashj.wallet.Protos.ScryptParameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -49,8 +49,8 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
-import static org.smartcashj.core.Utils.HEX;
-import static org.smartcashj.core.Utils.reverseBytes;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.reverseBytes;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.junit.Assert.*;
 

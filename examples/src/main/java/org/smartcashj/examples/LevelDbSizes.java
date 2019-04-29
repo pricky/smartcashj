@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
 import static org.fusesource.leveldbjni.JniDBFactory.*;
 

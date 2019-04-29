@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.*;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.net.InetAddress;

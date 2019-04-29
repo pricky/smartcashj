@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
-import org.smartcashj.core.*;
-import org.smartcashj.params.*;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.params.*;
 import org.junit.*;
 import org.spongycastle.crypto.params.*;
 
-import static org.smartcashj.core.Utils.*;
+import static cc.smartcash.smartcashj.core.Utils.*;
 import static org.junit.Assert.*;
 
 /**

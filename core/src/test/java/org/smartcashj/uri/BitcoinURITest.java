@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package org.smartcashj.uri;
+package cc.smartcash.smartcashj.uri;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
-import static org.smartcashj.core.Coin.*;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.SegwitAddress;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.SegwitAddress;
 
 import static org.junit.Assert.*;
 
