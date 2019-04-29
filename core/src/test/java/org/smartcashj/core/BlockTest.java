@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.io.ByteStreams;
 
-import org.smartcashj.core.AbstractBlockChain.NewBlockType;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.ScriptOpCodes;
-import org.smartcashj.script.ScriptPattern;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.Wallet.BalanceType;
+import cc.smartcash.smartcashj.core.AbstractBlockChain.NewBlockType;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.ScriptOpCodes;
+import cc.smartcash.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.Wallet.BalanceType;
 import org.junit.Before;
 import org.junit.Test;
 

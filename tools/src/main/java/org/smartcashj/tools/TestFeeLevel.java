@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.tools;
+package cc.smartcash.smartcashj.tools;
 
-import org.smartcashj.core.*;
-import org.smartcashj.core.listeners.PeerConnectedEventListener;
-import org.smartcashj.core.listeners.PeerDisconnectedEventListener;
-import org.smartcashj.kits.WalletAppKit;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.SendRequest;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.core.listeners.PeerConnectedEventListener;
+import cc.smartcash.smartcashj.core.listeners.PeerDisconnectedEventListener;
+import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.SendRequest;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;

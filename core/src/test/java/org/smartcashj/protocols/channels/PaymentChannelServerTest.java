@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.channels;
+package cc.smartcash.smartcashj.protocols.channels;
 
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.TransactionBroadcaster;
-import org.smartcashj.core.Utils;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.TransactionBroadcaster;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.wallet.Wallet;
 import org.bitcoin.paymentchannel.Protos;
 import org.easymock.Capture;
 import org.junit.Before;

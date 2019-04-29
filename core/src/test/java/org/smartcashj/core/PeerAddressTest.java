@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
 
-import org.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import org.junit.Test;
 
 public class PeerAddressTest {

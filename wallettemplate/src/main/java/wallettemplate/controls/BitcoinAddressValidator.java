@@ -16,9 +16,9 @@
 
 package wallettemplate.controls;
 
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.AddressFormatException;
-import org.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.AddressFormatException;
+import cc.smartcash.smartcashj.core.NetworkParameters;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import wallettemplate.utils.TextFieldValidator;

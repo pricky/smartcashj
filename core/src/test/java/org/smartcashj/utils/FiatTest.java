@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.smartcashj.utils;
+package cc.smartcash.smartcashj.utils;
 
-import static org.smartcashj.utils.Fiat.parseFiat;
+import static cc.smartcash.smartcashj.utils.Fiat.parseFiat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

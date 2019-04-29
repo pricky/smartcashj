@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import java.util.List;
 
 public class HDUtilsTest {

@@ -21,8 +21,8 @@ import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import org.smartcashj.crypto.*;
-import org.smartcashj.wallet.*;
+import cc.smartcash.smartcashj.crypto.*;
+import cc.smartcash.smartcashj.wallet.*;
 import org.slf4j.*;
 import org.spongycastle.crypto.params.*;
 

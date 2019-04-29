@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.core.VerificationException;
-import org.smartcashj.kits.WalletAppKit;
-import org.smartcashj.params.RegTestParams;
-import org.smartcashj.protocols.channels.*;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.WalletExtension;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.core.VerificationException;
+import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.RegTestParams;
+import cc.smartcash.smartcashj.protocols.channels.*;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.WalletExtension;
 
 import com.google.common.collect.ImmutableList;
 

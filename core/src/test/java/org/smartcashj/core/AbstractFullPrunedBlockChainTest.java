@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.collect.Lists;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.script.Script;
-import org.smartcashj.store.BlockStoreException;
-import org.smartcashj.store.FullPrunedBlockStore;
-import org.smartcashj.utils.BlockFileLoader;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.SendRequest;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.WalletTransaction;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.store.BlockStoreException;
+import cc.smartcash.smartcashj.store.FullPrunedBlockStore;
+import cc.smartcash.smartcashj.utils.BlockFileLoader;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.SendRequest;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.WalletTransaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.smartcashj.core.Coin.FIFTY_COINS;
+import static cc.smartcash.smartcashj.core.Coin.FIFTY_COINS;
 import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
 

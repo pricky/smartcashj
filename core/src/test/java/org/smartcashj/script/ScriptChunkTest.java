@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.script;
+package cc.smartcash.smartcashj.script;
 
-import static org.smartcashj.script.ScriptOpCodes.OP_0;
-import static org.smartcashj.script.ScriptOpCodes.OP_IF;
-import static org.smartcashj.script.ScriptOpCodes.OP_PUSHDATA1;
-import static org.smartcashj.script.ScriptOpCodes.OP_PUSHDATA2;
-import static org.smartcashj.script.ScriptOpCodes.OP_PUSHDATA4;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_0;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_IF;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_PUSHDATA1;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_PUSHDATA2;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_PUSHDATA4;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

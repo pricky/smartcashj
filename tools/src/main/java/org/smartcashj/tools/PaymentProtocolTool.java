@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.tools;
+package cc.smartcash.smartcashj.tools;
 
-import org.smartcashj.crypto.TrustStoreLoader;
-import org.smartcashj.protocols.payments.PaymentProtocol;
-import org.smartcashj.protocols.payments.PaymentProtocolException;
-import org.smartcashj.protocols.payments.PaymentSession;
-import org.smartcashj.uri.BitcoinURI;
-import org.smartcashj.uri.BitcoinURIParseException;
+import cc.smartcash.smartcashj.crypto.TrustStoreLoader;
+import cc.smartcash.smartcashj.protocols.payments.PaymentProtocol;
+import cc.smartcash.smartcashj.protocols.payments.PaymentProtocolException;
+import cc.smartcash.smartcashj.protocols.payments.PaymentSession;
+import cc.smartcash.smartcashj.uri.BitcoinURI;
+import cc.smartcash.smartcashj.uri.BitcoinURIParseException;
 import org.bitcoin.protocols.payments.Protos;
 
 import java.io.FileInputStream;

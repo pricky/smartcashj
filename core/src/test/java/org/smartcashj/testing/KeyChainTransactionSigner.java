@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.crypto.ChildNumber;
-import org.smartcashj.crypto.DeterministicKey;
-import org.smartcashj.signers.CustomTransactionSigner;
-import org.smartcashj.wallet.DeterministicKeyChain;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.crypto.ChildNumber;
+import cc.smartcash.smartcashj.crypto.DeterministicKey;
+import cc.smartcash.smartcashj.signers.CustomTransactionSigner;
+import cc.smartcash.smartcashj.wallet.DeterministicKeyChain;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;

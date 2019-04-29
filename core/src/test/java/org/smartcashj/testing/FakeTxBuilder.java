@@ -15,36 +15,36 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Block;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.MessageSerializer;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.ProtocolException;
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.core.StoredBlock;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.core.TransactionConfidence;
-import org.smartcashj.core.TransactionInput;
-import org.smartcashj.core.TransactionOutPoint;
-import org.smartcashj.core.TransactionOutput;
-import org.smartcashj.core.Utils;
-import org.smartcashj.core.VerificationException;
-import org.smartcashj.crypto.TransactionSignature;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.BlockStoreException;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Block;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.MessageSerializer;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.ProtocolException;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.core.StoredBlock;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.core.TransactionConfidence;
+import cc.smartcash.smartcashj.core.TransactionInput;
+import cc.smartcash.smartcashj.core.TransactionOutPoint;
+import cc.smartcash.smartcashj.core.TransactionOutput;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.core.VerificationException;
+import cc.smartcash.smartcashj.crypto.TransactionSignature;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.BlockStoreException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import static org.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
 import static com.google.common.base.Preconditions.checkState;
 
 public class FakeTxBuilder {

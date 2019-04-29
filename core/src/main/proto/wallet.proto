@@ -27,7 +27,7 @@ syntax = "proto2";
 
 package wallet;
 
-option java_package = "org.smartcashj.wallet";
+option java_package = "cc.smartcash.smartcashj.wallet";
 option java_outer_classname = "Protos";
 
 message PeerAddress {

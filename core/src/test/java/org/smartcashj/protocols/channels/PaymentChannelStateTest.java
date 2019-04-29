@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.channels;
+package cc.smartcash.smartcashj.protocols.channels;
 
-import org.smartcashj.core.*;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.script.ScriptPattern;
-import org.smartcashj.testing.TestWithWallet;
-import org.smartcashj.wallet.SendRequest;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.testing.TestWithWallet;
+import cc.smartcash.smartcashj.wallet.SendRequest;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -41,9 +41,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.testing.FakeTxBuilder.createFakeTx;
-import static org.smartcashj.testing.FakeTxBuilder.makeSolvedTestBlock;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeTx;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.makeSolvedTestBlock;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)

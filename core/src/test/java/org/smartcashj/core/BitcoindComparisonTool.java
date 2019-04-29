@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.util.concurrent.*;
-import org.smartcashj.core.listeners.*;
-import org.smartcashj.net.*;
-import org.smartcashj.params.*;
-import org.smartcashj.store.*;
-import org.smartcashj.utils.*;
+import cc.smartcash.smartcashj.core.listeners.*;
+import cc.smartcash.smartcashj.net.*;
+import cc.smartcash.smartcashj.params.*;
+import cc.smartcash.smartcashj.store.*;
+import cc.smartcash.smartcashj.utils.*;
 import org.slf4j.*;
 
 import java.io.*;

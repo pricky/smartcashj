@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.collect.*;
-import org.smartcashj.core.TransactionConfidence.*;
-import org.smartcashj.store.*;
-import org.smartcashj.testing.*;
-import org.smartcashj.wallet.*;
+import cc.smartcash.smartcashj.core.TransactionConfidence.*;
+import cc.smartcash.smartcashj.store.*;
+import cc.smartcash.smartcashj.testing.*;
+import cc.smartcash.smartcashj.wallet.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -29,7 +29,7 @@ import org.junit.runners.*;
 import java.math.*;
 import java.util.*;
 
-import static org.smartcashj.core.Utils.*;
+import static cc.smartcash.smartcashj.core.Utils.*;
 import static org.junit.Assert.*;
 
 @RunWith(value = Parameterized.class)

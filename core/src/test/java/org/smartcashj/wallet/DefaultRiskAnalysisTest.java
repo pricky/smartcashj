@@ -15,22 +15,22 @@
  * limitations under the License.
  */
 
-package org.smartcashj.wallet;
+package cc.smartcash.smartcashj.wallet;
 
 import com.google.common.collect.*;
-import org.smartcashj.core.*;
-import org.smartcashj.crypto.*;
-import org.smartcashj.params.*;
-import org.smartcashj.script.*;
-import org.smartcashj.testing.FakeTxBuilder;
-import org.smartcashj.wallet.DefaultRiskAnalysis.*;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.crypto.*;
+import cc.smartcash.smartcashj.params.*;
+import cc.smartcash.smartcashj.script.*;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.wallet.DefaultRiskAnalysis.*;
 import org.junit.*;
 
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkState;
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.script.ScriptOpCodes.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.*;
 import static org.junit.Assert.*;
 
 public class DefaultRiskAnalysisTest {

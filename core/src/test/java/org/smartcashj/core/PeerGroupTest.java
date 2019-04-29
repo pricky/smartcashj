@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.*;
 import com.google.common.util.concurrent.*;
-import org.smartcashj.core.listeners.*;
-import org.smartcashj.net.discovery.*;
-import org.smartcashj.testing.*;
-import org.smartcashj.utils.*;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.listeners.*;
+import cc.smartcash.smartcashj.net.discovery.*;
+import cc.smartcash.smartcashj.testing.*;
+import cc.smartcash.smartcashj.utils.*;
+import cc.smartcash.smartcashj.wallet.Wallet;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
-import static org.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
 import static org.junit.Assert.*;
 
 

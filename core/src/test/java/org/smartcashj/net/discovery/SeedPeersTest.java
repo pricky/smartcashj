@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package org.smartcashj.net.discovery;
+package cc.smartcash.smartcashj.net.discovery;
 
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import org.junit.Test;
 
 import java.net.InetSocketAddress;

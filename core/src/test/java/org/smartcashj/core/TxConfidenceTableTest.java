@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.*;
-import org.smartcashj.testing.*;
-import org.smartcashj.utils.*;
+import cc.smartcash.smartcashj.params.*;
+import cc.smartcash.smartcashj.testing.*;
+import cc.smartcash.smartcashj.utils.*;
 import org.junit.*;
 
 import java.net.*;
 
-import static org.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
 import static org.junit.Assert.*;
 
 public class TxConfidenceTableTest {

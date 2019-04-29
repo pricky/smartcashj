@@ -3,4 +3,4 @@
  * smartcashj. Some of these are junit4 classes you can subclass, and others are static utility methods for building
  * fake transactions and so on.
  */
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;

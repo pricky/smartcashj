@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.store.BlockStoreException;
-import org.smartcashj.store.FullPrunedBlockStore;
-import org.smartcashj.store.MemoryFullPrunedBlockStore;
+import cc.smartcash.smartcashj.store.BlockStoreException;
+import cc.smartcash.smartcashj.store.FullPrunedBlockStore;
+import cc.smartcash.smartcashj.store.MemoryFullPrunedBlockStore;
 
 /**
  * A MemoryStore implementation of the FullPrunedBlockStoreTest

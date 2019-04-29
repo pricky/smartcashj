@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.store;
+package cc.smartcash.smartcashj.store;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Context;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.StoredBlock;
-import org.smartcashj.params.*;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Context;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.StoredBlock;
+import cc.smartcash.smartcashj.params.*;
 import org.junit.*;
 
 import java.io.*;

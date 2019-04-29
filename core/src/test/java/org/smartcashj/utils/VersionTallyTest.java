@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.smartcashj.utils;
+package cc.smartcash.smartcashj.utils;
 
-import org.smartcashj.core.BlockChain;
-import org.smartcashj.core.Context;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.StoredBlock;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.BlockStoreException;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.core.BlockChain;
+import cc.smartcash.smartcashj.core.Context;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.StoredBlock;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.BlockStoreException;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;

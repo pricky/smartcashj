@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.signers.TransactionSigner;
-import org.smartcashj.wallet.KeyBag;
+import cc.smartcash.smartcashj.signers.TransactionSigner;
+import cc.smartcash.smartcashj.wallet.KeyBag;
 
 public class NopTransactionSigner implements TransactionSigner {
     private boolean isReady;

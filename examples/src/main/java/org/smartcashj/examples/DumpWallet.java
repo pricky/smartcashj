@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
 import java.io.File;
 
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 /**
  * DumpWallet loads a serialized wallet and prints information about what it contains.

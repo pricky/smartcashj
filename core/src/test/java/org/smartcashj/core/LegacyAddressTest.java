@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.Networks;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.script.ScriptPattern;
-import org.smartcashj.script.Script.ScriptType;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.Networks;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.script.Script.ScriptType;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -33,7 +33,7 @@ import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static org.junit.Assert.*;
 
 public class LegacyAddressTest {

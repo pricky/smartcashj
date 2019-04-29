@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -24,26 +24,26 @@ import java.util.EnumSet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.core.TransactionInput;
-import org.smartcashj.core.TransactionOutput;
-import org.smartcashj.core.Utils;
-import org.smartcashj.crypto.TransactionSignature;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.script.ScriptChunk;
-import org.smartcashj.script.ScriptException;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.core.TransactionInput;
+import cc.smartcash.smartcashj.core.TransactionOutput;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.crypto.TransactionSignature;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptChunk;
+import cc.smartcash.smartcashj.script.ScriptException;
 
-import static org.smartcashj.script.ScriptOpCodes.getOpCodeName;
-import org.smartcashj.signers.LocalTransactionSigner;
-import org.smartcashj.signers.TransactionSigner.ProposedTransaction;
-import org.smartcashj.wallet.KeyBag;
-import org.smartcashj.wallet.RedeemData;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.getOpCodeName;
+import cc.smartcash.smartcashj.signers.LocalTransactionSigner;
+import cc.smartcash.smartcashj.signers.TransactionSigner.ProposedTransaction;
+import cc.smartcash.smartcashj.wallet.KeyBag;
+import cc.smartcash.smartcashj.wallet.RedeemData;
 
 /**
  * Test case generator for transactions with low-S and high-S signatures, to

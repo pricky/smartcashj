@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.core.NetworkParameters.MAX_MONEY;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.NetworkParameters.MAX_MONEY;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

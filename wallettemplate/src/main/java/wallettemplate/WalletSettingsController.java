@@ -16,9 +16,9 @@
 
 package wallettemplate;
 
-import org.smartcashj.core.Utils;
-import org.smartcashj.crypto.MnemonicCode;
-import org.smartcashj.wallet.DeterministicSeed;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.crypto.MnemonicCode;
+import cc.smartcash.smartcashj.wallet.DeterministicSeed;
 import com.google.common.base.Splitter;
 import com.google.common.util.concurrent.Service;
 import javafx.application.Platform;

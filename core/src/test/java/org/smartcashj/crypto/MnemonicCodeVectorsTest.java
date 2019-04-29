@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,9 +27,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static org.smartcashj.core.Utils.HEX;
-import static org.smartcashj.core.Utils.SPACE_JOINER;
-import static org.smartcashj.core.Utils.WHITESPACE_SPLITTER;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.SPACE_JOINER;
+import static cc.smartcash.smartcashj.core.Utils.WHITESPACE_SPLITTER;
 import static org.junit.Assert.assertEquals;
 
 /**

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.smartcashj.crypto;
+package cc.smartcash.smartcashj.crypto;
 
-import org.smartcashj.core.AddressFormatException;
-import org.smartcashj.core.Base58;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.crypto.BIP38PrivateKey.BadPassphraseException;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.core.AddressFormatException;
+import cc.smartcash.smartcashj.core.Base58;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.crypto.BIP38PrivateKey.BadPassphraseException;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
 import com.google.common.base.*;
 import com.google.common.util.concurrent.*;
-import org.smartcashj.core.*;
-import org.smartcashj.net.*;
-import org.smartcashj.store.*;
-import org.smartcashj.utils.*;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.net.*;
+import cc.smartcash.smartcashj.store.*;
+import cc.smartcash.smartcashj.utils.*;
 
 import java.net.*;
 import java.util.concurrent.*;

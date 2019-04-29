@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.collect.ImmutableList;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.script.ScriptPattern;
-import org.smartcashj.testing.TestWithWallet;
-import org.smartcashj.wallet.SendRequest;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.testing.TestWithWallet;
+import cc.smartcash.smartcashj.wallet.SendRequest;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;

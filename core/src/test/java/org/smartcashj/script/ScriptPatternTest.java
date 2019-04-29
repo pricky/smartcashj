@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.script;
+package cc.smartcash.smartcashj.script;
 
 import com.google.common.collect.Lists;
 
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.SegwitAddress;
-import org.smartcashj.core.Sha256Hash;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.SegwitAddress;
+import cc.smartcash.smartcashj.core.Sha256Hash;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import org.junit.Test;
 
 import java.math.BigInteger;

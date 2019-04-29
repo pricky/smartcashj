@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package org.smartcashj.testing;
+package cc.smartcash.smartcashj.testing;
 
-import org.smartcashj.core.listeners.PeerDisconnectedEventListener;
-import org.smartcashj.core.listeners.PreMessageReceivedEventListener;
-import org.smartcashj.core.*;
-import org.smartcashj.net.*;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.listeners.PeerDisconnectedEventListener;
+import cc.smartcash.smartcashj.core.listeners.PreMessageReceivedEventListener;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.net.*;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import com.google.common.util.concurrent.SettableFuture;
 

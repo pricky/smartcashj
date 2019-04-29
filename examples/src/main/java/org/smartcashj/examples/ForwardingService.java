@@ -15,24 +15,24 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.InsufficientMoneyException;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.core.TransactionConfidence;
-import org.smartcashj.crypto.KeyCrypterException;
-import org.smartcashj.kits.WalletAppKit;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.RegTestParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.SendRequest;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.InsufficientMoneyException;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.core.TransactionConfidence;
+import cc.smartcash.smartcashj.crypto.KeyCrypterException;
+import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.RegTestParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.SendRequest;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;

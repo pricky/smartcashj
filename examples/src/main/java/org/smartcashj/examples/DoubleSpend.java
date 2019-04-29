@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.listeners.PreMessageReceivedEventListener;
-import org.smartcashj.core.*;
-import org.smartcashj.kits.WalletAppKit;
-import org.smartcashj.params.RegTestParams;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.listeners.PreMessageReceivedEventListener;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.RegTestParams;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import java.io.File;
 
-import static org.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
 
 /**
  * This is a little test app that waits for a coin on a local regtest node, then  generates two transactions that double

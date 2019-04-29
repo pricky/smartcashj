@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.RegTestParams;
+import cc.smartcash.smartcashj.params.RegTestParams;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static org.junit.Assert.assertTrue;
 
 public class SendHeadersMessageTest {

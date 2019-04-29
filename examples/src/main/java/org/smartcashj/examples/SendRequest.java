@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import org.smartcashj.core.*;
-import org.smartcashj.kits.WalletAppKit;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.Wallet.BalanceType;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.Wallet.BalanceType;
 
 import java.io.File;
 

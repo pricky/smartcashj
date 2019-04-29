@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.payments;
+package cc.smartcash.smartcashj.protocols.payments;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.crypto.X509Utils;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.protocols.payments.PaymentProtocol.Output;
-import org.smartcashj.protocols.payments.PaymentProtocol.PkiVerificationData;
-import org.smartcashj.protocols.payments.PaymentProtocolException.PkiVerificationException;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.crypto.X509Utils;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.protocols.payments.PaymentProtocol.Output;
+import cc.smartcash.smartcashj.protocols.payments.PaymentProtocol.PkiVerificationData;
+import cc.smartcash.smartcashj.protocols.payments.PaymentProtocolException.PkiVerificationException;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
 import org.bitcoin.protocols.payments.Protos;
 import org.bitcoin.protocols.payments.Protos.Payment;
 import org.bitcoin.protocols.payments.Protos.PaymentACK;

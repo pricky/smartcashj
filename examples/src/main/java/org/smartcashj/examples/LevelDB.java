@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
 import java.net.InetAddress;
-import org.smartcashj.core.FullPrunedBlockChain;
-import org.smartcashj.core.PeerGroup;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.store.FullPrunedBlockStore;
-import org.smartcashj.store.LevelDBFullPrunedBlockStore;
+import cc.smartcash.smartcashj.core.FullPrunedBlockChain;
+import cc.smartcash.smartcashj.core.PeerGroup;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.store.FullPrunedBlockStore;
+import cc.smartcash.smartcashj.store.LevelDBFullPrunedBlockStore;
 
 public class LevelDB {
     public static void main(String[] args) throws Exception {

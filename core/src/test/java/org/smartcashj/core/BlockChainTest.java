@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.testing.FakeTxBuilder;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.Wallet.BalanceType;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.Wallet.BalanceType;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.rules.ExpectedException;
@@ -38,9 +38,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.testing.FakeTxBuilder.createFakeBlock;
-import static org.smartcashj.testing.FakeTxBuilder.createFakeTx;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeBlock;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.createFakeTx;
 import static org.junit.Assert.*;
 
 // Handling of chain splits/reorgs are in ChainSplitTests.

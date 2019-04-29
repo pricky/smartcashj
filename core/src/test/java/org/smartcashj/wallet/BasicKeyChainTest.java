@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.wallet;
+package cc.smartcash.smartcashj.wallet;
 
-import org.smartcashj.core.BloomFilter;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.Utils;
-import org.smartcashj.crypto.KeyCrypter;
-import org.smartcashj.crypto.KeyCrypterException;
-import org.smartcashj.crypto.KeyCrypterScrypt;
-import org.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.core.BloomFilter;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.crypto.KeyCrypter;
+import cc.smartcash.smartcashj.crypto.KeyCrypterException;
+import cc.smartcash.smartcashj.crypto.KeyCrypterScrypt;
+import cc.smartcash.smartcashj.utils.Threading;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import org.smartcashj.wallet.listeners.AbstractKeyChainEventListener;
+import cc.smartcash.smartcashj.wallet.listeners.AbstractKeyChainEventListener;
 import org.junit.Before;
 import org.junit.Test;
 

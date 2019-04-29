@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package org.smartcashj.protocols.payments;
+package cc.smartcash.smartcashj.protocols.payments;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.Coin;
-import org.smartcashj.core.Context;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.core.TransactionInput;
-import org.smartcashj.core.TransactionOutput;
-import org.smartcashj.crypto.TrustStoreLoader;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.core.Context;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.core.TransactionInput;
+import cc.smartcash.smartcashj.core.TransactionOutput;
+import cc.smartcash.smartcashj.crypto.TrustStoreLoader;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
 import org.bitcoin.protocols.payments.Protos;
@@ -41,7 +41,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static org.smartcashj.core.Coin.COIN;
+import static cc.smartcash.smartcashj.core.Coin.COIN;
 import static org.junit.Assert.*;
 
 public class PaymentSessionTest {

@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.params.UnitTestParams;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.smartcashj.core.Utils.HEX;
+import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

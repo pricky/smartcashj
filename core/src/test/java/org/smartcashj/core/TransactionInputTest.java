@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.smartcashj.params.UnitTestParams;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.testing.FakeTxBuilder;
-import org.smartcashj.wallet.AllowUnconfirmedCoinSelector;
-import org.smartcashj.wallet.SendRequest;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.wallet.AllowUnconfirmedCoinSelector;
+import cc.smartcash.smartcashj.wallet.SendRequest;
+import cc.smartcash.smartcashj.wallet.Wallet;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;

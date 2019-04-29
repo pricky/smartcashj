@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.collect.*;
-import org.smartcashj.core.listeners.*;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.testing.FakeTxBuilder;
-import org.smartcashj.testing.InboundMessageQueuer;
-import org.smartcashj.testing.TestWithNetworkConnections;
-import org.smartcashj.utils.Threading;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
+import cc.smartcash.smartcashj.core.listeners.*;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.testing.FakeTxBuilder;
+import cc.smartcash.smartcashj.testing.InboundMessageQueuer;
+import cc.smartcash.smartcashj.testing.TestWithNetworkConnections;
+import cc.smartcash.smartcashj.utils.Threading;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
@@ -53,8 +53,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.testing.FakeTxBuilder.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.testing.FakeTxBuilder.*;
 import static org.junit.Assert.*;
 
 @RunWith(value = Parameterized.class)

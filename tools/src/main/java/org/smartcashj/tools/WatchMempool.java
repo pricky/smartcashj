@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-package org.smartcashj.tools;
+package cc.smartcash.smartcashj.tools;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.smartcashj.core.listeners.*;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.Peer;
-import org.smartcashj.core.PeerGroup;
-import org.smartcashj.core.Transaction;
-import org.smartcashj.net.discovery.DnsDiscovery;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.utils.BriefLogFormatter;
-import org.smartcashj.wallet.DefaultRiskAnalysis;
-import org.smartcashj.wallet.RiskAnalysis.Result;
+import cc.smartcash.smartcashj.core.listeners.*;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.Peer;
+import cc.smartcash.smartcashj.core.PeerGroup;
+import cc.smartcash.smartcashj.core.Transaction;
+import cc.smartcash.smartcashj.net.discovery.DnsDiscovery;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.utils.BriefLogFormatter;
+import cc.smartcash.smartcashj.wallet.DefaultRiskAnalysis;
+import cc.smartcash.smartcashj.wallet.RiskAnalysis.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.*;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.store.BlockStore;
-import org.smartcashj.store.MemoryBlockStore;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.store.BlockStore;
+import cc.smartcash.smartcashj.store.MemoryBlockStore;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
 
 import java.io.File;
 

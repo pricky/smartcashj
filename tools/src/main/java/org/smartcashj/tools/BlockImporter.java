@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.smartcashj.tools;
+package cc.smartcash.smartcashj.tools;
 
-import org.smartcashj.core.*;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.store.*;
-import org.smartcashj.utils.BlockFileLoader;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.store.*;
+import cc.smartcash.smartcashj.utils.BlockFileLoader;
 import com.google.common.base.Preconditions;
 
 import java.io.File;

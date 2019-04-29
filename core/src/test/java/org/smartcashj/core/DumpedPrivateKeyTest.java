@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,8 +28,8 @@ import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
 
 public class DumpedPrivateKeyTest {
     private static final NetworkParameters MAINNET = MainNetParams.get();

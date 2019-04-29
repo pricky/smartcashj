@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -26,12 +26,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Locale;
 
-import org.smartcashj.params.MainNetParams;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.Script.ScriptType;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.params.MainNetParams;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.Script.ScriptType;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptPattern;
 import org.junit.Test;
 
 import com.google.common.base.MoreObjects;

@@ -16,9 +16,9 @@
 
 package wallettemplate;
 
-import org.smartcashj.core.listeners.DownloadProgressTracker;
-import org.smartcashj.core.Coin;
-import org.smartcashj.utils.MonetaryFormat;
+import cc.smartcash.smartcashj.core.listeners.DownloadProgressTracker;
+import cc.smartcash.smartcashj.core.Coin;
+import cc.smartcash.smartcashj.utils.MonetaryFormat;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;

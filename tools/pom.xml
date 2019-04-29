@@ -19,7 +19,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>org.smartcashj</groupId>
+    <groupId>cc.smartcash.smartcashj</groupId>
     <artifactId>smartcashj-parent</artifactId>
     <version>0.16.0</version>
   </parent>
@@ -63,7 +63,7 @@
                       <configuration>
                           <transformers>
                               <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                  <mainClass>org.smartcashj.tools.WalletTool</mainClass>
+                                  <mainClass>cc.smartcash.smartcashj.tools.WalletTool</mainClass>
                               </transformer>
                           </transformers>
                           <outputFile>target/wallet-tool.jar</outputFile>
@@ -78,7 +78,7 @@
                       <configuration>
                           <transformers>
                               <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                  <mainClass>org.smartcashj.tools.BuildCheckpoints</mainClass>
+                                  <mainClass>cc.smartcash.smartcashj.tools.BuildCheckpoints</mainClass>
                               </transformer>
                           </transformers>
                           <outputFile>target/build-checkpoints.jar</outputFile>
@@ -92,7 +92,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.smartcashj</groupId>
+      <groupId>cc.smartcash.smartcashj</groupId>
       <artifactId>smartcashj-core</artifactId>
       <version>${project.parent.version}</version>
     </dependency>

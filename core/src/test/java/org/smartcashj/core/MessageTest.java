@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
-import org.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.params.UnitTestParams;
 import org.junit.Test;
 
 public class MessageTest {

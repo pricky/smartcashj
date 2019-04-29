@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.*;
-import org.smartcashj.kits.WalletAppKit;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.script.Script;
-import org.smartcashj.wallet.Wallet;
-import org.smartcashj.wallet.listeners.KeyChainEventListener;
-import org.smartcashj.wallet.listeners.ScriptsChangeEventListener;
-import org.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
-import org.smartcashj.wallet.listeners.WalletCoinsSentEventListener;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.wallet.listeners.KeyChainEventListener;
+import cc.smartcash.smartcashj.wallet.listeners.ScriptsChangeEventListener;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener;
+import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsSentEventListener;
 
 import java.io.File;
 import java.util.List;
 
-import org.smartcashj.core.listeners.TransactionConfidenceEventListener;
+import cc.smartcash.smartcashj.core.listeners.TransactionConfidenceEventListener;
 
 /**
  * The following example shows how to use the by smartcashj provided WalletAppKit.

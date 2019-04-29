@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.smartcashj.core;
+package cc.smartcash.smartcashj.core;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import org.smartcashj.core.Transaction.SigHash;
-import org.smartcashj.crypto.TransactionSignature;
-import org.smartcashj.script.Script;
-import org.smartcashj.script.ScriptBuilder;
-import org.smartcashj.script.ScriptException;
-import org.smartcashj.script.ScriptPattern;
+import cc.smartcash.smartcashj.core.Transaction.SigHash;
+import cc.smartcash.smartcashj.crypto.TransactionSignature;
+import cc.smartcash.smartcashj.script.Script;
+import cc.smartcash.smartcashj.script.ScriptBuilder;
+import cc.smartcash.smartcashj.script.ScriptException;
+import cc.smartcash.smartcashj.script.ScriptPattern;
 
 import com.google.common.base.Preconditions;
 
@@ -35,8 +35,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 
-import static org.smartcashj.core.Coin.*;
-import static org.smartcashj.script.ScriptOpCodes.*;
+import static cc.smartcash.smartcashj.core.Coin.*;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 

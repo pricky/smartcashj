@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.smartcashj.examples;
+package cc.smartcash.smartcashj.examples;
 
-import org.smartcashj.core.listeners.DownloadProgressTracker;
-import org.smartcashj.core.*;
-import org.smartcashj.net.discovery.DnsDiscovery;
-import org.smartcashj.params.TestNet3Params;
-import org.smartcashj.store.SPVBlockStore;
-import org.smartcashj.wallet.DeterministicSeed;
-import org.smartcashj.wallet.Wallet;
+import cc.smartcash.smartcashj.core.listeners.DownloadProgressTracker;
+import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.net.discovery.DnsDiscovery;
+import cc.smartcash.smartcashj.params.TestNet3Params;
+import cc.smartcash.smartcashj.store.SPVBlockStore;
+import cc.smartcash.smartcashj.wallet.DeterministicSeed;
+import cc.smartcash.smartcashj.wallet.Wallet;
 
 import java.io.File;
 

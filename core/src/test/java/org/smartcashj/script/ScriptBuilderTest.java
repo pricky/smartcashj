@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.smartcashj.script;
+package cc.smartcash.smartcashj.script;
 
-import static org.smartcashj.script.ScriptOpCodes.OP_FALSE;
-import static org.smartcashj.script.ScriptOpCodes.OP_TRUE;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_FALSE;
+import static cc.smartcash.smartcashj.script.ScriptOpCodes.OP_TRUE;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

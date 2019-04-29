@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package org.smartcashj.store;
+package cc.smartcash.smartcashj.store;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import org.smartcashj.core.Address;
-import org.smartcashj.core.ECKey;
-import org.smartcashj.core.LegacyAddress;
-import org.smartcashj.core.NetworkParameters;
-import org.smartcashj.core.StoredBlock;
-import org.smartcashj.params.UnitTestParams;
+import cc.smartcash.smartcashj.core.Address;
+import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.LegacyAddress;
+import cc.smartcash.smartcashj.core.NetworkParameters;
+import cc.smartcash.smartcashj.core.StoredBlock;
+import cc.smartcash.smartcashj.params.UnitTestParams;
 import org.junit.Before;
 import org.junit.Test;
 
