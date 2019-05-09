@@ -20,7 +20,7 @@
     <parent>
         <groupId>cc.smartcash.smartcashj</groupId>
         <artifactId>smartcashj-parent</artifactId>
-        <version>0.17.2-SNAPSHOT</version>
+        <version>0.17.2</version>
     </parent>
 
     <artifactId>smartcashj-core</artifactId>
