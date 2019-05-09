@@ -15,9 +15,7 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cc.smartcash.smartcashj</groupId>
@@ -71,14 +69,14 @@
                                     <tasks>
                                         <path id="proto.path">
                                             <fileset dir="src/main/proto">
-                                                <include name="**/*.proto"/>
+                                                <include name="**/*.proto" />
                                             </fileset>
                                         </path>
-                                        <pathconvert pathsep=" " property="proto.files" refid="proto.path"/>
+                                        <pathconvert pathsep=" " property="proto.files" refid="proto.path" />
                                         <exec executable="protoc" failonerror="true">
-                                            <arg value="--java_out=${project.basedir}/src/main/java"/>
-                                            <arg value="-I${project.basedir}/src/main/proto"/>
-                                            <arg line="${proto.files}"/>
+                                            <arg value="--java_out=${project.basedir}/src/main/java" />
+                                            <arg value="-I${project.basedir}/src/main/proto" />
+                                            <arg line="${proto.files}" />
                                         </exec>
                                     </tasks>
                                 </configuration>
@@ -149,11 +147,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <detectLinks/>
+                    <detectLinks />
                     <links>
                         <link>https://google.github.io/guava/releases/22.0/api/docs/</link>
                     </links>
-                    <detectJavaApiLink/>
+                    <detectJavaApiLink />
                     <quiet>true</quiet>
                 </configuration>
             </plugin>
@@ -173,7 +171,7 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <DependencyConvergence/>
+                                <DependencyConvergence />
                                 <digestRule implementation="uk.co.froot.maven.enforcer.DigestRule">
 
                                     <!-- Create a snapshot to build the list of URNs below -->
