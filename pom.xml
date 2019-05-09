@@ -20,7 +20,7 @@
 
   <groupId>cc.smartcash.smartcashj</groupId>
   <artifactId>smartcashj-parent</artifactId>
-  <version>0.17.1</version>
+  <version>0.17.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
