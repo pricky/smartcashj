@@ -27,7 +27,7 @@ import cc.smartcash.smartcashj.script.ScriptException;
 import cc.smartcash.smartcashj.wallet.AllowUnconfirmedCoinSelector;
 import cc.smartcash.smartcashj.wallet.SendRequest;
 import cc.smartcash.smartcashj.wallet.Wallet;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;

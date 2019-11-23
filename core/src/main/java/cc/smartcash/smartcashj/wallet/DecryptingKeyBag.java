@@ -17,7 +17,7 @@
 package cc.smartcash.smartcashj.wallet;
 
 import cc.smartcash.smartcashj.core.ECKey;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 import javax.annotation.Nullable;
 

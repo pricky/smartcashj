@@ -20,7 +20,7 @@ package cc.smartcash.smartcashj.script;
 import cc.smartcash.smartcashj.core.LegacyAddress;
 import cc.smartcash.smartcashj.core.SegwitAddress;
 import cc.smartcash.smartcashj.core.Sha256Hash;
-import org.spongycastle.util.encoders.Hex;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 import java.util.Arrays;

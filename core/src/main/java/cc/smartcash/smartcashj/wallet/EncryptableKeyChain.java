@@ -19,7 +19,7 @@ package cc.smartcash.smartcashj.wallet;
 import cc.smartcash.smartcashj.crypto.KeyCrypter;
 import cc.smartcash.smartcashj.crypto.KeyCrypterException;
 import cc.smartcash.smartcashj.crypto.KeyCrypterScrypt;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 import javax.annotation.Nullable;
 

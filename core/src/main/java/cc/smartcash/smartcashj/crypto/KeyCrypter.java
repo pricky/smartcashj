@@ -17,7 +17,7 @@
 package cc.smartcash.smartcashj.crypto;
 
 import cc.smartcash.smartcashj.wallet.Protos.Wallet.EncryptionType;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 import java.io.Serializable;
 

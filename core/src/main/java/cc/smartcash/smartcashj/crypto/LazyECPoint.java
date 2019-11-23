@@ -16,9 +16,10 @@
 
 package cc.smartcash.smartcashj.crypto;
 
-import org.spongycastle.math.ec.ECCurve;
-import org.spongycastle.math.ec.ECFieldElement;
-import org.spongycastle.math.ec.ECPoint;
+import cc.smartcash.smartcashj.core.ECKey;
+import org.bouncycastle.math.ec.ECCurve;
+import org.bouncycastle.math.ec.ECFieldElement;
+import org.bouncycastle.math.ec.ECPoint;
 
 import javax.annotation.Nullable;
 import java.math.BigInteger;
@@ -94,7 +95,7 @@ public class LazyECPoint {
 
     public boolean isCompressed() {
         if (bits != null)
-            return bits[0] == 2 || bits[0] == 3;
+            return ECKey.isPubKeyCompressed(bits);
         else
             return get().isCompressed();
     }

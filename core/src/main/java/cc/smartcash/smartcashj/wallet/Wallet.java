@@ -69,7 +69,7 @@ import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsReceivedEventListener
 import cc.smartcash.smartcashj.wallet.listeners.WalletCoinsSentEventListener;
 import cc.smartcash.smartcashj.wallet.listeners.WalletReorganizeEventListener;
 import org.slf4j.*;
-import org.spongycastle.crypto.params.*;
+import org.bouncycastle.crypto.params.*;
 
 import javax.annotation.*;
 import java.io.*;
@@ -1133,7 +1133,7 @@ public class Wallet extends BaseTaggableObject
 
     /**
      * Convenience wrapper around {@link Wallet#encrypt(KeyCrypter,
-     * org.spongycastle.crypto.params.KeyParameter)} which uses the default Scrypt key derivation algorithm and
+     * org.bouncycastle.crypto.params.KeyParameter)} which uses the default Scrypt key derivation algorithm and
      * parameters to derive a key from the given password.
      */
     public void encrypt(CharSequence password) {

@@ -28,7 +28,7 @@ import cc.smartcash.smartcashj.crypto.DeterministicKey;
 import cc.smartcash.smartcashj.crypto.KeyCrypter;
 import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.script.ScriptBuilder;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 import java.security.SecureRandom;
 import java.util.LinkedHashMap;

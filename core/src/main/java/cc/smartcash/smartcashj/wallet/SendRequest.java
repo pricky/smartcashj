@@ -36,7 +36,7 @@ import cc.smartcash.smartcashj.script.ScriptBuilder;
 import cc.smartcash.smartcashj.utils.ExchangeRate;
 import cc.smartcash.smartcashj.wallet.KeyChain.KeyPurpose;
 import cc.smartcash.smartcashj.wallet.Wallet.MissingSigsMode;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 import com.google.common.base.MoreObjects;
 

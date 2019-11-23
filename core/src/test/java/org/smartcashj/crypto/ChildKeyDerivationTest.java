@@ -20,7 +20,7 @@ package cc.smartcash.smartcashj.crypto;
 import cc.smartcash.smartcashj.core.*;
 import cc.smartcash.smartcashj.params.*;
 import org.junit.*;
-import org.spongycastle.crypto.params.*;
+import org.bouncycastle.crypto.params.*;
 
 import static cc.smartcash.smartcashj.core.Utils.*;
 import static org.junit.Assert.*;
