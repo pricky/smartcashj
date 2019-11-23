@@ -30,6 +30,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import static cc.smartcash.smartcashj.core.Utils.HEX;
 import static com.google.common.base.Preconditions.*;
@@ -53,7 +54,7 @@ public class DeterministicKey extends ECKey {
     };
 
     private final DeterministicKey parent;
-    private final ImmutableList<ChildNumber> childNumberPath;
+    private final HDPath childNumberPath;
     private final int depth;
     private int parentFingerprint; // 0 if this key is root node of key hierarchy
 
@@ -61,7 +62,7 @@ public class DeterministicKey extends ECKey {
     private final byte[] chainCode;
 
     /** Constructs a key from its components. This is not normally something you should use. */
-    public DeterministicKey(ImmutableList<ChildNumber> childNumberPath,
+    public DeterministicKey(List<ChildNumber> childNumberPath,
                             byte[] chainCode,
                             LazyECPoint publicAsPoint,
                             @Nullable BigInteger priv,
@@ -69,36 +70,37 @@ public class DeterministicKey extends ECKey {
         super(priv, compressPoint(checkNotNull(publicAsPoint)));
         checkArgument(chainCode.length == 32);
         this.parent = parent;
-        this.childNumberPath = checkNotNull(childNumberPath);
+        this.childNumberPath = HDPath.M(checkNotNull(childNumberPath));
         this.chainCode = Arrays.copyOf(chainCode, chainCode.length);
         this.depth = parent == null ? 0 : parent.depth + 1;
         this.parentFingerprint = (parent != null) ? parent.getFingerprint() : 0;
     }
 
-    public DeterministicKey(ImmutableList<ChildNumber> childNumberPath,
+    public DeterministicKey(List<ChildNumber> childNumberPath,
                             byte[] chainCode,
                             ECPoint publicAsPoint,
+                            boolean compressed,
                             @Nullable BigInteger priv,
                             @Nullable DeterministicKey parent) {
-        this(childNumberPath, chainCode, new LazyECPoint(publicAsPoint), priv, parent);
+        this(childNumberPath, chainCode, new LazyECPoint(publicAsPoint, compressed), priv, parent);
     }
 
     /** Constructs a key from its components. This is not normally something you should use. */
-    public DeterministicKey(ImmutableList<ChildNumber> childNumberPath,
+    public DeterministicKey(List<ChildNumber> childNumberPath,
                             byte[] chainCode,
                             BigInteger priv,
                             @Nullable DeterministicKey parent) {
-        super(priv, compressPoint(ECKey.publicPointFromPrivate(priv)));
+        super(priv, ECKey.publicPointFromPrivate(priv), true);
         checkArgument(chainCode.length == 32);
         this.parent = parent;
-        this.childNumberPath = checkNotNull(childNumberPath);
+        this.childNumberPath = HDPath.M(checkNotNull(childNumberPath));
         this.chainCode = Arrays.copyOf(chainCode, chainCode.length);
         this.depth = parent == null ? 0 : parent.depth + 1;
         this.parentFingerprint = (parent != null) ? parent.getFingerprint() : 0;
     }
 
     /** Constructs a key from its components. This is not normally something you should use. */
-    public DeterministicKey(ImmutableList<ChildNumber> childNumberPath,
+    public DeterministicKey(List<ChildNumber> childNumberPath,
                             byte[] chainCode,
                             KeyCrypter crypter,
                             LazyECPoint pub,
@@ -139,7 +141,7 @@ public class DeterministicKey extends ECKey {
         super(null, compressPoint(checkNotNull(publicAsPoint)));
         checkArgument(chainCode.length == 32);
         this.parent = parent;
-        this.childNumberPath = checkNotNull(childNumberPath);
+        this.childNumberPath = HDPath.M(checkNotNull(childNumberPath));
         this.chainCode = Arrays.copyOf(chainCode, chainCode.length);
         this.depth = depth;
         this.parentFingerprint = ascertainParentFingerprint(parent, parentFingerprint);
@@ -156,10 +158,10 @@ public class DeterministicKey extends ECKey {
                             @Nullable DeterministicKey parent,
                             int depth,
                             int parentFingerprint) {
-        super(priv, compressPoint(ECKey.publicPointFromPrivate(priv)));
+        super(priv, ECKey.publicPointFromPrivate(priv), true);
         checkArgument(chainCode.length == 32);
         this.parent = parent;
-        this.childNumberPath = checkNotNull(childNumberPath);
+        this.childNumberPath = HDPath.M(checkNotNull(childNumberPath));
         this.chainCode = Arrays.copyOf(chainCode, chainCode.length);
         this.depth = depth;
         this.parentFingerprint = ascertainParentFingerprint(parent, parentFingerprint);
@@ -168,7 +170,7 @@ public class DeterministicKey extends ECKey {
     
     /** Clones the key */
     public DeterministicKey(DeterministicKey keyToClone, DeterministicKey newParent) {
-        super(keyToClone.priv, keyToClone.pub.get());
+        super(keyToClone.priv, keyToClone.pub.get(), keyToClone.pub.isCompressed());
         this.parent = newParent;
         this.childNumberPath = keyToClone.childNumberPath;
         this.chainCode = keyToClone.chainCode;
@@ -182,7 +184,7 @@ public class DeterministicKey extends ECKey {
      * A path can be written as 1/2/1 which means the first child of the root, the second child of that node, then
      * the first child of that node.
      */
-    public ImmutableList<ChildNumber> getPath() {
+    public HDPath getPath() {
         return childNumberPath;
     }
 
@@ -427,7 +429,7 @@ public class DeterministicKey extends ECKey {
                 cursor.pub, new BigInteger(1, parentalPrivateKeyBytes), cursor.parent);
         // Now we have to rederive the keys along the path back to ourselves. That path can be found by just truncating
         // our path with the length of the parents path.
-        ImmutableList<ChildNumber> path = childNumberPath.subList(cursor.getPath().size(), childNumberPath.size());
+        List<ChildNumber> path = childNumberPath.subList(cursor.getPath().size(), childNumberPath.size());
         for (ChildNumber num : path) {
             downCursor = HDKeyDerivation.deriveChildKey(downCursor, num);
         }
@@ -435,7 +437,7 @@ public class DeterministicKey extends ECKey {
         // If it's not, it means we tried decrypting with an invalid password and earlier checks e.g. for padding didn't
         // catch it.
         if (!downCursor.pub.equals(pub))
-            throw new KeyCrypterException("Could not decrypt bytes");
+            throw new KeyCrypterException.PublicPrivateMismatch("Could not decrypt bytes");
         return checkNotNull(downCursor.priv);
     }
 
