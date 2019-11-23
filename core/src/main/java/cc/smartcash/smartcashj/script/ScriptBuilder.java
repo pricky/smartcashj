@@ -252,6 +252,11 @@ public class ScriptBuilder {
         return new Script(chunks);
     }
 
+    /** Creates an empty script. */
+    public static Script createEmpty() {
+        return new ScriptBuilder().build();
+    }
+
     /** Creates a scriptPubKey that encodes payment to the given address. */
     public static Script createOutputScript(Address to) {
         ScriptBuilder builder = new ScriptBuilder();

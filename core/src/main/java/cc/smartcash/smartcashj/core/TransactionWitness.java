@@ -14,6 +14,10 @@
 
 package cc.smartcash.smartcashj.core;
 
+import cc.smartcash.smartcashj.crypto.TransactionSignature;
+import static com.google.common.base.Preconditions.checkArgument;
+
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -22,6 +26,18 @@ import java.util.List;
 
 public class TransactionWitness {
     public static final TransactionWitness EMPTY = new TransactionWitness(0);
+
+    /**
+     * Creates the stack pushes necessary to redeem a P2WPKH output. If given signature is null, an empty push will be
+     * used as a placeholder.
+     */
+    public static TransactionWitness redeemP2WPKH(@Nullable TransactionSignature signature, ECKey pubKey) {
+        checkArgument(pubKey.isCompressed(), "only compressed keys allowed");
+        TransactionWitness witness = new TransactionWitness(2);
+        witness.setPush(0, signature != null ? signature.encodeToBitcoin() : new byte[0]); // signature
+        witness.setPush(1, pubKey.getPubKey()); // pubkey
+        return witness;
+    }
 
     private final byte[][] pushes;
 

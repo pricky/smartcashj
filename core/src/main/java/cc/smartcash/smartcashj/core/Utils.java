@@ -60,6 +60,8 @@ public class Utils {
     /** Hex encoding used throughout the framework. Use with HEX.encode(byte[]) or HEX.decode(CharSequence). */
     public static final BaseEncoding HEX = BaseEncoding.base16().lowerCase();
 
+    public static final int MAX_INITIAL_ARRAY_LENGTH = 20;
+
     private static BlockingQueue<Boolean> mockSleepQueue;
 
     /**

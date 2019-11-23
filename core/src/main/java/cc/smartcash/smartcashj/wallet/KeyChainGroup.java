@@ -17,6 +17,7 @@
 
 package cc.smartcash.smartcashj.wallet;
 
+
 import com.google.common.collect.*;
 import com.google.protobuf.*;
 

@@ -20,20 +20,26 @@ import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.wallet.Wallet;
 import cc.smartcash.smartcashj.wallet.WalletTransaction;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
  * This interface is used to abstract the {@link Wallet} and the {@link Transaction}
  */
 public interface TransactionBag {
-    /** Returns true if this wallet contains a public key which hashes to the given hash. */
-    boolean isPubKeyHashMine(byte[] pubkeyHash);
+    /**
+     * Look for a public key which hashes to the given hash and (optionally) is used for a specific script type.
+     * @param pubKeyHash hash of the public key to look for
+     * @param scriptType only look for given usage (currently {@link Script.ScriptType#P2PKH} or {@link Script.ScriptType#P2WPKH}) or {@code null} if we don't care
+     * @return true if hash was found
+     */
+    boolean isPubKeyHashMine(byte[] pubKeyHash, @Nullable Script.ScriptType scriptType);
 
     /** Returns true if this wallet is watching transactions for outputs with the script. */
     boolean isWatchedScript(Script script);
 
     /** Returns true if this wallet contains a keypair with the given public key. */
-    boolean isPubKeyMine(byte[] pubkey);
+    boolean isPubKeyMine(byte[] pubKey);
 
     /** Returns true if this wallet knows the script corresponding to the given hash. */
     boolean isPayToScriptHashMine(byte[] payToScriptHash);
