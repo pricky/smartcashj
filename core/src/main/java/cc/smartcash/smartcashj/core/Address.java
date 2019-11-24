@@ -18,6 +18,7 @@ package cc.smartcash.smartcashj.core;
 
 import javax.annotation.Nullable;
 
+import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.script.Script.ScriptType;
 
 /**
@@ -37,7 +38,7 @@ public abstract class Address extends PrefixedChecksummedBytes {
 
     /**
      * Construct an address from its textual form.
-     * 
+     *
      * @param params
      *            the expected network this address is valid for, or null if the network should be derived from the
      *            textual form
@@ -68,15 +69,35 @@ public abstract class Address extends PrefixedChecksummedBytes {
     }
 
     /**
+     * Construct an {@link Address} that represents the public part of the given {@link ECKey}.
+     *
+     * @param params
+     *            network this address is valid for
+     * @param key
+     *            only the public part is used
+     * @param outputScriptType
+     *            script type the address should use
+     * @return constructed address
+     */
+    public static Address fromKey(final NetworkParameters params, final ECKey key, final ScriptType outputScriptType) {
+        if (outputScriptType == Script.ScriptType.P2PKH)
+            return LegacyAddress.fromKey(params, key);
+        else if (outputScriptType == Script.ScriptType.P2WPKH)
+            return SegwitAddress.fromKey(params, key);
+        else
+            throw new IllegalArgumentException(outputScriptType.toString());
+    }
+
+    /**
      * Get either the public key hash or script hash that is encoded in the address.
-     * 
+     *
      * @return hash that is encoded in the address
      */
     public abstract byte[] getHash();
 
     /**
      * Get the type of output script that will be used for sending to the address.
-     * 
+     *
      * @return type of output script
      */
     public abstract ScriptType getOutputScriptType();

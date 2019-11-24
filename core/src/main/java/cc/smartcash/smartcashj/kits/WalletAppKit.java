@@ -24,7 +24,6 @@ import cc.smartcash.smartcashj.core.listeners.*;
 import cc.smartcash.smartcashj.core.*;
 import cc.smartcash.smartcashj.crypto.DeterministicKey;
 import cc.smartcash.smartcashj.net.discovery.*;
-import cc.smartcash.smartcashj.protocols.channels.*;
 import cc.smartcash.smartcashj.store.*;
 import cc.smartcash.smartcashj.wallet.*;
 import org.slf4j.*;

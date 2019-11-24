@@ -71,7 +71,7 @@ public class VerificationException extends RuntimeException {
     public static class BlockVersionOutOfDate extends VerificationException {
         public BlockVersionOutOfDate(final long version) {
             super("Block version #"
-                + version + " is outdated.");
+                    + version + " is outdated.");
         }
     }
 
@@ -84,6 +84,12 @@ public class VerificationException extends RuntimeException {
     public static class CoinbaseHeightMismatch extends VerificationException {
         public CoinbaseHeightMismatch(final String message) {
             super(message);
+        }
+    }
+
+    public static class NoncanonicalSignature extends VerificationException {
+        public NoncanonicalSignature() {
+            super("Signature encoding is not canonical");
         }
     }
 }

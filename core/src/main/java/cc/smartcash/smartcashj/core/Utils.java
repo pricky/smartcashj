@@ -36,6 +36,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.bouncycastle.crypto.digests.RIPEMD160Digest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -60,9 +62,16 @@ public class Utils {
     /** Hex encoding used throughout the framework. Use with HEX.encode(byte[]) or HEX.decode(CharSequence). */
     public static final BaseEncoding HEX = BaseEncoding.base16().lowerCase();
 
+    /**
+     * Max initial size of variable length arrays and ArrayLists that could be attacked.
+     * Avoids this attack: Attacker sends a msg indicating it will contain a huge number (eg 2 billion) elements (eg transaction inputs) and
+     * forces bitcoinj to try to allocate a huge piece of the memory resulting in OutOfMemoryError.
+     */
     public static final int MAX_INITIAL_ARRAY_LENGTH = 20;
 
     private static BlockingQueue<Boolean> mockSleepQueue;
+
+    private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
     /**
      * <p>
@@ -200,13 +209,13 @@ public class Utils {
     /** Parse 8 bytes from the byte array (starting at the offset) as signed 64-bit integer in little endian format. */
     public static long readInt64(byte[] bytes, int offset) {
         return (bytes[offset] & 0xffl) |
-               ((bytes[offset + 1] & 0xffl) << 8) |
-               ((bytes[offset + 2] & 0xffl) << 16) |
-               ((bytes[offset + 3] & 0xffl) << 24) |
-               ((bytes[offset + 4] & 0xffl) << 32) |
-               ((bytes[offset + 5] & 0xffl) << 40) |
-               ((bytes[offset + 6] & 0xffl) << 48) |
-               ((bytes[offset + 7] & 0xffl) << 56);
+                ((bytes[offset + 1] & 0xffl) << 8) |
+                ((bytes[offset + 2] & 0xffl) << 16) |
+                ((bytes[offset + 3] & 0xffl) << 24) |
+                ((bytes[offset + 4] & 0xffl) << 32) |
+                ((bytes[offset + 5] & 0xffl) << 40) |
+                ((bytes[offset + 6] & 0xffl) << 48) |
+                ((bytes[offset + 7] & 0xffl) << 56);
     }
 
     /** Parse 4 bytes from the byte array (starting at the offset) as unsigned 32-bit integer in big endian format. */
@@ -291,7 +300,7 @@ public class Utils {
         BigInteger result = new BigInteger(buf);
         return isNegative ? result.negate() : result;
     }
-    
+
     /**
      * MPI encoded numbers are produced by the OpenSSL BN_bn2mpi function. They consist of
      * a 4 byte big endian length field, followed by the stated number of bytes representing
@@ -419,12 +428,16 @@ public class Utils {
         return mockTime != null ? mockTime : new Date();
     }
 
-    // TODO: Replace usages of this where the result is / 1000 with currentTimeSeconds.
-    /** Returns the current time in milliseconds since the epoch, or a mocked out equivalent. */
+    /**
+     * Returns the current time in milliseconds since the epoch, or a mocked out equivalent.
+     */
     public static long currentTimeMillis() {
         return mockTime != null ? mockTime.getTime() : System.currentTimeMillis();
     }
 
+    /**
+     * Returns the current time in seconds since the epoch, or a mocked out equivalent.
+     */
     public static long currentTimeSeconds() {
         return currentTimeMillis() / 1000;
     }
@@ -453,12 +466,12 @@ public class Utils {
 
     // 00000001, 00000010, 00000100, 00001000, ...
     private static final int[] bitMask = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-    
+
     /** Checks if the given bit is set in data, using little endian (not the same as Java native big endian) */
     public static boolean checkBitLE(byte[] data, int index) {
         return (data[index >>> 3] & bitMask[7 & index]) != 0;
     }
-    
+
     /** Sets the given bit in data to one, using little endian (not the same as Java native big endian) */
     public static void setBitLE(byte[] data, int index) {
         data[index >>> 3] |= bitMask[7 & index];
@@ -506,7 +519,7 @@ public class Utils {
         int item, count;
         public Pair(int item, int count) { this.count = count; this.item = item; }
         // note that in this implementation compareTo() is not consistent with equals()
-        @Override public int compareTo(Pair o) { return -Ints.compare(count, o.count); }
+        @Override public int compareTo(Pair o) { return -Integer.compare(count, o.count); }
     }
 
     public static int maxOfMostFreq(int... items) {
@@ -520,7 +533,7 @@ public class Utils {
             return 0;
         // This would be much easier in a functional language (or in Java 8).
         items = Ordering.natural().reverse().sortedCopy(items);
-        LinkedList<Pair> pairs = Lists.newLinkedList();
+        LinkedList<Pair> pairs = new LinkedList<>();
         pairs.add(new Pair(items.get(0), 0));
         for (int item : items) {
             Pair pair = pairs.getLast();
@@ -541,24 +554,70 @@ public class Utils {
         return maxItem;
     }
 
-    private static int isAndroid = -1;
+    private enum Runtime {
+        ANDROID, OPENJDK, ORACLE_JAVA
+    }
+
+    private enum OS {
+        LINUX, WINDOWS, MAC_OS
+    }
+
+    private static Runtime runtime = null;
+    private static OS os = null;
+    static {
+        String runtimeProp = System.getProperty("java.runtime.name", "").toLowerCase(Locale.US);
+        if (runtimeProp.equals(""))
+            runtime = null;
+        else if (runtimeProp.contains("android"))
+            runtime = Runtime.ANDROID;
+        else if (runtimeProp.contains("openjdk"))
+            runtime = Runtime.OPENJDK;
+        else if (runtimeProp.contains("java(tm) se"))
+            runtime = Runtime.ORACLE_JAVA;
+        else
+            log.info("Unknown java.runtime.name '{}'", runtimeProp);
+
+        String osProp = System.getProperty("os.name", "").toLowerCase(Locale.US);
+        if (osProp.equals(""))
+            os = null;
+        else if (osProp.contains("linux"))
+            os = OS.LINUX;
+        else if (osProp.contains("win"))
+            os = OS.WINDOWS;
+        else if (osProp.contains("mac"))
+            os = OS.MAC_OS;
+        else
+            log.info("Unknown os.name '{}'", runtimeProp);
+    }
+
     public static boolean isAndroidRuntime() {
-        if (isAndroid == -1) {
-            final String runtime = System.getProperty("java.runtime.name");
-            isAndroid = (runtime != null && runtime.equals("Android Runtime")) ? 1 : 0;
-        }
-        return isAndroid == 1;
+        return runtime == Runtime.ANDROID;
+    }
+
+    public static boolean isOpenJDKRuntime() {
+        return runtime == Runtime.OPENJDK;
+    }
+
+    public static boolean isOracleJavaRuntime() {
+        return runtime == Runtime.ORACLE_JAVA;
     }
 
     public static boolean isLinux() {
-        return System.getProperty("os.name").toLowerCase().contains("linux");
+        return os == OS.LINUX;
     }
 
     public static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("win");
+        return os == OS.WINDOWS;
     }
 
     public static boolean isMac() {
-        return System.getProperty("os.name").toLowerCase().contains("mac");
+        return os == OS.MAC_OS;
+    }
+
+    public static String toString(List<byte[]> stack) {
+        List<String> parts = new ArrayList<>(stack.size());
+        for (byte[] push : stack)
+            parts.add('[' + HEX.encode(push) + ']');
+        return SPACE_JOINER.join(parts);
     }
 }
