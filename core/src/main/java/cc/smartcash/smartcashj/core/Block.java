@@ -28,6 +28,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkState;
 import static cc.smartcash.smartcashj.core.Coin.*;
 import static cc.smartcash.smartcashj.core.Sha256Hash.*;
 
@@ -40,7 +41,7 @@ import static cc.smartcash.smartcashj.core.Sha256Hash.*;
  *
  * <p>To get a block, you can either build one from the raw bytes you can get from another implementation, or request one
  * specifically using {@link Peer#getBlock(Sha256Hash)}, or grab one from a downloaded {@link BlockChain}.</p>
- * 
+ *
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class Block extends Message {
@@ -92,13 +93,13 @@ public class Block extends Message {
     // Fields defined as part of the protocol format.
     private long version;
     private Sha256Hash prevBlockHash;
-    private Sha256Hash merkleRoot;
+    private Sha256Hash merkleRoot, witnessRoot;
     private long time;
     private long difficultyTarget; // "nBits"
     private long nonce;
 
-    // TODO: Get rid of all the direct accesses to this field. It's a long-since unnecessary holdover from the Dalvik days.
-    /** If null, it means this object holds only the headers. */
+    // If null, it means this object holds only the headers.
+    @VisibleForTesting
     @Nullable List<Transaction> transactions;
 
     /** Stores the hash of the block. If null, getHash() will recalculate it. */
@@ -106,7 +107,7 @@ public class Block extends Message {
 
     protected boolean headerBytesValid;
     protected boolean transactionBytesValid;
-    
+
     // Blocks can be encoded in a way that will use more bytes than is optimal (due to VarInts having multiple encodings)
     // MAX_BLOCK_SIZE must be compared to the optimal encoding, not the actual encoding, so when parsing, we keep track
     // of the size of the ideal encoding in addition to the actual message size (which Message needs)
@@ -118,7 +119,7 @@ public class Block extends Message {
         // Set up a few basic things. We are not complete after this though.
         version = setVersion;
         difficultyTarget = 0x1d07fff8L;
-        time = System.currentTimeMillis() / 1000;
+        time = Utils.currentTimeSeconds();
         prevBlockHash = Sha256Hash.ZERO_HASH;
 
         length = HEADER_SIZE;
@@ -221,7 +222,7 @@ public class Block extends Message {
 
     /**
      * Parse transactions from the block.
-     * 
+     *
      * @param transactionsOffset Offset of the transactions within the block.
      * Useful for non-Bitcoin chains where the block header may not be a fixed
      * size.
@@ -266,7 +267,7 @@ public class Block extends Message {
         parseTransactions(offset + HEADER_SIZE);
         length = cursor - offset;
     }
-    
+
     public int getOptimalEncodingMessageSize() {
         if (optimalEncodingMessageSize != 0)
             return optimalEncodingMessageSize;
@@ -303,11 +304,9 @@ public class Block extends Message {
             return;
         }
 
-        if (transactions != null) {
-            stream.write(new VarInt(transactions.size()).encode());
-            for (Transaction tx : transactions) {
-                tx.bitcoinSerialize(stream);
-            }
+        stream.write(new VarInt(transactions.size()).encode());
+        for (Transaction tx : transactions) {
+            tx.bitcoinSerialize(stream);
         }
     }
 
@@ -484,14 +483,15 @@ public class Block extends Message {
             s.append(" (").append(bips).append(')');
         s.append('\n');
         s.append("   previous block: ").append(getPrevBlockHash()).append("\n");
-        s.append("   merkle root: ").append(getMerkleRoot()).append("\n");
         s.append("   time: ").append(time).append(" (").append(Utils.dateTimeFormat(time * 1000)).append(")\n");
         s.append("   difficulty target (nBits): ").append(difficultyTarget).append("\n");
         s.append("   nonce: ").append(nonce).append("\n");
         if (transactions != null && transactions.size() > 0) {
+            s.append("   merkle root: ").append(getMerkleRoot()).append("\n");
+            s.append("   witness root: ").append(getWitnessRoot()).append("\n");
             s.append("   with ").append(transactions.size()).append(" transaction(s):\n");
             for (Transaction tx : transactions) {
-                s.append(tx);
+                s.append(tx).append('\n');
             }
         }
         return s.toString();
@@ -539,7 +539,7 @@ public class Block extends Message {
         // ridiculously easy difficulty and this function would accept them.
         //
         // To prevent this attack from being possible, elsewhere we check that the difficultyTarget
-        // field is of the right value. This requires us to have the preceeding blocks.
+        // field is of the right value. This requires us to have the preceding blocks.
         BigInteger target = getDifficultyTargetAsInteger();
 
         BigInteger h = getHash().toBigInteger();
@@ -581,12 +581,43 @@ public class Block extends Message {
         }
     }
 
+    @VisibleForTesting
+    void checkWitnessRoot() throws VerificationException {
+        Transaction coinbase = transactions.get(0);
+        checkState(coinbase.isCoinBase());
+        Sha256Hash witnessCommitment = coinbase.findWitnessCommitment();
+        if (witnessCommitment != null) {
+            byte[] witnessReserved = null;
+            TransactionWitness witness = coinbase.getInput(0).getWitness();
+            if (witness.getPushCount() != 1)
+                throw new VerificationException("Coinbase witness reserved invalid: push count");
+            witnessReserved = witness.getPush(0);
+            if (witnessReserved.length != 32)
+                throw new VerificationException("Coinbase witness reserved invalid: length");
+
+            Sha256Hash witnessRootHash = Sha256Hash.twiceOf(getWitnessRoot().getReversedBytes(), witnessReserved);
+            if (!witnessRootHash.equals(witnessCommitment))
+                throw new VerificationException("Witness merkle root invalid. Expected " + witnessCommitment.toString()
+                        + " but got " + witnessRootHash.toString());
+        } else {
+            for (Transaction tx : transactions) {
+                if (tx.hasWitnesses())
+                    throw new VerificationException("Transaction witness found but no witness commitment present");
+            }
+        }
+    }
+
     private Sha256Hash calculateMerkleRoot() {
-        List<byte[]> tree = buildMerkleTree();
+        List<byte[]> tree = buildMerkleTree(false);
         return Sha256Hash.wrap(tree.get(tree.size() - 1));
     }
 
-    private List<byte[]> buildMerkleTree() {
+    private Sha256Hash calculateWitnessRoot() {
+        List<byte[]> tree = buildMerkleTree(true);
+        return Sha256Hash.wrap(tree.get(tree.size() - 1));
+    }
+
+    private List<byte[]> buildMerkleTree(boolean useWTxId) {
         // The Merkle root is based on a tree of hashes calculated from the transactions:
         //
         //     root
@@ -599,7 +630,7 @@ public class Block extends Message {
         // entry is a hash.
         //
         // The hashing algorithm is double SHA-256. The leaves are a hash of the serialized contents of the transaction.
-        // The interior nodes are hashes of the concenation of the two child hashes.
+        // The interior nodes are hashes of the concatenation of the two child hashes.
         //
         // This structure allows the creation of proof that a transaction was included into a block without having to
         // provide the full block contents. Instead, you can provide only a Merkle branch. For example to prove tx2 was
@@ -617,10 +648,15 @@ public class Block extends Message {
         //    2     3    4  4
         //  / \   / \   / \
         // t1 t2 t3 t4 t5 t5
-        ArrayList<byte[]> tree = new ArrayList<>();
+        ArrayList<byte[]> tree = new ArrayList<>(transactions.size());
         // Start by adding all the hashes of the transactions as leaves of the tree.
-        for (Transaction t : transactions) {
-            tree.add(t.getHash().getBytes());
+        for (Transaction tx : transactions) {
+            final Sha256Hash id;
+            if (useWTxId && tx.isCoinBase())
+                id = Sha256Hash.ZERO_HASH;
+            else
+                id = useWTxId ? tx.getWTxId() : tx.getTxId();
+            tree.add(id.getBytes());
         }
         int levelOffset = 0; // Offset in the list where the currently processed level starts.
         // Step through each level, stopping when we reach the root (levelSize == 1).
@@ -632,7 +668,7 @@ public class Block extends Message {
                 int right = Math.min(left + 1, levelSize - 1);
                 byte[] leftBytes = Utils.reverseBytes(tree.get(levelOffset + left));
                 byte[] rightBytes = Utils.reverseBytes(tree.get(levelOffset + right));
-                tree.add(Utils.reverseBytes(hashTwice(leftBytes, 0, 32, rightBytes, 0, 32)));
+                tree.add(Utils.reverseBytes(hashTwice(leftBytes, rightBytes)));
             }
             // Move to the next level.
             levelOffset += levelSize;
@@ -693,7 +729,7 @@ public class Block extends Message {
         // Now we need to check that the body of the block actually matches the headers. The network won't generate
         // an invalid block, but if we didn't validate this then an untrusted man-in-the-middle could obtain the next
         // valid block from the network and simply replace the transactions in it with their own fictional
-        // transactions that reference spent or non-existant inputs.
+        // transactions that reference spent or non-existent inputs.
         if (transactions.isEmpty())
             throw new VerificationException("Block had no transactions");
         if (this.getOptimalEncodingMessageSize() > MAX_BLOCK_SIZE)
@@ -703,7 +739,7 @@ public class Block extends Message {
         checkSigOps();
         for (Transaction transaction : transactions)
             transaction.verify();
-        }
+    }
 
     /**
      * Verifies both the header and that the transactions hash to the merkle root.
@@ -747,6 +783,15 @@ public class Block extends Message {
         unCacheHeader();
         merkleRoot = value;
         hash = null;
+    }
+
+    /**
+     * Returns the witness root in big endian form, calculating it from transactions if necessary.
+     */
+    public Sha256Hash getWitnessRoot() {
+        if (witnessRoot == null)
+            witnessRoot = calculateWitnessRoot();
+        return witnessRoot;
     }
 
     /** Adds a transaction to this block. The nonce and merkle root are invalid after this. */
@@ -859,7 +904,7 @@ public class Block extends Message {
     private static int txCounter;
 
     /** Adds a coinbase transaction to the block. This exists for unit tests.
-     * 
+     *
      * @param height block height, if known, or -1 otherwise.
      */
     @VisibleForTesting
@@ -882,7 +927,7 @@ public class Block extends Message {
         coinbase.addInput(new TransactionInput(params, coinbase,
                 inputBuilder.build().getProgram()));
         coinbase.addOutput(new TransactionOutput(params, coinbase, value,
-                ScriptBuilder.createOutputScript(ECKey.fromPublicOnly(pubKeyTo)).getProgram()));
+                ScriptBuilder.createP2PKOutputScript(ECKey.fromPublicOnly(pubKeyTo)).getProgram()));
         transactions.add(coinbase);
         coinbase.setParent(this);
         coinbase.length = coinbase.unsafeBitcoinSerialize().length;
@@ -905,7 +950,7 @@ public class Block extends Message {
     /**
      * Returns a solved block that builds on top of this one. This exists for unit tests.
      * In this variant you can specify a public key (pubkey) for use in generating coinbase blocks.
-     * 
+     *
      * @param height block height, if known, or -1 otherwise.
      */
     Block createNextBlock(@Nullable final Address to, final long version,
@@ -973,7 +1018,7 @@ public class Block extends Message {
     @VisibleForTesting
     public Block createNextBlockWithCoinbase(long version, byte[] pubKey, Coin coinbaseValue, final int height) {
         return createNextBlock(null, version, (TransactionOutPoint) null,
-                               Utils.currentTimeSeconds(), pubKey, coinbaseValue, height);
+                Utils.currentTimeSeconds(), pubKey, coinbaseValue, height);
     }
 
     /**
@@ -983,7 +1028,7 @@ public class Block extends Message {
     @VisibleForTesting
     Block createNextBlockWithCoinbase(long version, byte[] pubKey, final int height) {
         return createNextBlock(null, version, (TransactionOutPoint) null,
-                               Utils.currentTimeSeconds(), pubKey, FIFTY_COINS, height);
+                Utils.currentTimeSeconds(), pubKey, FIFTY_COINS, height);
     }
 
     @VisibleForTesting
@@ -998,7 +1043,7 @@ public class Block extends Message {
 
     /**
      * Return whether this block contains any transactions.
-     * 
+     *
      * @return  true if the block contains transactions, false otherwise (is
      * purely a header).
      */

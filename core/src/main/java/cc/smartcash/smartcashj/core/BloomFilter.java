@@ -21,14 +21,14 @@ import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.script.ScriptChunk;
 import cc.smartcash.smartcashj.script.ScriptPattern;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import com.google.common.base.MoreObjects;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Math.*;
@@ -47,14 +47,14 @@ import static java.lang.Math.*;
  */
 public class BloomFilter extends Message {
     /** The BLOOM_UPDATE_* constants control when the bloom filter is auto-updated by the peer using
-        it as a filter, either never, for all outputs or only for P2PK outputs (default) */
+     it as a filter, either never, for all outputs or only for P2PK outputs (default) */
     public enum BloomUpdate {
         UPDATE_NONE, // 0
         UPDATE_ALL, // 1
         /** Only adds outpoints to the filter if the output is a P2PK/pay-to-multisig script */
         UPDATE_P2PUBKEY_ONLY //2
     }
-    
+
     private byte[] data;
     private long hashFuncs;
     private long nTweak;
@@ -72,22 +72,22 @@ public class BloomFilter extends Message {
     public BloomFilter(NetworkParameters params, byte[] payloadBytes) throws ProtocolException {
         super(params, payloadBytes, 0);
     }
-    
+
     /**
      * Constructs a filter with the given parameters which is updated on P2PK outputs only.
      */
     public BloomFilter(int elements, double falsePositiveRate, long randomNonce) {
         this(elements, falsePositiveRate, randomNonce, BloomUpdate.UPDATE_P2PUBKEY_ONLY);
     }
-    
+
     /**
      * <p>Constructs a new Bloom Filter which will provide approximately the given false positive rate when the given
      * number of elements have been inserted. If the filter would otherwise be larger than the maximum allowed size,
      * it will be automatically downsized to the maximum size.</p>
-     * 
+     *
      * <p>To check the theoretical false positive rate of a given filter, use
      * {@link BloomFilter#getFalsePositiveRate(int)}.</p>
-     * 
+     *
      * <p>The anonymity of which coins are yours to any peer which you send a BloomFilter to is controlled by the
      * false positive rate. For reference, as of block 187,000, the total number of addresses used in the chain was
      * roughly 4.5 million. Thus, if you use a false positive rate of 0.001 (0.1%), there will be, on average, 4,500
@@ -95,15 +95,15 @@ public class BloomFilter extends Message {
      * which are not actually yours. Keep in mind that a remote node can do a pretty good job estimating the order of
      * magnitude of the false positive rate of a given filter you provide it when considering the anonymity of a given
      * filter.</p>
-     * 
+     *
      * <p>In order for filtered block download to function efficiently, the number of matched transactions in any given
      * block should be less than (with some headroom) the maximum size of the MemoryPool used by the Peer
      * doing the downloading (default is {@link TxConfidenceTable#MAX_SIZE}). See the comment in processBlock(FilteredBlock)
      * for more information on this restriction.</p>
-     * 
+     *
      * <p>randomNonce is a tweak for the hash function used to prevent some theoretical DoS attacks.
      * It should be a random value, however secureness of the random value is of no great consequence.</p>
-     * 
+     *
      * <p>updateFlag is used to control filter behaviour on the server (remote node) side when it encounters a hit.
      * See {@link BloomFilter.BloomUpdate} for a brief description of each mode. The purpose
      * of this flag is to reduce network round-tripping and avoid over-dirtying the filter for the most common
@@ -121,7 +121,7 @@ public class BloomFilter extends Message {
         this.nTweak = randomNonce;
         this.nFlags = (byte)(0xff & updateFlag.ordinal());
     }
-    
+
     /**
      * Returns the theoretical false positive rate of this filter if were to contain the given number of elements.
      */
@@ -131,7 +131,11 @@ public class BloomFilter extends Message {
 
     @Override
     public String toString() {
-        return "Bloom Filter of size " + data.length + " with " + hashFuncs + " hash functions.";
+        final MoreObjects.ToStringHelper helper = MoreObjects.toStringHelper(this).omitNullValues();
+        helper.add("data length", data.length);
+        helper.add("hashFuncs", hashFuncs);
+        helper.add("nFlags", getUpdateFlag());
+        return helper.toString();
     }
 
     @Override
@@ -146,7 +150,7 @@ public class BloomFilter extends Message {
         nFlags = readBytes(1)[0];
         length = cursor - offset;
     }
-    
+
     /**
      * Serializes this message to the provided stream. If you just want the raw bytes use bitcoinSerialize().
      */
@@ -176,10 +180,10 @@ public class BloomFilter extends Message {
         // body
         for(int i = 0; i < numBlocks; i += 4) {
             int k1 = (object[i] & 0xFF) |
-                  ((object[i+1] & 0xFF) << 8) |
-                  ((object[i+2] & 0xFF) << 16) |
-                  ((object[i+3] & 0xFF) << 24);
-            
+                    ((object[i+1] & 0xFF) << 8) |
+                    ((object[i+2] & 0xFF) << 16) |
+                    ((object[i+3] & 0xFF) << 24);
+
             k1 *= c1;
             k1 = rotateLeft32(k1, 15);
             k1 *= c2;
@@ -188,7 +192,7 @@ public class BloomFilter extends Message {
             h1 = rotateLeft32(h1, 13);
             h1 = h1*5+0xe6546b64;
         }
-        
+
         int k1 = 0;
         switch(object.length & 3)
         {
@@ -214,10 +218,10 @@ public class BloomFilter extends Message {
         h1 ^= h1 >>> 13;
         h1 *= 0xc2b2ae35;
         h1 ^= h1 >>> 16;
-        
+
         return (int)((h1&0xFFFFFFFFL) % (data.length * 8));
     }
-    
+
     /**
      * Returns true if the given object matches the filter either because it was inserted, or because we have a
      * false-positive.
@@ -229,7 +233,7 @@ public class BloomFilter extends Message {
         }
         return true;
     }
-    
+
     /** Insert the given arbitrary data into the filter */
     public synchronized void insert(byte[] object) {
         for (int i = 0; i < hashFuncs; i++)
@@ -240,6 +244,11 @@ public class BloomFilter extends Message {
     public synchronized void insert(ECKey key) {
         insert(key.getPubKey());
         insert(key.getPubKeyHash());
+    }
+
+    /** Inserts the given transaction outpoint. */
+    public synchronized void insert(TransactionOutPoint outpoint) {
+        insert(outpoint.unsafeBitcoinSerialize());
     }
 
     /**
@@ -260,8 +269,8 @@ public class BloomFilter extends Message {
     public synchronized void merge(BloomFilter filter) {
         if (!this.matchesAll() && !filter.matchesAll()) {
             checkArgument(filter.data.length == this.data.length &&
-                          filter.hashFuncs == this.hashFuncs &&
-                          filter.nTweak == this.nTweak);
+                    filter.hashFuncs == this.hashFuncs &&
+                    filter.nTweak == this.nTweak);
             for (int i = 0; i < data.length; i++)
                 this.data[i] |= filter.data[i];
         } else {
@@ -304,11 +313,11 @@ public class BloomFilter extends Message {
     public synchronized FilteredBlock applyAndUpdate(Block block) {
         List<Transaction> txns = block.getTransactions();
         List<Sha256Hash> txHashes = new ArrayList<>(txns.size());
-        List<Transaction> matched = Lists.newArrayList();
+        List<Transaction> matched = new ArrayList<>();
         byte[] bits = new byte[(int) Math.ceil(txns.size() / 8.0)];
         for (int i = 0; i < txns.size(); i++) {
             Transaction tx = txns.get(i);
-            txHashes.add(tx.getHash());
+            txHashes.add(tx.getTxId());
             if (applyAndUpdate(tx)) {
                 Utils.setBitLE(bits, i);
                 matched.add(tx);
@@ -322,7 +331,7 @@ public class BloomFilter extends Message {
     }
 
     public synchronized boolean applyAndUpdate(Transaction tx) {
-        if (contains(tx.getHash().getBytes()))
+        if (contains(tx.getTxId().getBytes()))
             return true;
         boolean found = false;
         BloomUpdate flag = getUpdateFlag();
@@ -332,9 +341,9 @@ public class BloomFilter extends Message {
                 if (!chunk.isPushData())
                     continue;
                 if (contains(chunk.data)) {
-                    boolean isSendingToPubKeys = ScriptPattern.isPayToPubKey(script) || ScriptPattern.isSentToMultisig(script);
+                    boolean isSendingToPubKeys = ScriptPattern.isP2PK(script) || ScriptPattern.isSentToMultisig(script);
                     if (flag == BloomUpdate.UPDATE_ALL || (flag == BloomUpdate.UPDATE_P2PUBKEY_ONLY && isSendingToPubKeys))
-                        insert(output.getOutPointFor().unsafeBitcoinSerialize());
+                        insert(output.getOutPointFor());
                     found = true;
                 }
             }
@@ -351,7 +360,7 @@ public class BloomFilter extends Message {
         }
         return false;
     }
-    
+
     @Override
     public synchronized boolean equals(Object o) {
         if (this == o) return true;
@@ -362,6 +371,6 @@ public class BloomFilter extends Message {
 
     @Override
     public synchronized int hashCode() {
-        return Objects.hashCode(hashFuncs, nTweak, Arrays.hashCode(data));
+        return Objects.hash(hashFuncs, nTweak, Arrays.hashCode(data));
     }
 }

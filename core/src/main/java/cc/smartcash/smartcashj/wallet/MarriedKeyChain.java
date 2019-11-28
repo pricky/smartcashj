@@ -16,6 +16,7 @@
 
 package cc.smartcash.smartcashj.wallet;
 
+import cc.smartcash.smartcashj.crypto.ChildNumber;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
@@ -30,7 +31,7 @@ import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.script.ScriptBuilder;
 import org.bouncycastle.crypto.params.KeyParameter;
 
-import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,6 @@ import javax.annotation.Nullable;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * <p>A multi-signature keychain using synchronized HD keys (a.k.a HDM)</p>
@@ -93,22 +93,25 @@ public class MarriedKeyChain extends DeterministicKeyChain {
 
         @Override
         public MarriedKeyChain build() {
-            checkState(random != null || entropy != null || seed != null || watchingKey!= null, "Must provide either entropy or random or seed or watchingKey");
             checkNotNull(followingKeys, "followingKeys must be provided");
-            MarriedKeyChain chain;
+
             if (threshold == 0)
                 threshold = (followingKeys.size() + 1) / 2 + 1;
-            if (random != null) {
-                chain = new MarriedKeyChain(random, bits, getPassphrase(), seedCreationTimeSecs);
-            } else if (entropy != null) {
-                chain = new MarriedKeyChain(entropy, getPassphrase(), seedCreationTimeSecs);
-            } else if (seed != null) {
-                seed.setCreationTimeSeconds(seedCreationTimeSecs);
-                chain = new MarriedKeyChain(seed);
-            } else {
-                watchingKey.setCreationTimeSeconds(seedCreationTimeSecs);
-                chain = new MarriedKeyChain(watchingKey);
-            }
+            if (accountPath == null)
+                accountPath = ACCOUNT_ZERO_PATH;
+
+            MarriedKeyChain chain;
+            if (random != null)
+                chain = new MarriedKeyChain(new DeterministicSeed(random, bits, getPassphrase()), null, outputScriptType, accountPath);
+            else if (entropy != null)
+                chain = new MarriedKeyChain(new DeterministicSeed(entropy, getPassphrase(), creationTimeSecs), null,
+                        outputScriptType, accountPath);
+            else if (seed != null)
+                chain = new MarriedKeyChain(seed, null, outputScriptType, accountPath);
+            else if (watchingKey != null)
+                chain = new MarriedKeyChain(watchingKey, outputScriptType);
+            else
+                throw new IllegalStateException();
             chain.addFollowingAccountKeys(followingKeys, threshold);
             return chain;
         }
@@ -118,26 +121,20 @@ public class MarriedKeyChain extends DeterministicKeyChain {
         return new Builder();
     }
 
-    // Protobuf deserialization constructors
-    MarriedKeyChain(DeterministicKey accountKey) {
-        super(accountKey, false);
+    /**
+     * This constructor is not stable across releases! If you need a stable API, use {@link #builder()} to use a
+     * {@link Builder}.
+     */
+    protected MarriedKeyChain(DeterministicKey accountKey, Script.ScriptType outputScriptType) {
+        super(accountKey, false, true, outputScriptType);
     }
 
-    MarriedKeyChain(DeterministicSeed seed, KeyCrypter crypter) {
-        super(seed, crypter);
-    }
-
-    // Builder constructors
-    private MarriedKeyChain(SecureRandom random, int bits, String passphrase, long seedCreationTimeSecs) {
-        super(random, bits, passphrase, seedCreationTimeSecs);
-    }
-
-    private MarriedKeyChain(byte[] entropy, String passphrase, long seedCreationTimeSecs) {
-        super(entropy, passphrase, seedCreationTimeSecs);
-    }
-
-    private MarriedKeyChain(DeterministicSeed seed) {
-        super(seed);
+    /**
+     * This constructor is not stable across releases! If you need a stable API, use {@link #builder()} to use a
+     * {@link Builder}.
+     */
+    protected MarriedKeyChain(DeterministicSeed seed, KeyCrypter crypter, Script.ScriptType outputScriptType, List<ChildNumber> accountPath) {
+        super(seed, crypter, outputScriptType, accountPath);
     }
 
     void setFollowingKeyChains(List<DeterministicKeyChain> followingKeyChains) {
@@ -188,11 +185,12 @@ public class MarriedKeyChain extends DeterministicKeyChain {
         checkState(numLeafKeysIssued() == 0, "Active keychain already has keys in use");
         checkState(followingKeyChains == null);
 
-        List<DeterministicKeyChain> followingKeyChains = Lists.newArrayList();
+        List<DeterministicKeyChain> followingKeyChains = new ArrayList<>();
 
         for (DeterministicKey key : followingAccountKeys) {
             checkArgument(key.getPath().size() == getAccountPath().size(), "Following keys have to be account keys");
-            DeterministicKeyChain chain = DeterministicKeyChain.watchAndFollow(key);
+            DeterministicKeyChain chain = DeterministicKeyChain.builder().watchAndFollow(key)
+                    .outputScriptType(getOutputScriptType()).build();
             if (lookaheadSize >= 0)
                 chain.setLookaheadSize(lookaheadSize);
             if (lookaheadThreshold >= 0)
@@ -221,7 +219,7 @@ public class MarriedKeyChain extends DeterministicKeyChain {
 
     @Override
     public List<Protos.Key> serializeToProtobuf() {
-        List<Protos.Key> result = newArrayList();
+        List<Protos.Key> result = new ArrayList<>();
         lock.lock();
         try {
             for (DeterministicKeyChain chain : followingKeyChains) {
@@ -235,14 +233,14 @@ public class MarriedKeyChain extends DeterministicKeyChain {
     }
 
     @Override
-    protected void formatAddresses(boolean includePrivateKeys, @Nullable KeyParameter aesKey, NetworkParameters params,
-            StringBuilder builder2) {
+    protected void formatAddresses(boolean includeLookahead, boolean includePrivateKeys, @Nullable KeyParameter aesKey,
+                                   NetworkParameters params, StringBuilder builder) {
         for (DeterministicKeyChain followingChain : followingKeyChains)
-            builder2.append("Following chain:  ").append(followingChain.getWatchingKey().serializePubB58(params))
+            builder.append("Following chain:  ").append(followingChain.getWatchingKey().serializePubB58(params))
                     .append('\n');
-        builder2.append('\n');
+        builder.append('\n');
         for (RedeemData redeemData : marriedKeysRedeemData.values())
-            formatScript(ScriptBuilder.createP2SHOutputScript(redeemData.redeemScript), builder2, params);
+            formatScript(ScriptBuilder.createP2SHOutputScript(redeemData.redeemScript), builder, params);
     }
 
     private void formatScript(Script script, StringBuilder builder, NetworkParameters params) {

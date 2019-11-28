@@ -312,6 +312,6 @@ public final class Coin implements Monetary, Comparable<Coin>, Serializable {
 
     @Override
     public int compareTo(final Coin other) {
-        return Longs.compare(this.value, other.value);
+        return Long.compare(this.value, other.value);
     }
 }

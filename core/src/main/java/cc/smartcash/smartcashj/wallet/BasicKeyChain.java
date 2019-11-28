@@ -18,13 +18,13 @@ package cc.smartcash.smartcashj.wallet;
 
 import cc.smartcash.smartcashj.core.BloomFilter;
 import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.core.NetworkParameters;
 import cc.smartcash.smartcashj.crypto.*;
 import cc.smartcash.smartcashj.utils.ListenerRegistration;
 import cc.smartcash.smartcashj.utils.Threading;
 import cc.smartcash.smartcashj.wallet.listeners.KeyChainEventListener;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import org.bouncycastle.crypto.params.KeyParameter;
 
@@ -42,9 +42,9 @@ import static com.google.common.base.Preconditions.*;
  * it will automatically add one to itself if it's empty or if encryption is requested.
  */
 public class BasicKeyChain implements EncryptableKeyChain {
-    private final ReentrantLock lock = Threading.lock("BasicKeyChain");
+    private final ReentrantLock lock = Threading.lock(BasicKeyChain.class);
 
-    // Maps used to let us quickly look up a key given data we find in transcations or the block chain.
+    // Maps used to let us quickly look up a key given data we find in transactions or the block chain.
     private final LinkedHashMap<ByteString, ECKey> hashToKeys;
     private final LinkedHashMap<ByteString, ECKey> pubkeyToKeys;
     @Nullable private final KeyCrypter keyCrypter;
@@ -203,19 +203,19 @@ public class BasicKeyChain implements EncryptableKeyChain {
         }
     }
 
-    public ECKey findKeyFromPubHash(byte[] pubkeyHash) {
+    public ECKey findKeyFromPubHash(byte[] pubKeyHash) {
         lock.lock();
         try {
-            return hashToKeys.get(ByteString.copyFrom(pubkeyHash));
+            return hashToKeys.get(ByteString.copyFrom(pubKeyHash));
         } finally {
             lock.unlock();
         }
     }
 
-    public ECKey findKeyFromPubKey(byte[] pubkey) {
+    public ECKey findKeyFromPubKey(byte[] pubKey) {
         lock.lock();
         try {
-            return pubkeyToKeys.get(ByteString.copyFrom(pubkey));
+            return pubkeyToKeys.get(ByteString.copyFrom(pubKey));
         } finally {
             lock.unlock();
         }
@@ -606,7 +606,7 @@ public class BasicKeyChain implements EncryptableKeyChain {
     public List<ECKey> findKeysBefore(long timeSecs) {
         lock.lock();
         try {
-            List<ECKey> results = Lists.newLinkedList();
+            List<ECKey> results = new LinkedList<>();
             for (ECKey key : hashToKeys.values()) {
                 final long keyTime = key.getCreationTimeSeconds();
                 if (keyTime < timeSecs) {
@@ -617,5 +617,14 @@ public class BasicKeyChain implements EncryptableKeyChain {
         } finally {
             lock.unlock();
         }
+    }
+
+    public String toString(boolean includePrivateKeys, @Nullable KeyParameter aesKey, NetworkParameters params) {
+        final StringBuilder builder = new StringBuilder();
+        List<ECKey> keys = getKeys();
+        Collections.sort(keys, ECKey.AGE_COMPARATOR);
+        for (ECKey key : keys)
+            key.formatKeyWithAddress(includePrivateKeys, aesKey, builder, params, null, "imported");
+        return builder.toString();
     }
 }

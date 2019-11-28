@@ -45,7 +45,7 @@ public class Threading {
     /**
      * An executor with one thread that is intended for running event listeners on. This ensures all event listener code
      * runs without any locks being held. It's intended for the API user to run things on. Callbacks registered by
-     * smartcashj internally shouldn't normally run here, although currently there are a few exceptions.
+     * bitcoinj internally shouldn't normally run here, although currently there are a few exceptions.
      */
     public static Executor USER_THREAD;
 
@@ -77,7 +77,7 @@ public class Threading {
      * any unhandled exceptions that are caught whilst the framework is processing network traffic or doing other
      * background tasks. The purpose of this is to allow you to report back unanticipated crashes from your users
      * to a central collection center for analysis and debugging. You should configure this <b>before</b> any
-     * smartcashj library code is run, setting it after you started network traffic and other forms of processing
+     * bitcoinj library code is run, setting it after you started network traffic and other forms of processing
      * may result in the change not taking effect.
      */
     @Nullable
@@ -91,7 +91,7 @@ public class Threading {
         private LinkedBlockingQueue<Runnable> tasks;
 
         public UserThread() {
-            super("smartcashj user thread");
+            super("bitcoinj user thread");
             setDaemon(true);
             tasks = new LinkedBlockingQueue<>();
             start();
@@ -117,10 +117,10 @@ public class Threading {
             final int size = tasks.size();
             if (size == WARNING_THRESHOLD) {
                 log.warn(
-                    "User thread has {} pending tasks, memory exhaustion may occur.\n" +
-                    "If you see this message, check your memory consumption and see if it's problematic or excessively spikey.\n" +
-                    "If it is, check for deadlocked or slow event handlers. If it isn't, try adjusting the constant \n" +
-                    "Threading.UserThread.WARNING_THRESHOLD upwards until it's a suitable level for your app, or Integer.MAX_VALUE to disable." , size);
+                        "User thread has {} pending tasks, memory exhaustion may occur.\n" +
+                                "If you see this message, check your memory consumption and see if it's problematic or excessively spikey.\n" +
+                                "If it is, check for deadlocked or slow event handlers. If it isn't, try adjusting the constant \n" +
+                                "Threading.UserThread.WARNING_THRESHOLD upwards until it's a suitable level for your app, or Integer.MAX_VALUE to disable." , size);
             }
             Uninterruptibles.putUninterruptibly(tasks, command);
         }
@@ -128,7 +128,7 @@ public class Threading {
 
     static {
         // Default policy goes here. If you want to change this, use one of the static methods before
-        // instantiating any smartcashj objects. The policy change will take effect only on new objects
+        // instantiating any bitcoinj objects. The policy change will take effect only on new objects
         // from that point onwards.
         throwOnLockCycles();
 
@@ -149,6 +149,10 @@ public class Threading {
 
     private static CycleDetectingLockFactory.Policy policy;
     public static CycleDetectingLockFactory factory;
+
+    public static ReentrantLock lock(Class clazz) {
+        return lock(clazz.getSimpleName() + " lock");
+    }
 
     public static ReentrantLock lock(String name) {
         if (Utils.isAndroidRuntime())

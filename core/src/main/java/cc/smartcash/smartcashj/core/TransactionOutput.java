@@ -17,7 +17,6 @@
 
 package cc.smartcash.smartcashj.core;
 
-import com.google.common.base.Objects;
 import cc.smartcash.smartcashj.script.*;
 import cc.smartcash.smartcashj.wallet.Wallet;
 import org.slf4j.*;
@@ -26,13 +25,14 @@ import javax.annotation.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.*;
 
 /**
  * <p>A TransactionOutput message contains a scriptPubKey that controls who is able to spend its value. It is a sub-part
  * of the Transaction message.</p>
- * 
+ *
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class TransactionOutput extends ChildMessage {
@@ -54,8 +54,6 @@ public class TransactionOutput extends ChildMessage {
     // us and used in one of our own transactions (eg, because it is a change output).
     private boolean availableForSpending;
     @Nullable private TransactionInput spentBy;
-
-    private int scriptLen;
 
     /**
      * Deserializes a transaction output message. This is usually part of a transaction message.
@@ -96,7 +94,7 @@ public class TransactionOutput extends ChildMessage {
      * {@link Transaction#addOutput(Coin, ECKey)} instead of creating an output directly.
      */
     public TransactionOutput(NetworkParameters params, @Nullable Transaction parent, Coin value, ECKey to) {
-        this(params, parent, value, ScriptBuilder.createOutputScript(to).getProgram());
+        this(params, parent, value, ScriptBuilder.createP2PKOutputScript(to).getProgram());
     }
 
     public TransactionOutput(NetworkParameters params, @Nullable Transaction parent, Coin value, byte[] scriptBytes) {
@@ -139,7 +137,7 @@ public class TransactionOutput extends ChildMessage {
     @Override
     protected void parse() throws ProtocolException {
         value = readInt64();
-        scriptLen = (int) readVarInt();
+        int scriptLen = (int) readVarInt();
         length = cursor - offset + scriptLen;
         scriptBytes = readBytes(scriptLen);
     }
@@ -158,11 +156,7 @@ public class TransactionOutput extends ChildMessage {
      * receives.
      */
     public Coin getValue() {
-        try {
-            return Coin.valueOf(value);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+        return Coin.valueOf(value);
     }
 
     /**
@@ -199,10 +193,7 @@ public class TransactionOutput extends ChildMessage {
 
     /**
      * <p>Gets the minimum value for a txout of this size to be considered non-dust by Bitcoin Core
-     * (and thus relayed). See: CTxOut::IsDust() in Bitcoin Core. The assumption is that any output that would
-     * consume more than a third of its value in fees is not something the Bitcoin system wants to deal with right now,
-     * so we call them "dust outputs" and they're made non standard. The choice of one third is somewhat arbitrary and
-     * may change in future.</p>
+     * (and thus relayed). See: CTxOut::IsDust() in Bitcoin Core.</p>
      *
      * <p>You probably should use {@link TransactionOutput#getMinNonDustValue()} which uses
      * a safe fee-per-kb by default.</p>
@@ -210,19 +201,34 @@ public class TransactionOutput extends ChildMessage {
      * @param feePerKb The fee required per kilobyte. Note that this is the same as Bitcoin Core's -minrelaytxfee * 3
      */
     public Coin getMinNonDustValue(Coin feePerKb) {
-        // A typical output is 33 bytes (pubkey hash + opcodes) and requires an input of 148 bytes to spend so we add
-        // that together to find out the total amount of data used to transfer this amount of value. Note that this
-        // formula is wrong for anything that's not a P2PKH output, unfortunately, we must follow Bitcoin Core's
-        // wrongness in order to ensure we're considered standard. A better formula would either estimate the
-        // size of data needed to satisfy all different script types, or just hard code 33 below.
-        final long size = this.unsafeBitcoinSerialize().length + 148;
+        // "Dust" is defined in terms of dustRelayFee,
+        // which has units satoshis-per-kilobyte.
+        // If you'd pay more in fees than the value of the output
+        // to spend something, then we consider it dust.
+        // A typical spendable non-segwit txout is 34 bytes big, and will
+        // need a CTxIn of at least 148 bytes to spend:
+        // so dust is a spendable txout less than
+        // 182*dustRelayFee/1000 (in satoshis).
+        // 546 satoshis at the default rate of 3000 sat/kB.
+        // A typical spendable segwit txout is 31 bytes big, and will
+        // need a CTxIn of at least 67 bytes to spend:
+        // so dust is a spendable txout less than
+        // 98*dustRelayFee/1000 (in satoshis).
+        // 294 satoshis at the default rate of 3000 sat/kB.
+        long size = this.unsafeBitcoinSerialize().length;
+        final Script script = getScriptPubKey();
+        if (ScriptPattern.isP2PKH(script) || ScriptPattern.isP2PK(script) || ScriptPattern.isP2SH(script))
+            size += 32 + 4 + 1 + 107 + 4; // 148
+        else if (ScriptPattern.isP2WH(script))
+            size += 32 + 4 + 1 + (107 / 4) + 4; // 68
+        else
+            return Coin.ZERO;
         return feePerKb.multiply(size).divide(1000);
     }
 
     /**
      * Returns the minimum value for this output to be considered "not dust", i.e. the transaction will be relayable
-     * and mined by default miners. For normal pay to address outputs, this is 2730 satoshis, the same as
-     * {@link Transaction#MIN_NONDUST_OUTPUT}.
+     * and mined by default miners.
      */
     public Coin getMinNonDustValue() {
         return getMinNonDustValue(Transaction.REFERENCE_DEFAULT_MIN_TX_FEE.multiply(3));
@@ -239,7 +245,7 @@ public class TransactionOutput extends ChildMessage {
         spentBy = input;
         if (parent != null)
             if (log.isDebugEnabled()) log.debug("Marked {}:{} as spent by {}", getParentTransactionHash(), getIndex(), input);
-        else
+            else
             if (log.isDebugEnabled()) log.debug("Marked floating output as spent by {}", input);
     }
 
@@ -249,7 +255,7 @@ public class TransactionOutput extends ChildMessage {
     public void markAsUnspent() {
         if (parent != null)
             if (log.isDebugEnabled()) log.debug("Un-marked {}:{} as spent by {}", getParentTransactionHash(), getIndex(), spentBy);
-        else
+            else
             if (log.isDebugEnabled()) log.debug("Un-marked floating output as spent by {}", spentBy);
         availableForSpending = true;
         spentBy = null;
@@ -269,7 +275,7 @@ public class TransactionOutput extends ChildMessage {
     /**
      * The backing script bytes which can be turned into a Script object.
      * @return the scriptBytes
-    */
+     */
     public byte[] getScriptBytes() {
         return scriptBytes;
     }
@@ -306,9 +312,11 @@ public class TransactionOutput extends ChildMessage {
             else if (ScriptPattern.isP2SH(script))
                 return transactionBag.isPayToScriptHashMine(ScriptPattern.extractHashFromP2SH(script));
             else if (ScriptPattern.isP2PKH(script))
-                return transactionBag.isPubKeyHashMine(ScriptPattern.extractHashFromP2PKH(script),Script.ScriptType.P2PKH);
+                return transactionBag.isPubKeyHashMine(ScriptPattern.extractHashFromP2PKH(script),
+                        Script.ScriptType.P2PKH);
             else if (ScriptPattern.isP2WPKH(script))
-                return transactionBag.isPubKeyHashMine(ScriptPattern.extractHashFromP2WH(script),Script.ScriptType.P2WPKH);
+                return transactionBag.isPubKeyHashMine(ScriptPattern.extractHashFromP2WH(script),
+                        Script.ScriptType.P2WPKH);
             else
                 return false;
         } catch (ScriptException e) {
@@ -365,7 +373,7 @@ public class TransactionOutput extends ChildMessage {
      */
     @Nullable
     public Sha256Hash getParentTransactionHash() {
-        return parent == null ? null : parent.getHash();
+        return parent == null ? null : ((Transaction) parent).getTxId();
     }
 
     /**
@@ -409,6 +417,6 @@ public class TransactionOutput extends ChildMessage {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(value, parent, Arrays.hashCode(scriptBytes));
+        return Objects.hash(value, parent, Arrays.hashCode(scriptBytes));
     }
 }

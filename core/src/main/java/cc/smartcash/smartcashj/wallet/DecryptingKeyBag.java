@@ -17,6 +17,7 @@
 package cc.smartcash.smartcashj.wallet;
 
 import cc.smartcash.smartcashj.core.ECKey;
+import cc.smartcash.smartcashj.script.Script;
 import org.bouncycastle.crypto.params.KeyParameter;
 
 import javax.annotation.Nullable;
@@ -63,14 +64,14 @@ public class DecryptingKeyBag implements KeyBag {
 
     @Nullable
     @Override
-    public ECKey findKeyFromPubHash(byte[] pubkeyHash) {
-        return maybeDecrypt(target.findKeyFromPubHash(pubkeyHash));
+    public ECKey findKeyFromPubKeyHash(byte[] pubKeyHash, @Nullable Script.ScriptType scriptType) {
+        return maybeDecrypt(target.findKeyFromPubKeyHash(pubKeyHash, scriptType));
     }
 
     @Nullable
     @Override
-    public ECKey findKeyFromPubKey(byte[] pubkey) {
-        return maybeDecrypt(target.findKeyFromPubKey(pubkey));
+    public ECKey findKeyFromPubKey(byte[] pubKey) {
+        return maybeDecrypt(target.findKeyFromPubKey(pubKey));
     }
 
     @Nullable
