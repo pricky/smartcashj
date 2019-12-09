@@ -16,7 +16,6 @@
 
 package cc.smartcash.smartcashj.core;
 
-import com.google.common.base.Objects;
 import com.google.common.net.InetAddresses;
 
 import javax.annotation.Nullable;
@@ -26,31 +25,36 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * <p>A VersionMessage holds information exchanged during connection setup with another peer. Most of the fields are not
- * particularly interesting. The subVer field, since BIP 14, acts as a User-Agent string would. You can and should 
+ * particularly interesting. The subVer field, since BIP 14, acts as a User-Agent string would. You can and should
  * append to or change the subVer for your own software so other implementations can identify it, and you can look at
  * the subVer field received from other nodes to see what they are running.</p>
  *
  * <p>After creating yourself a VersionMessage, you can pass it to {@link PeerGroup#setVersionMessage(VersionMessage)}
  * to ensure it will be used for each new connection.</p>
- * 
+ *
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class VersionMessage extends Message {
 
     /** The version of this library release, as a string. */
-    public static final String BITCOINJ_VERSION = "0.15-SNAPSHOT";
+    public static final String BITCOINJ_VERSION = "0.16-SNAPSHOT";
     /** The value that is prepended to the subVer field of this application. */
-    public static final String LIBRARY_SUBVER = "/smartcashj:" + BITCOINJ_VERSION + "/";
+    public static final String LIBRARY_SUBVER = "/bitcoinj:" + BITCOINJ_VERSION + "/";
 
-    /** A service bit that denotes whether the peer has a copy of the block chain or not. */
+    /** A service bit that denotes whether the peer has a full copy of the block chain or not. */
     public static final int NODE_NETWORK = 1 << 0;
     /** A service bit that denotes whether the peer supports the getutxos message or not. */
     public static final int NODE_GETUTXOS = 1 << 1;
+    /** A service bit that denotes whether the peer supports BIP37 bloom filters or not. The service bit is defined in BIP111. */
+    public static final int NODE_BLOOM = 1 << 2;
     /** Indicates that a node can be asked for blocks and transactions including witness data. */
     public static final int NODE_WITNESS = 1 << 3;
+    /** A service bit that denotes whether the peer has at least the last two days worth of blockchain (BIP159). */
+    public static final int NODE_NETWORK_LIMITED = 1 << 10;
     /** A service bit used by Bitcoin-ABC to announce Bitcoin Cash nodes. */
     public static final int NODE_BITCOIN_CASH = 1 << 5;
 
@@ -96,12 +100,12 @@ public class VersionMessage extends Message {
     // It doesn't really make sense to ever lazily parse a version message or to retain the backing bytes.
     // If you're receiving this on the wire you need to check the protocol version and it will never need to be sent
     // back down the wire.
-    
+
     public VersionMessage(NetworkParameters params, int newBestHeight) {
         super(params);
         clientVersion = params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.CURRENT);
         localServices = 0;
-        time = System.currentTimeMillis() / 1000;
+        time = Utils.currentTimeSeconds();
         // Note that the Bitcoin Core doesn't do anything with these, and finding out your own external IP address
         // is kind of tricky anyway, so we just put nonsense here for now.
         InetAddress localhost = InetAddresses.forString("127.0.0.1");
@@ -178,14 +182,6 @@ public class VersionMessage extends Message {
         }
     }
 
-    /**
-     * Returns true if the version message indicates the sender has a full copy of the block chain,
-     * or if it's running in client mode (only has the headers).
-     */
-    public boolean hasBlockChain() {
-        return (localServices & NODE_NETWORK) == NODE_NETWORK;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -203,8 +199,8 @@ public class VersionMessage extends Message {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(bestHeight, clientVersion, localServices,
-            time, subVer, receivingAddr, fromAddr, relayTxesBeforeFilter);
+        return Objects.hash(bestHeight, clientVersion, localServices,
+                time, subVer, receivingAddr, fromAddr, relayTxesBeforeFilter);
     }
 
     @Override
@@ -236,8 +232,8 @@ public class VersionMessage extends Message {
 
     /**
      * <p>Appends the given user-agent information to the subVer field. The subVer is composed of a series of
-     * name:version pairs separated by slashes in the form of a path. For example a typical subVer field for smartcashj
-     * users might look like "/smartcashj:0.13/MultiBit:1.2/" where libraries come further to the left.</p>
+     * name:version pairs separated by slashes in the form of a path. For example a typical subVer field for bitcoinj
+     * users might look like "/bitcoinj:0.13/MultiBit:1.2/" where libraries come further to the left.</p>
      *
      * <p>There can be as many components as you feel a need for, and the version string can be anything, but it is
      * recommended to use A.B.C where A = major, B = minor and C = revision for software releases, and dates for
@@ -245,8 +241,8 @@ public class VersionMessage extends Message {
      * and version are not allowed to contain such characters.</p>
      *
      * <p>Anything put in the "comments" field will appear in brackets and may be used for platform info, or anything
-     * else. For example, calling <tt>appendToSubVer("MultiBit", "1.0", "Windows")</tt> will result in a subVer being
-     * set of "/smartcashj:1.0/MultiBit:1.0(Windows)/". Therefore the / ( and ) characters are reserved in all these
+     * else. For example, calling {@code appendToSubVer("MultiBit", "1.0", "Windows")} will result in a subVer being
+     * set of "/bitcoinj:1.0/MultiBit:1.0(Windows)/". Therefore the / ( and ) characters are reserved in all these
      * components. If you don't want to add a comment (recommended), pass null.</p>
      *
      * <p>See <a href="https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki">BIP 14</a> for more information.</p>
@@ -279,12 +275,15 @@ public class VersionMessage extends Message {
     }
 
     /**
-     * Returns true if the clientVersion field is {@link NetworkParameters.ProtocolVersion#BLOOM_FILTER} or higher.
-     * If it is then Bloom filtering
-     * is available and the memory pool of the remote peer will be queried when the downloadData property is true.
+     * Returns true if the peer supports bloom filtering according to BIP37 and BIP111.
      */
     public boolean isBloomFilteringSupported() {
-        return clientVersion >= params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.BLOOM_FILTER);
+        if (clientVersion >= params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.BLOOM_FILTER)
+                && clientVersion < params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.BLOOM_FILTER_BIP111))
+            return true;
+        if ((localServices & NODE_BLOOM) == NODE_BLOOM)
+            return true;
+        return false;
     }
 
     /** Returns true if the protocol version and service bits both indicate support for the getutxos message. */
@@ -296,5 +295,18 @@ public class VersionMessage extends Message {
     /** Returns true if a peer can be asked for blocks and transactions including witness data. */
     public boolean isWitnessSupported() {
         return (localServices & NODE_WITNESS) == NODE_WITNESS;
+    }
+
+    /**
+     * Returns true if the version message indicates the sender has a full copy of the block chain, or false if it's
+     * running in client mode (only has the headers).
+     */
+    public boolean hasBlockChain() {
+        return (localServices & NODE_NETWORK) == NODE_NETWORK;
+    }
+
+    /** Returns true if the peer has at least the last two days worth of blockchain (BIP159). */
+    public boolean hasLimitedBlockChain() {
+        return hasBlockChain() || (localServices & NODE_NETWORK_LIMITED) == NODE_NETWORK_LIMITED;
     }
 }

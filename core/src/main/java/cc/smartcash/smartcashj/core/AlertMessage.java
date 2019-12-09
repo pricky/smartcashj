@@ -114,7 +114,7 @@ public class AlertMessage extends Message {
      * Returns true if the digital signature attached to the message verifies. Don't do anything with the alert if it
      * doesn't verify, because that would allow arbitrary attackers to spam your users.
      */
-    public boolean isSignatureValid() {
+    public boolean isSignatureValid() throws SignatureDecodeException {
         return ECKey.verify(Sha256Hash.hashTwice(content), signature, params.getAlertSigningKey());
     }
 

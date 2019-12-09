@@ -111,7 +111,7 @@ public class NioClient implements MessageWriteTarget {
             public void onFailure(Throwable t) {
                 log.error("Connect to {} failed: {}", serverAddress, Throwables.getRootCause(t));
             }
-        });
+        }, MoreExecutors.directExecutor());
     }
 
     @Override
@@ -124,3 +124,4 @@ public class NioClient implements MessageWriteTarget {
         handler.writeTarget.writeBytes(message);
     }
 }
+

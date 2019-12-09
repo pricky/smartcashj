@@ -761,7 +761,7 @@ public class DeterministicKeyChain implements EncryptableKeyChain {
                 // HD keys inherit the timestamp of their parent if they have one, so no need to serialize it.
                 proto.clearCreationTimestamp();
             } else {
-                proto.setOutputScriptType(Protos.Key.OutputScriptType.valueOf(outputScriptType.name()));
+                //proto.setOutputScriptType(Protos.Key.OutputScriptType.valueOf(outputScriptType.name()));
             }
             entries.add(proto.build());
         }
@@ -843,8 +843,8 @@ public class DeterministicKeyChain implements EncryptableKeyChain {
                 // Deserialize the public key and path.
                 LazyECPoint pubkey = new LazyECPoint(ECKey.CURVE.getCurve(), key.getPublicKey().toByteArray());
                 final HDPath immutablePath = HDPath.M(path);
-                if (key.hasOutputScriptType())
-                    outputScriptType = Script.ScriptType.valueOf(key.getOutputScriptType().name());
+                //if (key.hasOutputScriptType())
+                //    outputScriptType = Script.ScriptType.valueOf(key.getOutputScriptType().name());
                 // Possibly create the chain, if we didn't already do so yet.
                 boolean isWatchingAccountKey = false;
                 boolean isFollowingKey = false;
@@ -1330,7 +1330,7 @@ public class DeterministicKeyChain implements EncryptableKeyChain {
     /**
      * Whether the keychain is married.  A keychain is married when it vends P2SH addresses
      * from multiple keychains in a multisig relationship.
-     * @see org.bitcoinj.wallet.MarriedKeyChain
+     * @see cc.smartcash.smartcashj.wallet.MarriedKeyChain
      */
     public boolean isMarried() {
         return false;
