@@ -36,6 +36,12 @@ message PeerAddress {
   required uint64 services = 3;
 }
 
+message PeerAddress {
+  required bytes ip_address = 1;
+  required uint32 port = 2;
+  required uint64 services = 3;
+}
+
 message EncryptedData {
   required bytes initialisation_vector = 1;       // The initialisation vector for the AES encryption (16 bytes)
   required bytes encrypted_private_key = 2;       // The encrypted private key
@@ -137,6 +143,13 @@ message Key {
 
   // The path to the root. Only applicable to a DETERMINISTIC_MNEMONIC key entry.
   repeated uint32 account_path = 10 [packed = true];
+
+  enum OutputScriptType {
+    P2PKH = 1;
+    P2WPKH = 2;
+  }
+  // Type of addresses (aka output scripts) to generate for receiving.
+  optional OutputScriptType output_script_type = 11;
 }
 
 message Script {
