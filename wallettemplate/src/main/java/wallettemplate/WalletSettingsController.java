@@ -30,7 +30,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.KeyParameter;
 import wallettemplate.utils.TextFieldValidator;
 
 import javax.annotation.Nullable;
@@ -90,7 +90,7 @@ public class WalletSettingsController {
         // Validate words as they are being typed.
         MnemonicCode codec = unchecked(MnemonicCode::new);
         TextFieldValidator validator = new TextFieldValidator(wordsArea, text ->
-            !didThrow(() -> codec.check(Splitter.on(' ').splitToList(text)))
+                !didThrow(() -> codec.check(Splitter.on(' ').splitToList(text)))
         );
 
         // Clear the date picker if the user starts editing the words, if it contained the current wallets date.
@@ -104,8 +104,8 @@ public class WalletSettingsController {
                 datePicker.valueProperty().isNull(),
 
                 createBooleanBinding(() ->
-                        datePicker.getValue().isAfter(LocalDate.now())
-                , /* depends on */ datePicker.valueProperty())
+                                datePicker.getValue().isAfter(LocalDate.now())
+                        , /* depends on */ datePicker.valueProperty())
         );
 
         // Don't let the user click restore if the words area contains the current wallet words, or are an invalid set,
@@ -170,7 +170,7 @@ public class WalletSettingsController {
 
         long birthday = datePicker.getValue().atStartOfDay().toEpochSecond(ZoneOffset.UTC);
         DeterministicSeed seed = new DeterministicSeed(Splitter.on(' ').splitToList(wordsArea.getText()), null, "", birthday);
-        // Shut down smartcashj and restart it with the new seed.
+        // Shut down bitcoinj and restart it with the new seed.
         Main.bitcoin.addListener(new Service.Listener() {
             @Override
             public void terminated(Service.State from) {

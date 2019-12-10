@@ -1,6 +1,6 @@
 /*
  * Copyright by the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,6 +16,9 @@
 
 package wallettemplate;
 
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
 import cc.smartcash.smartcashj.core.listeners.DownloadProgressTracker;
 import cc.smartcash.smartcashj.core.Coin;
 import cc.smartcash.smartcashj.utils.MonetaryFormat;
@@ -27,7 +30,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
-import org.fxmisc.easybind.EasyBind;
 import wallettemplate.controls.ClickableBitcoinAddress;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.BitcoinUIModel;
@@ -48,6 +50,7 @@ public class MainController {
 
     private BitcoinUIModel model = new BitcoinUIModel();
     private NotificationBarPane.Item syncItem;
+    private static final MonetaryFormat MONETARY_FORMAT = MonetaryFormat.BTC.noCode();
 
     // Called by FXMLLoader.
     public void initialize() {
@@ -57,7 +60,7 @@ public class MainController {
     public void onBitcoinSetup() {
         model.setWallet(bitcoin.wallet());
         addressControl.addressProperty().bind(model.addressProperty());
-        balance.textProperty().bind(EasyBind.map(model.balanceProperty(), coin -> MonetaryFormat.BTC.noCode().format(coin).toString()));
+        balance.textProperty().bind(createBalanceStringBinding(model.balanceProperty()));
         // Don't let the user click send money when the wallet is empty.
         sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));
 
@@ -73,6 +76,14 @@ public class MainController {
                 showBitcoinSyncMessage();
             }
         });
+    }
+
+    private static String formatCoin(Coin coin) {
+        return MONETARY_FORMAT.format(coin).toString();
+    }
+
+    private static Binding<String> createBalanceStringBinding(ObservableValue<Coin> coinProperty) {
+        return Bindings.createStringBinding(() -> formatCoin(coinProperty.getValue()), coinProperty);
     }
 
     private void showBitcoinSyncMessage() {

@@ -24,7 +24,7 @@ import javafx.scene.layout.*;
 import cc.smartcash.smartcashj.crypto.*;
 import cc.smartcash.smartcashj.wallet.*;
 import org.slf4j.*;
-import org.spongycastle.crypto.params.*;
+import org.bouncycastle.crypto.params.*;
 
 import com.google.protobuf.ByteString;
 
