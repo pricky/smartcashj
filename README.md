@@ -1,6 +1,6 @@
 ### Welcome to smartcashj
 
-The bitcoinj library is a Java implementation of the Bitcoin protocol, which allows it to maintain a wallet and send/receive transactions without needing a local copy of Bitcoin Core. It comes with full documentation and some example apps showing how to use it.
+The smartcashj library is a Java implementation of the SmartCash protocol, which allows it to maintain a wallet and send/receive transactions without needing a local copy of SmartCash Core. It comes with full documentation and some example apps showing how to use it.
 
 ### Technologies
 
@@ -36,17 +36,3 @@ Alternatively, just import the project using your IDE. [IntelliJ](http://www.jet
 ### Example applications
 
 These are found in the `examples` module.
-
-### Where next?
-
-Now you are ready to [follow the tutorial](https://bitcoinj.github.io/getting-started).
-
-### Testing a SNAPSHOT build
-
-Building apps with official releases of **bitcoinj** is covered in the [tutorial](https://bitcoinj.github.io/getting-started).
-
-If you want to develop or test your app with a [Jitpack](https://jitpack.io)-powered build of the latest `master` or `release-0.15` branch of **bitcoinj** follow the dynamically-generated instructions for that branch by following the correct link.
-
-
-* [master](https://jitpack.io/#bitcoinj/bitcoinj/master-SNAPSHOT) branch
-* [release-0.15](https://jitpack.io/#bitcoinj/bitcoinj/release-0.15-SNAPSHOT) branch
