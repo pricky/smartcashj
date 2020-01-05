@@ -101,8 +101,8 @@ public class DeterministicKeyChain implements EncryptableKeyChain {
     public static final HDPath ACCOUNT_ZERO_PATH = HDPath.M(ChildNumber.ZERO_HARDENED);
     // m / 1'
     public static final HDPath ACCOUNT_ONE_PATH = HDPath.M(ChildNumber.ONE_HARDENED);
-    // m / 44' / 0' / 0'
-    public static final HDPath BIP44_ACCOUNT_ZERO_PATH = HDPath.M(new ChildNumber(44, true))
+    // m / 224' / 0' / 0'
+    public static final HDPath BIP44_ACCOUNT_ZERO_PATH = HDPath.M(new ChildNumber(224, true))
             .extend(ChildNumber.ZERO_HARDENED, ChildNumber.ZERO_HARDENED);
     public static final HDPath EXTERNAL_SUBPATH = HDPath.M(ChildNumber.ZERO);
     public static final HDPath INTERNAL_SUBPATH = HDPath.M(ChildNumber.ONE);

@@ -71,7 +71,7 @@ public class Context {
      * @param ensureMinRequiredFee Whether to ensure the minimum required fee by default when completing transactions. For details, see {@link SendRequest#ensureMinRequiredFee}.
      */
     public Context(NetworkParameters params, int eventHorizon, Coin feePerKb, boolean ensureMinRequiredFee) {
-        log.info("Creating smartcashj {} context.", VersionMessage.BITCOINJ_VERSION);
+        log.info("Creating smartcashj {} context.", VersionMessage.SMARTCASHJ_VERSION);
         this.confidenceTable = new TxConfidenceTable();
         this.params = params;
         this.eventHorizon = eventHorizon;

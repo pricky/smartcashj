@@ -37,12 +37,12 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         interval = INTERVAL;
         targetTimespan = TARGET_TIMESPAN;
         maxTarget = Utils.decodeCompactBits(0x1d00ffffL);
-        dumpedPrivateKeyHeader = 128;
-        addressHeader = 0;
-        p2shHeader = 5;
-        segwitAddressHrp = "bc";
-        port = 8333;
-        packetMagic = 0xf9beb4d9L;
+        dumpedPrivateKeyHeader = 191;
+        addressHeader = 63;
+        p2shHeader = 18;
+        segwitAddressHrp = "sc";
+        port = 9678;
+        packetMagic = 0x5ca1ab1eL;
         bip32HeaderP2PKHpub = 0x0488b21e; // The 4 byte header that serializes in base58 to "xpub".
         bip32HeaderP2PKHpriv = 0x0488ade4; // The 4 byte header that serializes in base58 to "xprv"
         bip32HeaderP2WPKHpub = 0x04b24746; // The 4 byte header that serializes in base58 to "zpub".
@@ -53,8 +53,8 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         majorityWindow = MAINNET_MAJORITY_WINDOW;
 
         genesisBlock.setDifficultyTarget(0x1d00ffffL);
-        genesisBlock.setTime(1231006505L);
-        genesisBlock.setNonce(2083236893);
+        genesisBlock.setTime(1496467978L);
+        genesisBlock.setNonce(245887);
         id = ID_MAINNET;
         subsidyDecreaseBlockCount = 210000;
         spendableCoinbaseDepth = 100;
@@ -66,21 +66,23 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        checkpoints.put(91722, Sha256Hash.wrap("00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e"));
-        checkpoints.put(91812, Sha256Hash.wrap("00000000000af0aed4792b1acee3d966af36cf5def14935db8de83d6f9306f2f"));
-        checkpoints.put(91842, Sha256Hash.wrap("00000000000a4d0a398161ffc163c503763b1f4360639393e0e4c8e300e0caec"));
-        checkpoints.put(91880, Sha256Hash.wrap("00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721"));
-        checkpoints.put(200000, Sha256Hash.wrap("000000000000034a7dedef4a161fa058a2d67a173a90155f3a2fe6fc132e0ebf"));
+        checkpoints.put(0, Sha256Hash.wrap("0x000007acc6970b812948d14ea5a0a13db0fdd07d5047c7e69101fa8b361e05a4"));
+        checkpoints.put(75000, Sha256Hash.wrap("0x000000000002ee203026137ebc460e1886e09b9fdb0e83697e5a74976088e75c"));
+        checkpoints.put(170000, Sha256Hash.wrap("0x000000000000670ff41fbb4ad819b48bfe1c35623f13297d3fbf9bf02abcd87c"));
+        checkpoints.put(500000, Sha256Hash.wrap("0x00000000000016a1fa8e650e5a82babefeb9225ffe78614bc4b23cf160d16eeb"));
+        checkpoints.put(1000000, Sha256Hash.wrap("0x00000000000008e14776878dba228ac957a97205df4716ce1913ae4339e7aeb9"));
+        checkpoints.put(1030000, Sha256Hash.wrap("0x00000000000000d7e76cc6c30a2bece10f552123ad3c9a63beceb0d553a46f04"));
 
         dnsSeeds = new String[] {
-                "seed.bitcoin.sipa.be",         // Pieter Wuille
-                "dnsseed.bluematt.me",          // Matt Corallo
-                "dnsseed.bitcoin.dashjr.org",   // Luke Dashjr
-                "seed.bitcoinstats.com",        // Chris Decker
-                "seed.bitcoin.jonasschnelli.ch",// Jonas Schnelli
-                "seed.btc.petertodd.org",       // Peter Todd
-                "seed.bitcoin.sprovoost.nl",    // Sjors Provoost
-                "dnsseed.emzy.de",              // Stephan Oeste
+                "seed.smrt.cash",
+                "seed1.smrt.cash",
+                "seed2.smrt.cash",
+                "seed1.smartcash.org",
+                "seed2.smartcash.org",
+                "seed.smartcash.cc",
+                "seed2.smartcash.cc",
+                "seed3.smartcash.cc",
+                "seed4.smartcash.cc",
         };
         httpSeeds = new HttpDiscovery.Details[] {
                 // Andreas Schildbach
