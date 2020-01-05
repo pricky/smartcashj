@@ -20,6 +20,7 @@ package cc.smartcash.smartcashj.core;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+
 /**
  * Base58 is a way to encode Bitcoin addresses (or arbitrary data) as alphanumeric strings.
  * <p>
@@ -107,9 +108,8 @@ public class Base58 {
         byte[] addressBytes = new byte[1 + payload.length + 4];
         addressBytes[0] = (byte) version;
         System.arraycopy(payload, 0, addressBytes, 1, payload.length);
-// New address format
-//        byte[] checksum = Sha256Hash.hashTwice(addressBytes, 0, payload.length + 1);
-        byte[] checksum = KeccakCore(addressBytes, 0, payload.length + 1);
+        // New address format
+        byte[] checksum = Keccak256Hash.hashTwice(addressBytes, 0, payload.length + 1);
         System.arraycopy(checksum, 0, addressBytes, payload.length + 1, 4);
         return Base58.encode(addressBytes);
     }
@@ -175,9 +175,8 @@ public class Base58 {
             throw new AddressFormatException.InvalidDataLength("Input too short: " + decoded.length);
         byte[] data = Arrays.copyOfRange(decoded, 0, decoded.length - 4);
         byte[] checksum = Arrays.copyOfRange(decoded, decoded.length - 4, decoded.length);
-// New address format
-//        byte[] actualChecksum = Arrays.copyOfRange(Sha256Hash.hashTwice(data), 0, 4);
-        byte[] actualChecksum = Arrays.copyOfRange(KeccakCore(data), 0, 4);
+
+        byte[] actualChecksum = Arrays.copyOfRange(Keccak256Hash.hashTwice(data), 0, 4);
         if (!Arrays.equals(checksum, actualChecksum))
             throw new AddressFormatException.InvalidChecksum();
         return data;
