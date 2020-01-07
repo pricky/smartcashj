@@ -127,9 +127,9 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
     // Compatibility SQL.
     private static final String SELECT_COMPATIBILITY_COINBASE_SQL               = "SELECT coinbase FROM openoutputs WHERE 1 = 2";
 
-    protected Sha256Hash chainHeadHash;
+    protected Keccak256Hash chainHeadHash;
     protected StoredBlock chainHeadBlock;
-    protected Sha256Hash verifiedChainHeadHash;
+    protected Keccak256Hash verifiedChainHeadHash;
     protected StoredBlock verifiedChainHeadBlock;
     protected NetworkParameters params;
     protected ThreadLocal<Connection> conn;
@@ -558,7 +558,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
             // The coinbase in the genesis block is not spendable. This is because of how Bitcoin Core inits
             // its database - the genesis transaction isn't actually in the db so its spent flags can never be updated.
             List<Transaction> genesisTransactions = Lists.newLinkedList();
-            StoredUndoableBlock storedGenesis = new StoredUndoableBlock(params.getGenesisBlock().getHash(), genesisTransactions);
+            StoredUndoableBlock storedGenesis = new StoredUndoableBlock(params.getGenesisBlock().getHashKeccak(), genesisTransactions);
             put(storedGenesisHeader, storedGenesis);
             setChainHead(storedGenesisHeader);
             setVerifiedChainHead(storedGenesisHeader);
@@ -580,7 +580,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
         if (!rs.next()) {
             throw new BlockStoreException("corrupt database block store - no chain head pointer");
         }
-        Sha256Hash hash = Sha256Hash.wrap(rs.getBytes(1));
+        Keccak256Hash hash = Keccak256Hash.wrap(rs.getBytes(1));
         rs.close();
         this.chainHeadBlock = get(hash);
         this.chainHeadHash = hash;
@@ -592,7 +592,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
         if (!rs.next()) {
             throw new BlockStoreException("corrupt database block store - no verified chain head pointer");
         }
-        hash = Sha256Hash.wrap(rs.getBytes(1));
+        hash = Keccak256Hash.wrap(rs.getBytes(1));
         rs.close();
         ps.close();
         this.verifiedChainHeadBlock = get(hash);
@@ -713,7 +713,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
         }
     }
 
-    public StoredBlock get(Sha256Hash hash, boolean wasUndoableOnly) throws BlockStoreException {
+    public StoredBlock get(Keccak256Hash hash, boolean wasUndoableOnly) throws BlockStoreException {
         // Optimize for chain head
         if (chainHeadHash != null && chainHeadHash.equals(hash))
             return chainHeadBlock;
@@ -764,17 +764,17 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
     }
 
     @Override
-    public StoredBlock get(Sha256Hash hash) throws BlockStoreException {
+    public StoredBlock get(Keccak256Hash hash) throws BlockStoreException {
         return get(hash, false);
     }
 
     @Override
-    public StoredBlock getOnceUndoableStoredBlock(Sha256Hash hash) throws BlockStoreException {
+    public StoredBlock getOnceUndoableStoredBlock(Keccak256Hash hash) throws BlockStoreException {
         return get(hash, true);
     }
 
     @Override
-    public StoredUndoableBlock getUndoBlock(Sha256Hash hash) throws BlockStoreException {
+    public StoredUndoableBlock getUndoBlock(Keccak256Hash hash) throws BlockStoreException {
         maybeConnect();
         PreparedStatement s = null;
         try {
@@ -841,7 +841,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
 
     @Override
     public void setChainHead(StoredBlock chainHead) throws BlockStoreException {
-        Sha256Hash hash = chainHead.getHeader().getHash();
+        Keccak256Hash hash = chainHead.getHeader().getHashKeccak();
         this.chainHeadHash = hash;
         this.chainHeadBlock = chainHead;
         maybeConnect();
@@ -864,7 +864,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
 
     @Override
     public void setVerifiedChainHead(StoredBlock chainHead) throws BlockStoreException {
-        Sha256Hash hash = chainHead.getHeader().getHash();
+        Keccak256Hash hash = chainHead.getHeader().getHashKeccak();
         this.verifiedChainHeadHash = hash;
         this.verifiedChainHeadBlock = chainHead;
         maybeConnect();

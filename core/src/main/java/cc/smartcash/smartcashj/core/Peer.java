@@ -115,7 +115,7 @@ public class Peer extends PeerSocketHandler {
     // If non-null, we should discard incoming filtered blocks because we ran out of keys and are awaiting a new filter
     // to be calculated by the PeerGroup. The discarded block hashes should be added here so we can re-request them
     // once we've recalculated and resent a new filter.
-    @GuardedBy("lock") @Nullable private List<Sha256Hash> awaitingFreshFilter;
+    @GuardedBy("lock") @Nullable private List<Keccak256Hash> awaitingFreshFilter;
     // Keeps track of things we requested internally with getdata but didn't receive yet, so we can avoid re-requests.
     // It's not quite the same as getDataFutures, as this is used only for getdatas done as part of downloading
     // the chain and so is lighter weight (we just keep a bunch of hashes not futures).
@@ -1077,7 +1077,7 @@ public class Peer extends PeerSocketHandler {
                     // We must record the hashes of blocks we discard because you cannot do getblocks twice on the same
                     // range of blocks and get an inv both times, due to the codepath in Bitcoin Core hitting
                     // CPeer::PushInventory() which checks CPeer::setInventoryKnown and thus deduplicates.
-                    awaitingFreshFilter.add(m.getHash());
+                    awaitingFreshFilter.add(m.getHashKeccak());
                     return;   // Chain download process is restarted via a call to setBloomFilter.
                 } else if (checkForFilterExhaustion(m)) {
                     // Yes, so we must abandon the attempt to process this block and any further blocks we receive,
@@ -1086,7 +1086,7 @@ public class Peer extends PeerSocketHandler {
                     // safely restart the chain download with the new filter that contains a new set of lookahead keys.
                     log.info("Bloom filter exhausted whilst processing block {}, discarding", m.getHash());
                     awaitingFreshFilter = new LinkedList<>();
-                    awaitingFreshFilter.add(m.getHash());
+                    awaitingFreshFilter.add(m.getHashKeccak());
                     awaitingFreshFilter.addAll(blockChain.drainOrphanBlocks());
                     return;   // Chain download process is restarted via a call to setBloomFilter.
                 }
@@ -1270,10 +1270,10 @@ public class Peer extends PeerSocketHandler {
                         // it's better to be safe here.
                         if (!pendingBlockDownloads.contains(item.hash)) {
                             if (vPeerVersionMessage.isBloomFilteringSupported() && useFilteredBlocks) {
-                                getdata.addFilteredBlock(item.hash);
+                                getdata.addFilteredBlock(item.hashKeccak);
                                 pingAfterGetData = true;
                             } else {
-                                getdata.addBlock(item.hash, vPeerVersionMessage.isWitnessSupported());
+                                getdata.addBlock(item.hashKeccak, vPeerVersionMessage.isWitnessSupported());
                             }
                             pendingBlockDownloads.add(item.hash);
                         }
@@ -1307,7 +1307,7 @@ public class Peer extends PeerSocketHandler {
     // The 'unchecked conversion' warning being suppressed here comes from the sendSingleGetData() formally returning
     // ListenableFuture instead of ListenableFuture<Block>. This is okay as sendSingleGetData() actually returns
     // ListenableFuture<Block> in this context. Note that sendSingleGetData() is also used for Transactions.
-    public ListenableFuture<Block> getBlock(Sha256Hash blockHash) {
+    public ListenableFuture<Block> getBlock(Keccak256Hash blockHash) {
         // This does not need to be locked.
         log.info("Request to fetch block {}", blockHash);
         GetDataMessage getdata = new GetDataMessage(params);
@@ -1767,7 +1767,7 @@ public class Peer extends PeerSocketHandler {
                     lock.lock();
                     checkNotNull(awaitingFreshFilter);
                     GetDataMessage getdata = new GetDataMessage(params);
-                    for (Sha256Hash hash : awaitingFreshFilter)
+                    for (Keccak256Hash hash : awaitingFreshFilter)
                         getdata.addFilteredBlock(hash);
                     awaitingFreshFilter = null;
                     lock.unlock();

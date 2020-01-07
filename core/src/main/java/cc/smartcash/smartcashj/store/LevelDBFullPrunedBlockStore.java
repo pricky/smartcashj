@@ -28,20 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.io.*;
 import java.nio.ByteBuffer;
 
-import cc.smartcash.smartcashj.core.Address;
-import cc.smartcash.smartcashj.core.AddressFormatException;
-import cc.smartcash.smartcashj.core.ECKey;
-import cc.smartcash.smartcashj.core.LegacyAddress;
-import cc.smartcash.smartcashj.core.NetworkParameters;
-import cc.smartcash.smartcashj.core.Sha256Hash;
-import cc.smartcash.smartcashj.core.StoredBlock;
-import cc.smartcash.smartcashj.core.StoredUndoableBlock;
-import cc.smartcash.smartcashj.core.Transaction;
-import cc.smartcash.smartcashj.core.TransactionOutputChanges;
-import cc.smartcash.smartcashj.core.UTXO;
-import cc.smartcash.smartcashj.core.UTXOProviderException;
-import cc.smartcash.smartcashj.core.Utils;
-import cc.smartcash.smartcashj.core.VerificationException;
+import cc.smartcash.smartcashj.core.*;
 import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.script.ScriptException;
 import org.iq80.leveldb.*;
@@ -72,9 +59,9 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
     DB db = null;
 
     // Standard blockstore properties
-    protected Sha256Hash chainHeadHash;
+    protected Keccak256Hash chainHeadHash;
     protected StoredBlock chainHeadBlock;
-    protected Sha256Hash verifiedChainHeadHash;
+    protected Keccak256Hash verifiedChainHeadHash;
     protected StoredBlock verifiedChainHeadBlock;
     protected int fullStoreDepth;
     // Indicates if we track and report runtime for each method
@@ -306,14 +293,14 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
     }
 
     private void initFromDb() throws BlockStoreException {
-        Sha256Hash hash = Sha256Hash.wrap(batchGet(getKey(KeyType.CHAIN_HEAD_SETTING)));
+        Keccak256Hash hash = Keccak256Hash.wrap(batchGet(getKey(KeyType.CHAIN_HEAD_SETTING)));
         this.chainHeadBlock = get(hash);
         this.chainHeadHash = hash;
         if (this.chainHeadBlock == null) {
             throw new BlockStoreException("corrupt database block store - head block not found");
         }
 
-        hash = Sha256Hash.wrap(batchGet(getKey(KeyType.VERIFIED_CHAIN_HEAD_SETTING)));
+        hash = Keccak256Hash.wrap(batchGet(getKey(KeyType.VERIFIED_CHAIN_HEAD_SETTING)));
         this.verifiedChainHeadBlock = get(hash);
         this.verifiedChainHeadHash = hash;
         if (this.verifiedChainHeadBlock == null) {
@@ -332,7 +319,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
             // its database - the genesis transaction isn't actually in the db
             // so its spent flags can never be updated.
             List<Transaction> genesisTransactions = Lists.newLinkedList();
-            StoredUndoableBlock storedGenesis = new StoredUndoableBlock(params.getGenesisBlock().getHash(),
+            StoredUndoableBlock storedGenesis = new StoredUndoableBlock(params.getGenesisBlock().getHashKeccak(),
                     genesisTransactions);
             beginDatabaseBatchWrite();
             put(storedGenesisHeader, storedGenesis);
@@ -399,7 +386,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
     public void setChainHead(StoredBlock chainHead) throws BlockStoreException {
         if (instrument)
             beginMethod("setChainHead");
-        Sha256Hash hash = chainHead.getHeader().getHash();
+        Keccak256Hash hash = chainHead.getHeader().getHashKeccak();
         this.chainHeadHash = hash;
         this.chainHeadBlock = chainHead;
         batchPut(getKey(KeyType.CHAIN_HEAD_SETTING), hash.getBytes());
@@ -493,7 +480,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
         // We put as one record as then the get is much faster.
         if (instrument)
             beginMethod("putUpdateStoredBlock");
-        Sha256Hash hash = storedBlock.getHeader().getHash();
+        Keccak256Hash hash = storedBlock.getHeader().getHashKeccak();
         ByteBuffer bb = ByteBuffer.allocate(97);
         storedBlock.serializeCompact(bb);
         bb.put((byte) (wasUndoable ? 1 : 0));
@@ -526,7 +513,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
             throw new BlockStoreException(e);
         }
 
-        Sha256Hash hash = storedBlock.getHeader().getHash();
+        Keccak256Hash hash = storedBlock.getHeader().getHashKeccak();
 
         ByteBuffer keyBuf = ByteBuffer.allocate(33);
         keyBuf.put((byte) KeyType.HEIGHT_UNDOABLEBLOCKS.ordinal());
@@ -587,7 +574,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
         return key;
     }
 
-    private byte[] getKey(KeyType keytype, Sha256Hash hash) {
+    private byte[] getKey(KeyType keytype, Keccak256Hash hash) {
         byte[] key = new byte[29];
 
         key[0] = (byte) keytype.ordinal();
@@ -604,16 +591,16 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
     }
 
     @Override
-    public StoredBlock getOnceUndoableStoredBlock(Sha256Hash hash) throws BlockStoreException {
+    public StoredBlock getOnceUndoableStoredBlock(Keccak256Hash hash) throws BlockStoreException {
         return get(hash, true);
     }
 
     @Override
-    public StoredBlock get(Sha256Hash hash) throws BlockStoreException {
+    public StoredBlock get(Keccak256Hash hash) throws BlockStoreException {
         return get(hash, false);
     }
 
-    public StoredBlock get(Sha256Hash hash, boolean wasUndoableOnly) throws BlockStoreException {
+    public StoredBlock get(Keccak256Hash hash, boolean wasUndoableOnly) throws BlockStoreException {
 
         // Optimize for chain head
         if (chainHeadHash != null && chainHeadHash.equals(hash))
@@ -649,7 +636,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
     }
 
     @Override
-    public StoredUndoableBlock getUndoBlock(Sha256Hash hash) throws BlockStoreException {
+    public StoredUndoableBlock getUndoBlock(Keccak256Hash hash) throws BlockStoreException {
         try {
             if (instrument)
                 beginMethod("getUndoBlock");
@@ -981,7 +968,7 @@ public class LevelDBFullPrunedBlockStore implements FullPrunedBlockStore {
     public void setVerifiedChainHead(StoredBlock chainHead) throws BlockStoreException {
         if (instrument)
             beginMethod("setVerifiedChainHead");
-        Sha256Hash hash = chainHead.getHeader().getHash();
+        Keccak256Hash hash = chainHead.getHeader().getHashKeccak();
         this.verifiedChainHeadHash = hash;
         this.verifiedChainHeadBlock = chainHead;
         batchPut(getKey(KeyType.VERIFIED_CHAIN_HEAD_SETTING), hash.getBytes());

@@ -35,7 +35,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * A Keccak256Hash just wraps a byte[] so that equals and hashcode work correctly, allowing it to be used as keys in a
  * map. It also checks that the length is correct and provides a bit more type safety.
  */
-public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash> {
+public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash>{
     public static final int LENGTH = 32; // bytes
     public static final Keccak256Hash ZERO_HASH = wrap(new byte[LENGTH]);
 
@@ -96,9 +96,9 @@ public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash> {
      * @param contents the bytes on which the hash value is calculated
      * @return a new instance containing the calculated (two-time) hash
      */
-    public static Keccak256Hash twiceOf(byte[] contents) {
-        return wrap(hashTwice(contents));
-    }
+//    public static Keccak256Hash twiceOf(byte[] contents) {
+//        return wrap(hashTwice(contents));
+//    }
 
     /**
      * Creates a new instance containing the hash of the calculated hash of the given bytes.
@@ -107,9 +107,9 @@ public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash> {
      * @param content2 second bytes on which the hash value is calculated
      * @return a new instance containing the calculated (two-time) hash
      */
-    public static Keccak256Hash twiceOf(byte[] content1, byte[] content2) {
-        return wrap(hashTwice(content1, content2));
-    }
+//    public static Keccak256Hash twiceOf(byte[] content1, byte[] content2) {
+//        return wrap(hashTwice(content1, content2));
+//    }
 
     /**
      * Creates a new instance containing the calculated (one-time) hash of the given file's contents.
@@ -169,54 +169,54 @@ public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash> {
         return digest.digest();
     }
 
-    /**
-     * Calculates the SHA3-256 hash of the given bytes,
-     * and then hashes the resulting hash again.
-     *
-     * @param input the bytes to hash
-     * @return the double-hash (in big-endian order)
-     */
-    public static byte[] hashTwice(byte[] input) {
-        return hashTwice(input, 0, input.length);
-    }
-
-    /**
-     * Calculates the hash of hash on the given chunks of bytes. This is equivalent to concatenating the two
-     * chunks and then passing the result to {@link #hashTwice(byte[])}.
-     */
-    public static byte[] hashTwice(byte[] input1, byte[] input2) {
-        MessageDigest digest = newDigest();
-        digest.update(input1);
-        digest.update(input2);
-        return digest.digest(digest.digest());
-    }
-
-    /**
-     * Calculates the SHA3-256 hash of the given byte range,
-     * and then hashes the resulting hash again.
-     *
-     * @param input the array containing the bytes to hash
-     * @param offset the offset within the array of the bytes to hash
-     * @param length the number of bytes to hash
-     * @return the double-hash (in big-endian order)
-     */
-    public static byte[] hashTwice(byte[] input, int offset, int length) {
-        MessageDigest digest = newDigest();
-        digest.update(input, offset, length);
-        return digest.digest(digest.digest());
-    }
-
-    /**
-     * Calculates the hash of hash on the given byte ranges. This is equivalent to
-     * concatenating the two ranges and then passing the result to {@link #hashTwice(byte[])}.
-     */
-    public static byte[] hashTwice(byte[] input1, int offset1, int length1,
-                                   byte[] input2, int offset2, int length2) {
-        MessageDigest digest = newDigest();
-        digest.update(input1, offset1, length1);
-        digest.update(input2, offset2, length2);
-        return digest.digest(digest.digest());
-    }
+//    /**
+//     * Calculates the SHA3-256 hash of the given bytes,
+//     * and then hashes the resulting hash again.
+//     *
+//     * @param input the bytes to hash
+//     * @return the double-hash (in big-endian order)
+//     */
+//    public static byte[] hashTwice(byte[] input) {
+//        return hashTwice(input, 0, input.length);
+//    }
+//
+//    /**
+//     * Calculates the hash of hash on the given chunks of bytes. This is equivalent to concatenating the two
+//     * chunks and then passing the result to {@link #hashTwice(byte[])}.
+//     */
+//    public static byte[] hashTwice(byte[] input1, byte[] input2) {
+//        MessageDigest digest = newDigest();
+//        digest.update(input1);
+//        digest.update(input2);
+//        return digest.digest(digest.digest());
+//    }
+//
+//    /**
+//     * Calculates the SHA3-256 hash of the given byte range,
+//     * and then hashes the resulting hash again.
+//     *
+//     * @param input the array containing the bytes to hash
+//     * @param offset the offset within the array of the bytes to hash
+//     * @param length the number of bytes to hash
+//     * @return the double-hash (in big-endian order)
+//     */
+//    public static byte[] hashTwice(byte[] input, int offset, int length) {
+//        MessageDigest digest = newDigest();
+//        digest.update(input, offset, length);
+//        return digest.digest(digest.digest());
+//    }
+//
+//    /**
+//     * Calculates the hash of hash on the given byte ranges. This is equivalent to
+//     * concatenating the two ranges and then passing the result to {@link #hashTwice(byte[])}.
+//     */
+//    public static byte[] hashTwice(byte[] input1, int offset1, int length1,
+//                                   byte[] input2, int offset2, int length2) {
+//        MessageDigest digest = newDigest();
+//        digest.update(input1, offset1, length1);
+//        digest.update(input2, offset2, length2);
+//        return digest.digest(digest.digest());
+//    }
 
     @Override
     public boolean equals(Object o) {

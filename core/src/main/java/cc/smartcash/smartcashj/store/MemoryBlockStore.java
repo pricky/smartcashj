@@ -25,9 +25,9 @@ import java.util.Map;
  * Keeps {@link StoredBlock}s in memory. Used primarily for unit testing.
  */
 public class MemoryBlockStore implements BlockStore {
-    private LinkedHashMap<Sha256Hash, StoredBlock> blockMap = new LinkedHashMap<Sha256Hash, StoredBlock>() {
+    private LinkedHashMap<Keccak256Hash, StoredBlock> blockMap = new LinkedHashMap<Keccak256Hash, StoredBlock>() {
         @Override
-        protected boolean removeEldestEntry(Map.Entry<Sha256Hash, StoredBlock> eldest) {
+        protected boolean removeEldestEntry(Map.Entry<Keccak256Hash, StoredBlock> eldest) {
             return blockMap.size() > 5000;
         }
     };
@@ -52,12 +52,12 @@ public class MemoryBlockStore implements BlockStore {
     @Override
     public synchronized final void put(StoredBlock block) throws BlockStoreException {
         if (blockMap == null) throw new BlockStoreException("MemoryBlockStore is closed");
-        Sha256Hash hash = block.getHeader().getHash();
+        Keccak256Hash hash = block.getHeader().getHashKeccak();
         blockMap.put(hash, block);
     }
 
     @Override
-    public synchronized StoredBlock get(Sha256Hash hash) throws BlockStoreException {
+    public synchronized StoredBlock get(Keccak256Hash hash) throws BlockStoreException {
         if (blockMap == null) throw new BlockStoreException("MemoryBlockStore is closed");
         return blockMap.get(hash);
     }

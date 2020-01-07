@@ -113,7 +113,7 @@ public class FullPrunedBlockChain extends AbstractBlockChain {
     protected StoredBlock addToBlockStore(StoredBlock storedPrev, Block header, TransactionOutputChanges txOutChanges)
             throws BlockStoreException, VerificationException {
         StoredBlock newBlock = storedPrev.build(header);
-        blockStore.put(newBlock, new StoredUndoableBlock(newBlock.getHeader().getHash(), txOutChanges));
+        blockStore.put(newBlock, new StoredUndoableBlock(newBlock.getHeader().getHashKeccak(), txOutChanges));
         return newBlock;
     }
 
@@ -121,7 +121,7 @@ public class FullPrunedBlockChain extends AbstractBlockChain {
     protected StoredBlock addToBlockStore(StoredBlock storedPrev, Block block)
             throws BlockStoreException, VerificationException {
         StoredBlock newBlock = storedPrev.build(block);
-        blockStore.put(newBlock, new StoredUndoableBlock(newBlock.getHeader().getHash(), block.getTransactions()));
+        blockStore.put(newBlock, new StoredUndoableBlock(newBlock.getHeader().getHashKeccak(), block.getTransactions()));
         return newBlock;
     }
 
@@ -215,7 +215,7 @@ public class FullPrunedBlockChain extends AbstractBlockChain {
         checkState(lock.isHeldByCurrentThread());
         if (block.getTransactions() == null)
             throw new RuntimeException("connectTransactions called with Block that didn't have transactions!");
-        if (!params.passesCheckpoint(height, block.getHash()))
+        if (!params.passesCheckpoint(height, block.getHashKeccak()))
             throw new VerificationException("Block failed checkpoint lockin at " + height);
 
         blockStore.beginDatabaseBatchWrite();
@@ -350,11 +350,11 @@ public class FullPrunedBlockChain extends AbstractBlockChain {
     protected synchronized TransactionOutputChanges connectTransactions(StoredBlock newBlock)
             throws VerificationException, BlockStoreException, PrunedException {
         checkState(lock.isHeldByCurrentThread());
-        if (!params.passesCheckpoint(newBlock.getHeight(), newBlock.getHeader().getHash()))
+        if (!params.passesCheckpoint(newBlock.getHeight(), newBlock.getHeader().getHashKeccak()))
             throw new VerificationException("Block failed checkpoint lockin at " + newBlock.getHeight());
 
         blockStore.beginDatabaseBatchWrite();
-        StoredUndoableBlock block = blockStore.getUndoBlock(newBlock.getHeader().getHash());
+        StoredUndoableBlock block = blockStore.getUndoBlock(newBlock.getHeader().getHashKeccak());
         if (block == null) {
             // We're trying to re-org too deep and the data needed has been deleted.
             blockStore.abortDatabaseBatchWrite();
@@ -498,7 +498,7 @@ public class FullPrunedBlockChain extends AbstractBlockChain {
         checkState(lock.isHeldByCurrentThread());
         blockStore.beginDatabaseBatchWrite();
         try {
-            StoredUndoableBlock undoBlock = blockStore.getUndoBlock(oldBlock.getHeader().getHash());
+            StoredUndoableBlock undoBlock = blockStore.getUndoBlock(oldBlock.getHeader().getHashKeccak());
             if (undoBlock == null) throw new PrunedException(oldBlock.getHeader().getHash());
             TransactionOutputChanges txOutChanges = undoBlock.getTxOutChanges();
             for (UTXO out : txOutChanges.txOutsSpent)
@@ -527,7 +527,7 @@ public class FullPrunedBlockChain extends AbstractBlockChain {
     }
 
     @Override
-    protected StoredBlock getStoredBlockInCurrentScope(Sha256Hash hash) throws BlockStoreException {
+    protected StoredBlock getStoredBlockInCurrentScope(Keccak256Hash hash) throws BlockStoreException {
         checkState(lock.isHeldByCurrentThread());
         return blockStore.getOnceUndoableStoredBlock(hash);
     }

@@ -28,19 +28,19 @@ import java.util.List;
  */
 public class StoredUndoableBlock {
     
-    Sha256Hash blockHash;
+    Keccak256Hash blockHash;
     
     // Only one of either txOutChanges or transactions will be set
     private TransactionOutputChanges txOutChanges;
     private List<Transaction> transactions;
     
-    public StoredUndoableBlock(Sha256Hash hash, TransactionOutputChanges txOutChanges) {
+    public StoredUndoableBlock(Keccak256Hash hash, TransactionOutputChanges txOutChanges) {
         this.blockHash = hash;
         this.transactions = null;
         this.txOutChanges = txOutChanges;
     }
     
-    public StoredUndoableBlock(Sha256Hash hash, List<Transaction> transactions) {
+    public StoredUndoableBlock(Keccak256Hash hash, List<Transaction> transactions) {
         this.blockHash = hash;
         this.txOutChanges = null;
         this.transactions = transactions;
@@ -65,7 +65,7 @@ public class StoredUndoableBlock {
     /**
      * Get the hash of the represented block
      */
-    public Sha256Hash getHash() {
+    public Keccak256Hash getHash() {
         return blockHash;
     }
 

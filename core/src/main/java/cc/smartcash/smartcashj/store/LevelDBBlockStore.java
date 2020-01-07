@@ -84,7 +84,7 @@ public class LevelDBBlockStore implements BlockStore {
     }
 
     @Override @Nullable
-    public synchronized StoredBlock get(Sha256Hash hash) throws BlockStoreException {
+    public synchronized StoredBlock get(Keccak256Hash hash) throws BlockStoreException {
         byte[] bits = db.get(hash.getBytes());
         if (bits == null)
             return null;
@@ -93,7 +93,7 @@ public class LevelDBBlockStore implements BlockStore {
 
     @Override
     public synchronized StoredBlock getChainHead() throws BlockStoreException {
-        return get(Sha256Hash.wrap(db.get(CHAIN_HEAD_KEY)));
+        return get(Keccak256Hash.wrap(db.get(CHAIN_HEAD_KEY)));
     }
 
     @Override

@@ -17,18 +17,9 @@
 
 package cc.smartcash.smartcashj.wallet;
 
+import cc.smartcash.smartcashj.core.*;
 import com.google.protobuf.Message;
-import cc.smartcash.smartcashj.core.Coin;
-import cc.smartcash.smartcashj.core.NetworkParameters;
-import cc.smartcash.smartcashj.core.PeerAddress;
-import cc.smartcash.smartcashj.core.Sha256Hash;
-import cc.smartcash.smartcashj.core.Transaction;
-import cc.smartcash.smartcashj.core.TransactionConfidence;
 import cc.smartcash.smartcashj.core.TransactionConfidence.ConfidenceType;
-import cc.smartcash.smartcashj.core.TransactionInput;
-import cc.smartcash.smartcashj.core.TransactionOutPoint;
-import cc.smartcash.smartcashj.core.TransactionOutput;
-import cc.smartcash.smartcashj.core.TransactionWitness;
 import cc.smartcash.smartcashj.crypto.KeyCrypter;
 import cc.smartcash.smartcashj.crypto.KeyCrypterScrypt;
 import cc.smartcash.smartcashj.script.Script;
@@ -197,9 +188,9 @@ public class WalletProtobufSerializer {
         }
 
         // Populate the lastSeenBlockHash field.
-        Sha256Hash lastSeenBlockHash = wallet.getLastBlockSeenHash();
+        Keccak256Hash lastSeenBlockHash = wallet.getLastBlockSeenHash();
         if (lastSeenBlockHash != null) {
-            walletBuilder.setLastSeenBlockHash(hashToByteString(lastSeenBlockHash));
+            walletBuilder.setLastSeenBlockHash(hashToByteStringKeccak(lastSeenBlockHash));
             walletBuilder.setLastSeenBlockHeight(wallet.getLastBlockSeenHeight());
         }
         if (wallet.getLastBlockSeenTimeSecs() > 0)
@@ -303,10 +294,10 @@ public class WalletProtobufSerializer {
         }
 
         // Handle which blocks tx was seen in.
-        final Map<Sha256Hash, Integer> appearsInHashes = tx.getAppearsInHashes();
+        final Map<Keccak256Hash, Integer> appearsInHashes = tx.getAppearsInHashes();
         if (appearsInHashes != null) {
-            for (Map.Entry<Sha256Hash, Integer> entry : appearsInHashes.entrySet()) {
-                txBuilder.addBlockHash(hashToByteString(entry.getKey()));
+            for (Map.Entry<Keccak256Hash, Integer> entry : appearsInHashes.entrySet()) {
+                txBuilder.addBlockHash(hashToByteStringKeccak(entry.getKey()));
                 txBuilder.addBlockRelativityOffsets(entry.getValue());
             }
         }
@@ -402,8 +393,16 @@ public class WalletProtobufSerializer {
         return ByteString.copyFrom(hash.getBytes());
     }
 
+    public static ByteString hashToByteStringKeccak(Keccak256Hash hash) {
+        return ByteString.copyFrom(hash.getBytes());
+    }
+
     public static Sha256Hash byteStringToHash(ByteString bs) {
         return Sha256Hash.wrap(bs.toByteArray());
+    }
+
+    public static Keccak256Hash byteStringToHashKeccak(ByteString bs) {
+        return Keccak256Hash.wrap(bs.toByteArray());
     }
 
     /**
@@ -543,7 +542,7 @@ public class WalletProtobufSerializer {
             if (!walletProto.hasLastSeenBlockHash()) {
                 wallet.setLastBlockSeenHash(null);
             } else {
-                wallet.setLastBlockSeenHash(byteStringToHash(walletProto.getLastSeenBlockHash()));
+                wallet.setLastBlockSeenHash(byteStringToHashKeccak(walletProto.getLastSeenBlockHash()));
             }
             if (!walletProto.hasLastSeenBlockHeight()) {
                 wallet.setLastBlockSeenHeight(-1);
@@ -666,7 +665,7 @@ public class WalletProtobufSerializer {
             int relativityOffset = 0;
             if (txProto.getBlockRelativityOffsetsCount() > 0)
                 relativityOffset = txProto.getBlockRelativityOffsets(i);
-            tx.addBlockAppearance(byteStringToHash(blockHash), relativityOffset);
+            tx.addBlockAppearance(byteStringToHashKeccak(blockHash), relativityOffset);
         }
 
         if (txProto.hasLockTime()) {

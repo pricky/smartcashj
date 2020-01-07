@@ -152,7 +152,7 @@ public class Wallet extends BaseTaggableObject
     protected final Context context;
     protected final NetworkParameters params;
 
-    @Nullable private Sha256Hash lastBlockSeenHash;
+    @Nullable private Keccak256Hash lastBlockSeenHash;
     private int lastBlockSeenHeight;
     private long lastBlockSeenTimeSecs;
 
@@ -2274,7 +2274,7 @@ public class Wallet extends BaseTaggableObject
     @Override
     public void notifyNewBestBlock(StoredBlock block) throws VerificationException {
         // Check to see if this block has been seen before.
-        Sha256Hash newBlockHash = block.getHeader().getHash();
+        Keccak256Hash newBlockHash = block.getHeader().getHashKeccak();
         if (newBlockHash.equals(getLastBlockSeenHash()))
             return;
         lock.lock();
@@ -3522,7 +3522,7 @@ public class Wallet extends BaseTaggableObject
 
     /** Returns the hash of the last seen best-chain block, or null if the wallet is too old to store this data. */
     @Nullable
-    public Sha256Hash getLastBlockSeenHash() {
+    public Keccak256Hash getLastBlockSeenHash() {
         lock.lock();
         try {
             return lastBlockSeenHash;
@@ -3531,7 +3531,7 @@ public class Wallet extends BaseTaggableObject
         }
     }
 
-    public void setLastBlockSeenHash(@Nullable Sha256Hash lastBlockSeenHash) {
+    public void setLastBlockSeenHash(@Nullable Keccak256Hash lastBlockSeenHash) {
         lock.lock();
         try {
             this.lastBlockSeenHash = lastBlockSeenHash;
@@ -4639,21 +4639,21 @@ public class Wallet extends BaseTaggableObject
 
             // Map block hash to transactions that appear in it. We ensure that the map values are sorted according
             // to their relative position within those blocks.
-            ArrayListMultimap<Sha256Hash, TxOffsetPair> mapBlockTx = ArrayListMultimap.create();
+            ArrayListMultimap<Keccak256Hash, TxOffsetPair> mapBlockTx = ArrayListMultimap.create();
             for (Transaction tx : getTransactions(true)) {
-                Map<Sha256Hash, Integer> appearsIn = tx.getAppearsInHashes();
+                Map<Keccak256Hash, Integer> appearsIn = tx.getAppearsInHashes();
                 if (appearsIn == null) continue;  // Pending.
-                for (Map.Entry<Sha256Hash, Integer> block : appearsIn.entrySet())
+                for (Map.Entry<Keccak256Hash, Integer> block : appearsIn.entrySet())
                     mapBlockTx.put(block.getKey(), new TxOffsetPair(tx, block.getValue()));
             }
-            for (Sha256Hash blockHash : mapBlockTx.keySet())
+            for (Keccak256Hash blockHash : mapBlockTx.keySet())
                 Collections.sort(mapBlockTx.get(blockHash));
 
-            List<Sha256Hash> oldBlockHashes = new ArrayList<>(oldBlocks.size());
+            List<Keccak256Hash> oldBlockHashes = new ArrayList<>(oldBlocks.size());
             log.info("Old part of chain (top to bottom):");
             for (StoredBlock b : oldBlocks) {
                 log.info("  {}", b.getHeader().getHashAsString());
-                oldBlockHashes.add(b.getHeader().getHash());
+                oldBlockHashes.add(b.getHeader().getHashKeccak());
             }
             log.info("New part of chain (top to bottom):");
             for (StoredBlock b : newBlocks) {
@@ -4664,7 +4664,7 @@ public class Wallet extends BaseTaggableObject
 
             // For each block in the old chain, disconnect the transactions in reverse order.
             LinkedList<Transaction> oldChainTxns = new LinkedList<>();
-            for (Sha256Hash blockHash : oldBlockHashes) {
+            for (Keccak256Hash blockHash : oldBlockHashes) {
                 for (TxOffsetPair pair : mapBlockTx.get(blockHash)) {
                     Transaction tx = pair.tx;
                     final Sha256Hash txHash = tx.getTxId();
@@ -4726,7 +4726,7 @@ public class Wallet extends BaseTaggableObject
             subtractDepth(depthToSubtract, dead.values());
 
             // The effective last seen block is now the split point so set the lastSeenBlockHash.
-            setLastBlockSeenHash(splitPoint.getHeader().getHash());
+            setLastBlockSeenHash(splitPoint.getHeader().getHashKeccak());
 
             // For each block in the new chain, work forwards calling receive() and notifyNewBestBlock().
             // This will pull them back out of the pending pool, or if the tx didn't appear in the old chain and
@@ -4734,7 +4734,7 @@ public class Wallet extends BaseTaggableObject
             // conflict.
             for (StoredBlock block : newBlocks) {
                 log.info("Replaying block {}", block.getHeader().getHashAsString());
-                for (TxOffsetPair pair : mapBlockTx.get(block.getHeader().getHash())) {
+                for (TxOffsetPair pair : mapBlockTx.get(block.getHeader().getHashKeccak())) {
                     log.info("  tx {}", pair.tx.getTxId());
                     try {
                         receive(pair.tx, block, BlockChain.NewBlockType.BEST_CHAIN, pair.offset);

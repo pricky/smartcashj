@@ -52,26 +52,26 @@ public class MainNetParams extends AbstractBitcoinNetParams {
         majorityRejectBlockOutdated = MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED;
         majorityWindow = MAINNET_MAJORITY_WINDOW;
 
-        genesisBlock.setDifficultyTarget(0x1d00ffffL);
+        genesisBlock.setDifficultyTarget(0x1e0ffff0L);
         genesisBlock.setTime(1496467978L);
         genesisBlock.setNonce(245887);
         id = ID_MAINNET;
         subsidyDecreaseBlockCount = 210000;
         spendableCoinbaseDepth = 100;
         String genesisHash = genesisBlock.getHashAsString();
-        checkState(genesisHash.equals("000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"),
+        checkState(genesisHash.equals("000007acc6970b812948d14ea5a0a13db0fdd07d5047c7e69101fa8b361e05a4"),
                 genesisHash);
 
         // This contains (at a minimum) the blocks which are not BIP30 compliant. BIP30 changed how duplicate
         // transactions are handled. Duplicated transactions could occur in the case where a coinbase had the same
         // extraNonce and the same outputs but appeared at different heights, and greatly complicated re-org handling.
         // Having these here simplifies block connection logic considerably.
-        checkpoints.put(0, Sha256Hash.wrap("0x000007acc6970b812948d14ea5a0a13db0fdd07d5047c7e69101fa8b361e05a4"));
-        checkpoints.put(75000, Sha256Hash.wrap("0x000000000002ee203026137ebc460e1886e09b9fdb0e83697e5a74976088e75c"));
-        checkpoints.put(170000, Sha256Hash.wrap("0x000000000000670ff41fbb4ad819b48bfe1c35623f13297d3fbf9bf02abcd87c"));
-        checkpoints.put(500000, Sha256Hash.wrap("0x00000000000016a1fa8e650e5a82babefeb9225ffe78614bc4b23cf160d16eeb"));
-        checkpoints.put(1000000, Sha256Hash.wrap("0x00000000000008e14776878dba228ac957a97205df4716ce1913ae4339e7aeb9"));
-        checkpoints.put(1030000, Sha256Hash.wrap("0x00000000000000d7e76cc6c30a2bece10f552123ad3c9a63beceb0d553a46f04"));
+        checkpoints.put(0, Keccak256Hash.wrap("000007acc6970b812948d14ea5a0a13db0fdd07d5047c7e69101fa8b361e05a4"));
+        checkpoints.put(75000, Keccak256Hash.wrap("000000000002ee203026137ebc460e1886e09b9fdb0e83697e5a74976088e75c"));
+        checkpoints.put(170000, Keccak256Hash.wrap("000000000000670ff41fbb4ad819b48bfe1c35623f13297d3fbf9bf02abcd87c"));
+        checkpoints.put(500000, Keccak256Hash.wrap("00000000000016a1fa8e650e5a82babefeb9225ffe78614bc4b23cf160d16eeb"));
+        checkpoints.put(1000000, Keccak256Hash.wrap("00000000000008e14776878dba228ac957a97205df4716ce1913ae4339e7aeb9"));
+        checkpoints.put(1030000, Keccak256Hash.wrap("00000000000000d7e76cc6c30a2bece10f552123ad3c9a63beceb0d553a46f04"));
 
         dnsSeeds = new String[] {
                 "seed.smrt.cash",

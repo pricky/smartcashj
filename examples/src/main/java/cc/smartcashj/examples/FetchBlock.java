@@ -81,7 +81,7 @@ public class FetchBlock {
         Peer peer = peerGroup.getConnectedPeers().get(0);
 
         // Retrieve a block through a peer
-        Sha256Hash blockHash = Sha256Hash.wrap(nonOpts.get(0));
+        Keccak256Hash blockHash = Keccak256Hash.wrap(nonOpts.get(0));
         Future<Block> future = peer.getBlock(blockHash);
         System.out.println("Waiting for node to send us the requested block: " + blockHash);
         Block block = future.get();

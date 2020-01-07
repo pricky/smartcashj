@@ -122,7 +122,7 @@ public abstract class AbstractBlockChain {
     }
     // Holds blocks that we have received but can't plug into the chain yet, eg because they were created whilst we
     // were downloading the block chain.
-    private final LinkedHashMap<Sha256Hash, OrphanBlock> orphanBlocks = new LinkedHashMap<>();
+    private final LinkedHashMap<Keccak256Hash, OrphanBlock> orphanBlocks = new LinkedHashMap<>();
 
     /** False positive estimation uses a double exponential moving average. */
     public static final double FP_ESTIMATOR_ALPHA = 0.0001;
@@ -340,7 +340,7 @@ public abstract class AbstractBlockChain {
      * For a standard BlockChain, this should return blockStore.get(hash),
      * for a FullPrunedBlockChain blockStore.getOnceUndoableStoredBlock(hash)
      */
-    protected abstract StoredBlock getStoredBlockInCurrentScope(Sha256Hash hash) throws BlockStoreException;
+    protected abstract StoredBlock getStoredBlockInCurrentScope(Keccak256Hash hash) throws BlockStoreException;
 
     /**
      * Processes a received block and tries to add it to the chain. If there's something wrong with the block an
@@ -434,7 +434,7 @@ public abstract class AbstractBlockChain {
             if (block.equals(getChainHead().getHeader())) {
                 return true;
             }
-            if (tryConnecting && orphanBlocks.containsKey(block.getHash())) {
+            if (tryConnecting && orphanBlocks.containsKey(block.getHashKeccak())) {
                 return false;
             }
 
@@ -444,7 +444,7 @@ public abstract class AbstractBlockChain {
 
             // Check for already-seen block, but only for full pruned mode, where the DB is
             // more likely able to handle these queries quickly.
-            if (shouldVerifyTransactions() && blockStore.get(block.getHash()) != null) {
+            if (shouldVerifyTransactions() && blockStore.get(block.getHashKeccak()) != null) {
                 return true;
             }
 
@@ -481,7 +481,7 @@ public abstract class AbstractBlockChain {
                 // have more blocks.
                 checkState(tryConnecting, "bug in tryConnectingOrphans");
                 log.warn("Block does not connect: {} prev {}", block.getHashAsString(), block.getPrevBlockHash());
-                orphanBlocks.put(block.getHash(), new OrphanBlock(block, filteredTxHashList, filteredTxn));
+                orphanBlocks.put(block.getHashKeccak(), new OrphanBlock(block, filteredTxHashList, filteredTxn));
                 return false;
             } else {
                 checkState(lock.isHeldByCurrentThread());
@@ -504,10 +504,10 @@ public abstract class AbstractBlockChain {
      * Used by Peer when a filter exhaustion event has occurred and thus any orphan blocks that have been downloaded
      * might be inaccurate/incomplete.
      */
-    public Set<Sha256Hash> drainOrphanBlocks() {
+    public Set<Keccak256Hash> drainOrphanBlocks() {
         lock.lock();
         try {
-            Set<Sha256Hash> hashes = new HashSet<>(orphanBlocks.keySet());
+            Set<Keccak256Hash> hashes = new HashSet<>(orphanBlocks.keySet());
             orphanBlocks.clear();
             return hashes;
         } finally {
@@ -524,7 +524,7 @@ public abstract class AbstractBlockChain {
         checkState(lock.isHeldByCurrentThread());
         boolean filtered = filteredTxHashList != null && filteredTxn != null;
         // Check that we aren't connecting a block that fails a checkpoint check
-        if (!params.passesCheckpoint(storedPrev.getHeight() + 1, block.getHash()))
+        if (!params.passesCheckpoint(storedPrev.getHeight() + 1, block.getHashKeccak()))
             throw new VerificationException("Block failed checkpoint lockin at " + (storedPrev.getHeight() + 1));
         if (shouldVerifyTransactions()) {
             checkNotNull(block.transactions);

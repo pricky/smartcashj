@@ -18,6 +18,7 @@ package cc.smartcashj.examples;
 
 import cc.smartcash.smartcashj.core.NetworkParameters;
 import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import cc.smartcash.smartcashj.params.TestNet3Params;
 import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.wallet.DeterministicSeed;
@@ -35,7 +36,7 @@ public class BackupToMnemonicSeed {
 
     public static void main(String[] args) {
 
-        NetworkParameters params = TestNet3Params.get();
+        NetworkParameters params = MainNetParams.get();
         Wallet wallet = Wallet.createDeterministic(params, Script.ScriptType.P2PKH);
 
         DeterministicSeed seed = wallet.getKeyChainSeed();

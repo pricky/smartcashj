@@ -88,7 +88,7 @@ public abstract class ListMessage extends Message {
             InventoryItem.Type type = InventoryItem.Type.ofCode(typeCode);
             if (type == null)
                 throw new ProtocolException("Unknown CInv type: " + typeCode);
-            InventoryItem item = new InventoryItem(type, readHash());
+            InventoryItem item = new InventoryItem(type, readHash(), null);
             items.add(item);
         }
         payload = null;

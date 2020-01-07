@@ -148,7 +148,7 @@ public class Transaction extends ChildMessage {
     // regardless of where they actually appeared in the block.
     //
     // If this transaction is not stored in the wallet, appearsInHashes is null.
-    private Map<Sha256Hash, Integer> appearsInHashes;
+    private Map<Keccak256Hash, Integer> appearsInHashes;
 
     // Transactions can be encoded in a way that will use more bytes than is optimal
     // (due to VarInts having multiple encodings)
@@ -280,7 +280,7 @@ public class Transaction extends ChildMessage {
                 } catch (IOException e) {
                     throw new RuntimeException(e); // cannot happen
                 }
-                cachedTxId = Sha256Hash.wrapReversed(Sha256Hash.hashTwice(stream.toByteArray()));
+                cachedTxId = Sha256Hash.wrapReversed(Sha256Hash.hash(stream.toByteArray()));
             }
         }
         return cachedTxId;
@@ -301,7 +301,7 @@ public class Transaction extends ChildMessage {
                 } catch (IOException e) {
                     throw new RuntimeException(e); // cannot happen
                 }
-                cachedWTxId = Sha256Hash.wrapReversed(Sha256Hash.hashTwice(baos.toByteArray()));
+                cachedWTxId = Sha256Hash.wrapReversed(Sha256Hash.hash(baos.toByteArray()));
             }
         }
         return cachedWTxId;
@@ -365,7 +365,7 @@ public class Transaction extends ChildMessage {
      * block.
      */
     @Nullable
-    public Map<Sha256Hash, Integer> getAppearsInHashes() {
+    public Map<Keccak256Hash, Integer> getAppearsInHashes() {
         return appearsInHashes != null ? ImmutableMap.copyOf(appearsInHashes) : null;
     }
 
@@ -397,7 +397,7 @@ public class Transaction extends ChildMessage {
             updatedAt = new Date(blockTime);
         }
 
-        addBlockAppearance(block.getHeader().getHash(), relativityOffset);
+        addBlockAppearance(block.getHeader().getHashKeccak(), relativityOffset);
 
         if (bestChain) {
             TransactionConfidence transactionConfidence = getConfidence();
@@ -406,7 +406,7 @@ public class Transaction extends ChildMessage {
         }
     }
 
-    public void addBlockAppearance(final Sha256Hash blockHash, int relativityOffset) {
+    public void addBlockAppearance(final Keccak256Hash blockHash, int relativityOffset) {
         if (appearsInHashes == null) {
             // TODO: This could be a lot more memory efficient as we'll typically only store one element.
             appearsInHashes = new TreeMap<>();
@@ -1371,7 +1371,7 @@ public class Transaction extends ChildMessage {
                     bosHashPrevouts.write(this.inputs.get(i).getOutpoint().getHash().getReversedBytes());
                     uint32ToByteStreamLE(this.inputs.get(i).getOutpoint().getIndex(), bosHashPrevouts);
                 }
-                hashPrevouts = Sha256Hash.hashTwice(bosHashPrevouts.toByteArray());
+                hashPrevouts = Sha256Hash.hash(bosHashPrevouts.toByteArray());
             }
 
             if (!anyoneCanPay && signAll) {
@@ -1379,7 +1379,7 @@ public class Transaction extends ChildMessage {
                 for (int i = 0; i < this.inputs.size(); ++i) {
                     uint32ToByteStreamLE(this.inputs.get(i).getSequenceNumber(), bosSequence);
                 }
-                hashSequence = Sha256Hash.hashTwice(bosSequence.toByteArray());
+                hashSequence = Sha256Hash.hash(bosSequence.toByteArray());
             }
 
             if (signAll) {
@@ -1392,7 +1392,7 @@ public class Transaction extends ChildMessage {
                     bosHashOutputs.write(new VarInt(this.outputs.get(i).getScriptBytes().length).encode());
                     bosHashOutputs.write(this.outputs.get(i).getScriptBytes());
                 }
-                hashOutputs = Sha256Hash.hashTwice(bosHashOutputs.toByteArray());
+                hashOutputs = Sha256Hash.hash(bosHashOutputs.toByteArray());
             } else if (basicSigHashType == SigHash.SINGLE.value && inputIndex < outputs.size()) {
                 ByteArrayOutputStream bosHashOutputs = new UnsafeByteArrayOutputStream(256);
                 uint64ToByteStreamLE(
@@ -1401,7 +1401,7 @@ public class Transaction extends ChildMessage {
                 );
                 bosHashOutputs.write(new VarInt(this.outputs.get(inputIndex).getScriptBytes().length).encode());
                 bosHashOutputs.write(this.outputs.get(inputIndex).getScriptBytes());
-                hashOutputs = Sha256Hash.hashTwice(bosHashOutputs.toByteArray());
+                hashOutputs = Sha256Hash.hash(bosHashOutputs.toByteArray());
             }
             uint32ToByteStreamLE(version, bos);
             bos.write(hashPrevouts);

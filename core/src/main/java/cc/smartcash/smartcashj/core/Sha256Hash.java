@@ -43,7 +43,7 @@ public class Sha256Hash implements Serializable, Comparable<Sha256Hash> {
 
     private final byte[] bytes;
 
-    private Sha256Hash(byte[] rawHashBytes) {
+    public Sha256Hash(byte[] rawHashBytes) {
         checkArgument(rawHashBytes.length == LENGTH);
         this.bytes = rawHashBytes;
     }

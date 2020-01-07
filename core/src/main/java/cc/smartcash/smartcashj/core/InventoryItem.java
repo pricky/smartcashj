@@ -48,10 +48,12 @@ public class InventoryItem {
 
     public final Type type;
     public final Sha256Hash hash;
+    public final Keccak256Hash hashKeccak;
 
-    public InventoryItem(Type type, Sha256Hash hash) {
+    public InventoryItem(Type type, Sha256Hash hash, Keccak256Hash hashKeccak) {
         this.type = type;
         this.hash = hash;
+        this.hashKeccak = hashKeccak;
     }
 
     @Override

@@ -18,6 +18,7 @@
 package cc.smartcashj.examples;
 
 import cc.smartcash.smartcashj.core.*;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import cc.smartcash.smartcashj.params.TestNet3Params;
 import cc.smartcash.smartcashj.store.BlockStore;
 import cc.smartcash.smartcashj.store.MemoryBlockStore;
@@ -34,7 +35,7 @@ public class FetchTransactions {
     public static void main(String[] args) throws Exception {
         BriefLogFormatter.init();
         System.out.println("Connecting to node");
-        final NetworkParameters params = TestNet3Params.get();
+        final NetworkParameters params = MainNetParams.get();
 
         BlockStore blockStore = new MemoryBlockStore(params);
         BlockChain chain = new BlockChain(params, blockStore);

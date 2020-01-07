@@ -22,23 +22,14 @@ import static com.google.common.base.Preconditions.checkState;
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
-import cc.smartcash.smartcashj.core.Block;
-import cc.smartcash.smartcashj.core.Coin;
-import cc.smartcash.smartcashj.core.NetworkParameters;
-import cc.smartcash.smartcashj.core.Sha256Hash;
-import cc.smartcash.smartcashj.core.StoredBlock;
-import cc.smartcash.smartcashj.core.Transaction;
-import cc.smartcash.smartcashj.core.Utils;
+import cc.smartcash.smartcashj.core.*;
 import cc.smartcash.smartcashj.utils.MonetaryFormat;
-import cc.smartcash.smartcashj.core.VerificationException;
 import cc.smartcash.smartcashj.store.BlockStore;
 import cc.smartcash.smartcashj.store.BlockStoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Stopwatch;
-
-import cc.smartcash.smartcashj.core.BitcoinSerializer;
 
 /**
  * Parameters for Bitcoin-like networks.
@@ -94,7 +85,7 @@ public abstract class AbstractBitcoinNetParams extends NetworkParameters {
         // We need to find a block far back in the chain. It's OK that this is expensive because it only occurs every
         // two weeks after the initial block chain download.
         final Stopwatch watch = Stopwatch.createStarted();
-        Sha256Hash hash = prev.getHash();
+        Keccak256Hash hash = prev.getHashKeccak();
         StoredBlock cursor = null;
         final int interval = this.getInterval();
         for (int i = 0; i < interval; i++) {

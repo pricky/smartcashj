@@ -21,6 +21,7 @@ import com.google.common.annotations.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import cc.smartcash.smartcashj.script.*;
+import fr.cryptohash.Keccak256;
 import org.slf4j.*;
 
 import javax.annotation.*;
@@ -82,7 +83,7 @@ public class Block extends Message {
     /** Height of the first block */
     public static final int BLOCK_HEIGHT_GENESIS = 0;
 
-    public static final long BLOCK_VERSION_GENESIS = 1;
+    public static final long BLOCK_VERSION_GENESIS = 2;
     /** Block version introduced in BIP 34: Height in coinbase */
     public static final long BLOCK_VERSION_BIP34 = 2;
     /** Block version introduced in BIP 66: Strict DER signatures */
@@ -92,7 +93,7 @@ public class Block extends Message {
 
     // Fields defined as part of the protocol format.
     private long version;
-    private Sha256Hash prevBlockHash;
+    private Keccak256Hash prevBlockHash;
     private Sha256Hash merkleRoot, witnessRoot;
     private long time;
     private long difficultyTarget; // "nBits"
@@ -103,7 +104,7 @@ public class Block extends Message {
     @Nullable List<Transaction> transactions;
 
     /** Stores the hash of the block. If null, getHash() will recalculate it. */
-    private Sha256Hash hash;
+    private Keccak256Hash hash;
 
     protected boolean headerBytesValid;
     protected boolean transactionBytesValid;
@@ -120,7 +121,7 @@ public class Block extends Message {
         version = setVersion;
         difficultyTarget = 0x1d07fff8L;
         time = Utils.currentTimeSeconds();
-        prevBlockHash = Sha256Hash.ZERO_HASH;
+        prevBlockHash = Keccak256Hash.ZERO_HASH;
 
         length = HEADER_SIZE;
     }
@@ -193,7 +194,7 @@ public class Block extends Message {
      * @param nonce Arbitrary number to make the block hash lower than the target.
      * @param transactions List of transactions including the coinbase.
      */
-    public Block(NetworkParameters params, long version, Sha256Hash prevBlockHash, Sha256Hash merkleRoot, long time,
+    public Block(NetworkParameters params, long version, Keccak256Hash prevBlockHash, Sha256Hash merkleRoot, long time,
                  long difficultyTarget, long nonce, List<Transaction> transactions) {
         super(params);
         this.version = version;
@@ -255,12 +256,12 @@ public class Block extends Message {
         // header
         cursor = offset;
         version = readUint32();
-        prevBlockHash = readHash();
+        prevBlockHash = readHashKeccak();
         merkleRoot = readHash();
         time = readUint32();
         difficultyTarget = readUint32();
         nonce = readUint32();
-        hash = Sha256Hash.wrapReversed(Sha256Hash.hashTwice(payload, offset, cursor - offset));
+        hash = Keccak256Hash.wrapReversed(Keccak256Hash.hash(payload, offset, cursor - offset));
         headerBytesValid = serializer.isParseRetainMode();
 
         // transactions
@@ -399,11 +400,11 @@ public class Block extends Message {
      * Calculates the block hash by serializing the block and hashing the
      * resulting bytes.
      */
-    private Sha256Hash calculateHash() {
+    private Keccak256Hash calculateHash() {
         try {
             ByteArrayOutputStream bos = new UnsafeByteArrayOutputStream(HEADER_SIZE);
             writeHeader(bos);
-            return Sha256Hash.wrapReversed(Sha256Hash.hashTwice(bos.toByteArray()));
+            return Keccak256Hash.wrapReversed(Keccak256Hash.hash(bos.toByteArray()));
         } catch (IOException e) {
             throw new RuntimeException(e); // Cannot happen.
         }
@@ -415,7 +416,7 @@ public class Block extends Message {
      * you will get "00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048".
      */
     public String getHashAsString() {
-        return getHash().toString();
+        return getHashKeccak().toString();
     }
 
     /**
@@ -423,7 +424,7 @@ public class Block extends Message {
      * below the target). Big endian.
      */
     @Override
-    public Sha256Hash getHash() {
+    public Keccak256Hash getHashKeccak() {
         if (hash == null)
             hash = calculateHash();
         return hash;
@@ -464,7 +465,7 @@ public class Block extends Message {
         block.time = time;
         block.difficultyTarget = difficultyTarget;
         block.transactions = null;
-        block.hash = getHash();
+        block.hash = getHashKeccak();
     }
 
     /**
@@ -825,11 +826,11 @@ public class Block extends Message {
     /**
      * Returns the hash of the previous block in the chain, as defined by the block header.
      */
-    public Sha256Hash getPrevBlockHash() {
+    public Keccak256Hash getPrevBlockHash() {
         return prevBlockHash;
     }
 
-    void setPrevBlockHash(Sha256Hash prevBlockHash) {
+    void setPrevBlockHash(Keccak256Hash prevBlockHash) {
         unCacheHeader();
         this.prevBlockHash = prevBlockHash;
         this.hash = null;
@@ -982,7 +983,7 @@ public class Block extends Message {
             b.addTransaction(t);
         }
 
-        b.setPrevBlockHash(getHash());
+        b.setPrevBlockHash(getHashKeccak());
         // Don't let timestamp go backwards
         if (getTimeSeconds() >= time)
             b.setTime(getTimeSeconds() + 1);

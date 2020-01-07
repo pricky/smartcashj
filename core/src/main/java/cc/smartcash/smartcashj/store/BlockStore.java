@@ -16,10 +16,7 @@
 
 package cc.smartcash.smartcashj.store;
 
-import cc.smartcash.smartcashj.core.BlockChain;
-import cc.smartcash.smartcashj.core.NetworkParameters;
-import cc.smartcash.smartcashj.core.Sha256Hash;
-import cc.smartcash.smartcashj.core.StoredBlock;
+import cc.smartcash.smartcashj.core.*;
 
 /**
  * An implementor of BlockStore saves StoredBlock objects to disk. Different implementations store them in
@@ -43,7 +40,7 @@ public interface BlockStore {
      * Returns the StoredBlock given a hash. The returned values block.getHash() method will be equal to the
      * parameter. If no such block is found, returns null.
      */
-    StoredBlock get(Sha256Hash hash) throws BlockStoreException;
+    StoredBlock get(Keccak256Hash hash) throws BlockStoreException;
 
     /**
      * Returns the {@link StoredBlock} that represents the top of the chain of greatest total work. Note that this

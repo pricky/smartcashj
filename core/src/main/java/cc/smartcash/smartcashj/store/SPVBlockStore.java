@@ -55,9 +55,9 @@ public class SPVBlockStore implements BlockStore {
     // the OpenJDK/Oracle JVM calls into the get() methods are compiled down to inlined native code on Android each
     // get() call is actually a full-blown JNI method under the hood, meaning it's unbelievably slow. The caches
     // below let us stay in the JIT-compiled Java world without expensive JNI transitions and make a 10x difference!
-    protected LinkedHashMap<Sha256Hash, StoredBlock> blockCache = new LinkedHashMap<Sha256Hash, StoredBlock>() {
+    protected LinkedHashMap<Keccak256Hash, StoredBlock> blockCache = new LinkedHashMap<Keccak256Hash, StoredBlock>() {
         @Override
-        protected boolean removeEldestEntry(Map.Entry<Sha256Hash, StoredBlock> entry) {
+        protected boolean removeEldestEntry(Map.Entry<Keccak256Hash, StoredBlock> entry) {
             return size() > 2050;  // Slightly more than the difficulty transition period.
         }
     };
@@ -68,9 +68,9 @@ public class SPVBlockStore implements BlockStore {
     // We don't care about the value in this cache. It is always notFoundMarker. Unfortunately LinkedHashSet does not
     // provide the removeEldestEntry control.
     private static final Object NOT_FOUND_MARKER = new Object();
-    protected LinkedHashMap<Sha256Hash, Object> notFoundCache = new LinkedHashMap<Sha256Hash, Object>() {
+    protected LinkedHashMap<Keccak256Hash, Object> notFoundCache = new LinkedHashMap<Keccak256Hash, Object>() {
         @Override
-        protected boolean removeEldestEntry(Map.Entry<Sha256Hash, Object> entry) {
+        protected boolean removeEldestEntry(Map.Entry<Keccak256Hash, Object> entry) {
             return size() > 100;  // This was chosen arbitrarily.
         }
     };
@@ -192,7 +192,7 @@ public class SPVBlockStore implements BlockStore {
                 cursor = FILE_PROLOGUE_BYTES;
             }
             buffer.position(cursor);
-            Sha256Hash hash = block.getHeader().getHash();
+            Keccak256Hash hash = block.getHeader().getHashKeccak();
             notFoundCache.remove(hash);
             buffer.put(hash.getBytes());
             block.serializeCompact(buffer);
@@ -203,7 +203,7 @@ public class SPVBlockStore implements BlockStore {
 
     @Override
     @Nullable
-    public StoredBlock get(Sha256Hash hash) throws BlockStoreException {
+    public StoredBlock get(Keccak256Hash hash) throws BlockStoreException {
         final MappedByteBuffer buffer = this.buffer;
         if (buffer == null) throw new BlockStoreException("Store closed");
 
@@ -258,7 +258,7 @@ public class SPVBlockStore implements BlockStore {
                 byte[] headHash = new byte[32];
                 buffer.position(8);
                 buffer.get(headHash);
-                Sha256Hash hash = Sha256Hash.wrap(headHash);
+                Keccak256Hash hash = Keccak256Hash.wrap(headHash);
                 StoredBlock block = get(hash);
                 if (block == null)
                     throw new BlockStoreException("Corrupted block store: could not find chain head: " + hash);

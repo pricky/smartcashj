@@ -48,15 +48,15 @@ public class GetDataMessage extends ListMessage {
 
     public void addTransaction(Sha256Hash hash, boolean includeWitness) {
         addItem(new InventoryItem(
-                includeWitness ? InventoryItem.Type.WITNESS_TRANSACTION : InventoryItem.Type.TRANSACTION, hash));
+                includeWitness ? InventoryItem.Type.WITNESS_TRANSACTION : InventoryItem.Type.TRANSACTION, hash, null));
     }
 
-    public void addBlock(Sha256Hash hash, boolean includeWitness) {
-        addItem(new InventoryItem(includeWitness ? InventoryItem.Type.WITNESS_BLOCK : InventoryItem.Type.BLOCK, hash));
+    public void addBlock(Keccak256Hash hash, boolean includeWitness) {
+        addItem(new InventoryItem(includeWitness ? InventoryItem.Type.WITNESS_BLOCK : InventoryItem.Type.BLOCK, null, hash));
     }
 
-    public void addFilteredBlock(Sha256Hash hash) {
-        addItem(new InventoryItem(InventoryItem.Type.FILTERED_BLOCK, hash));
+    public void addFilteredBlock(Keccak256Hash hash) {
+        addItem(new InventoryItem(InventoryItem.Type.FILTERED_BLOCK,null, hash));
     }
 
     public Sha256Hash getHashOf(int i) {

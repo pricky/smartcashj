@@ -238,8 +238,8 @@ public class MemoryFullPrunedBlockStore implements FullPrunedBlockStore {
         public boolean wasUndoable;
         public StoredBlockAndWasUndoableFlag(StoredBlock block, boolean wasUndoable) { this.block = block; this.wasUndoable = wasUndoable; }
     }
-    private TransactionalHashMap<Sha256Hash, StoredBlockAndWasUndoableFlag> blockMap;
-    private TransactionalMultiKeyHashMap<Sha256Hash, Integer, StoredUndoableBlock> fullBlockMap;
+    private TransactionalHashMap<Keccak256Hash, StoredBlockAndWasUndoableFlag> blockMap;
+    private TransactionalMultiKeyHashMap<Keccak256Hash, Integer, StoredUndoableBlock> fullBlockMap;
     //TODO: Use something more suited to remove-heavy use?
     private TransactionalHashMap<StoredTransactionOutPoint, UTXO> transactionOutputMap;
     private StoredBlock chainHead;
@@ -262,7 +262,7 @@ public class MemoryFullPrunedBlockStore implements FullPrunedBlockStore {
             StoredBlock storedGenesisHeader = new StoredBlock(params.getGenesisBlock().cloneAsHeader(), params.getGenesisBlock().getWork(), 0);
             // The coinbase in the genesis block is not spendable
             List<Transaction> genesisTransactions = Lists.newLinkedList();
-            StoredUndoableBlock storedGenesis = new StoredUndoableBlock(params.getGenesisBlock().getHash(), genesisTransactions);
+            StoredUndoableBlock storedGenesis = new StoredUndoableBlock(params.getGenesisBlock().getHashKeccak(), genesisTransactions);
             put(storedGenesisHeader, storedGenesis);
             setChainHead(storedGenesisHeader);
             setVerifiedChainHead(storedGenesisHeader);
@@ -277,21 +277,21 @@ public class MemoryFullPrunedBlockStore implements FullPrunedBlockStore {
     @Override
     public synchronized void put(StoredBlock block) throws BlockStoreException {
         Preconditions.checkNotNull(blockMap, "MemoryFullPrunedBlockStore is closed");
-        Sha256Hash hash = block.getHeader().getHash();
+        Keccak256Hash hash = block.getHeader().getHashKeccak();
         blockMap.put(hash, new StoredBlockAndWasUndoableFlag(block, false));
     }
     
     @Override
     public synchronized final void put(StoredBlock storedBlock, StoredUndoableBlock undoableBlock) throws BlockStoreException {
         Preconditions.checkNotNull(blockMap, "MemoryFullPrunedBlockStore is closed");
-        Sha256Hash hash = storedBlock.getHeader().getHash();
+        Keccak256Hash hash = storedBlock.getHeader().getHashKeccak();
         fullBlockMap.put(hash, storedBlock.getHeight(), undoableBlock);
         blockMap.put(hash, new StoredBlockAndWasUndoableFlag(storedBlock, true));
     }
 
     @Override
     @Nullable
-    public synchronized StoredBlock get(Sha256Hash hash) throws BlockStoreException {
+    public synchronized StoredBlock get(Keccak256Hash hash) throws BlockStoreException {
         Preconditions.checkNotNull(blockMap, "MemoryFullPrunedBlockStore is closed");
         StoredBlockAndWasUndoableFlag storedBlock = blockMap.get(hash);
         return storedBlock == null ? null : storedBlock.block;
@@ -299,7 +299,7 @@ public class MemoryFullPrunedBlockStore implements FullPrunedBlockStore {
     
     @Override
     @Nullable
-    public synchronized StoredBlock getOnceUndoableStoredBlock(Sha256Hash hash) throws BlockStoreException {
+    public synchronized StoredBlock getOnceUndoableStoredBlock(Keccak256Hash hash) throws BlockStoreException {
         Preconditions.checkNotNull(blockMap, "MemoryFullPrunedBlockStore is closed");
         StoredBlockAndWasUndoableFlag storedBlock = blockMap.get(hash);
         return (storedBlock != null && storedBlock.wasUndoable) ? storedBlock.block : null;
@@ -307,7 +307,7 @@ public class MemoryFullPrunedBlockStore implements FullPrunedBlockStore {
     
     @Override
     @Nullable
-    public synchronized StoredUndoableBlock getUndoBlock(Sha256Hash hash) throws BlockStoreException {
+    public synchronized StoredUndoableBlock getUndoBlock(Keccak256Hash hash) throws BlockStoreException {
         Preconditions.checkNotNull(fullBlockMap, "MemoryFullPrunedBlockStore is closed");
         return fullBlockMap.get(hash);
     }

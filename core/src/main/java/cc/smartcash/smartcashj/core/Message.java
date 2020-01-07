@@ -279,6 +279,9 @@ public abstract class Message {
     public Sha256Hash getHash() {
         throw new UnsupportedOperationException();
     }
+    public Keccak256Hash getHashKeccak() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * This returns a correct value by parsing the message.
@@ -350,6 +353,12 @@ public abstract class Message {
     protected String readStr() throws ProtocolException {
         long length = readVarInt();
         return length == 0 ? "" : new String(readBytes((int) length), StandardCharsets.UTF_8); // optimization for empty strings
+    }
+
+    protected Keccak256Hash readHashKeccak() throws ProtocolException {
+        // We have to flip it around, as it's been read off the wire in little endian.
+        // Not the most efficient way to do this but the clearest.
+        return Keccak256Hash.wrapReversed(readBytes(32));
     }
 
     protected Sha256Hash readHash() throws ProtocolException {
