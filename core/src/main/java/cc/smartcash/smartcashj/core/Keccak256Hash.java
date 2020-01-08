@@ -130,12 +130,12 @@ public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash>{
     }
 
     /**
-     * Returns a new SHA-256 MessageDigest instance.
+     * Returns a new SHA3-256 MessageDigest instance.
      *
      * This is a convenience method which wraps the checked
      * exception that can never occur with a RuntimeException.
      *
-     * @return a new SHA-256 MessageDigest instance
+     * @return a new SHA3-256 MessageDigest instance
      */
     public static MessageDigest newDigest() {
         try {

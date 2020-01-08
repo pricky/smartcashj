@@ -873,7 +873,7 @@ public class ECKey implements EncryptableItem {
      */
     public String signMessage(String message, @Nullable KeyParameter aesKey) throws KeyCrypterException {
         byte[] data = formatMessageForSigning(message);
-        Sha256Hash hash = Sha256Hash.twiceOf(data);
+        Sha256Hash hash = Sha256Hash.hashOf(data);
         ECDSASignature sig = sign(hash, aesKey);
         byte recId = findRecoveryId(hash, sig);
         int headerByte = recId + 27 + (isCompressed() ? 4 : 0);
@@ -917,7 +917,7 @@ public class ECKey implements EncryptableItem {
         byte[] messageBytes = formatMessageForSigning(message);
         // Note that the C++ code doesn't actually seem to specify any character encoding. Presumably it's whatever
         // JSON-SPIRIT hands back. Assume UTF-8 for now.
-        Sha256Hash messageHash = Sha256Hash.twiceOf(messageBytes);
+        Sha256Hash messageHash = Sha256Hash.hashOf(messageBytes);
         boolean compressed = false;
         if (header >= 31) {
             compressed = true;

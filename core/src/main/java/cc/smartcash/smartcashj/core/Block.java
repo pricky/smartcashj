@@ -41,7 +41,7 @@ import static cc.smartcash.smartcashj.core.Sha256Hash.*;
  * more detail on blocks.</p>
  *
  * <p>To get a block, you can either build one from the raw bytes you can get from another implementation, or request one
- * specifically using {@link Peer#getBlock(Sha256Hash)}, or grab one from a downloaded {@link BlockChain}.</p>
+ * specifically using {@link Peer#getBlock(Keccak256Hash)}, or grab one from a downloaded {@link BlockChain}.</p>
  *
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
@@ -596,7 +596,7 @@ public class Block extends Message {
             if (witnessReserved.length != 32)
                 throw new VerificationException("Coinbase witness reserved invalid: length");
 
-            Sha256Hash witnessRootHash = Sha256Hash.twiceOf(getWitnessRoot().getReversedBytes(), witnessReserved);
+            Sha256Hash witnessRootHash = Sha256Hash.hashOf(getWitnessRoot().getReversedBytes(), witnessReserved);
             if (!witnessRootHash.equals(witnessCommitment))
                 throw new VerificationException("Witness merkle root invalid. Expected " + witnessCommitment.toString()
                         + " but got " + witnessRootHash.toString());
@@ -669,7 +669,7 @@ public class Block extends Message {
                 int right = Math.min(left + 1, levelSize - 1);
                 byte[] leftBytes = Utils.reverseBytes(tree.get(levelOffset + left));
                 byte[] rightBytes = Utils.reverseBytes(tree.get(levelOffset + right));
-                tree.add(Utils.reverseBytes(hashTwice(leftBytes, rightBytes)));
+                tree.add(Utils.reverseBytes(hash(leftBytes, rightBytes)));
             }
             // Move to the next level.
             levelOffset += levelSize;

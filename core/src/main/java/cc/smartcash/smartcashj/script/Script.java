@@ -1211,7 +1211,7 @@ public class Script {
                     case OP_HASH256:
                         if (stack.size() < 1)
                             throw new ScriptException(ScriptError.SCRIPT_ERR_INVALID_STACK_OPERATION, "Attempted OP_SHA256 on an empty stack");
-                        stack.add(Sha256Hash.hashTwice(stack.pollLast()));
+                        stack.add(Sha256Hash.hash(stack.pollLast()));
                         break;
                     case OP_CODESEPARATOR:
                         lastCodeSepLocation = nextLocationInScript;
