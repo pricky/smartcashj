@@ -29,6 +29,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import org.bouncycastle.jcajce.provider.digest.Keccak;
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
@@ -164,9 +165,9 @@ public class Keccak256Hash implements Serializable, Comparable<Keccak256Hash>{
      * @return the hash (in big-endian order)
      */
     public static byte[] hash(byte[] input, int offset, int length) {
-        MessageDigest digest = newDigest();
-        digest.update(input, offset, length);
-        return digest.digest();
+        Keccak.DigestKeccak kecc = new Keccak.Digest256();
+        kecc.update(input, offset, length);
+        return kecc.digest();
     }
 
 //    /**

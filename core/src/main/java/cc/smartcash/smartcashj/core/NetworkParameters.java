@@ -118,11 +118,9 @@ public abstract class NetworkParameters {
             //
             //   "SmartCash, Communinty Driven Cash"
             byte[] bytes = Utils.HEX.decode
-                    ("04ffff001d010445536d617274436173682c20436f6d6d756e696e74792044726976656e2043617368");
+                    ("04ffff0f1e010421536d617274436173682c20436f6d6d756e696e74792044726976656e204361736804833e0000");
             t.addInput(new TransactionInput(n, t, bytes));
             ByteArrayOutputStream scriptPubKeyBytes = new ByteArrayOutputStream();
-            Script.writeBytes(scriptPubKeyBytes, Utils.HEX.decode
-                    (""));
             t.addOutput(new TransactionOutput(n, t, ZERO, scriptPubKeyBytes.toByteArray()));
         } catch (Exception e) {
             // Cannot happen.

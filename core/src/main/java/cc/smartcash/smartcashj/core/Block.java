@@ -543,7 +543,7 @@ public class Block extends Message {
         // field is of the right value. This requires us to have the preceding blocks.
         BigInteger target = getDifficultyTargetAsInteger();
 
-        BigInteger h = getHash().toBigInteger();
+        BigInteger h = getHashKeccak().toBigInteger();
         if (h.compareTo(target) > 0) {
             // Proof of work check failed!
             if (throwException)
@@ -759,12 +759,12 @@ public class Block extends Message {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return getHash().equals(((Block)o).getHash());
+        return getHashKeccak().equals(((Block)o).getHashKeccak());
     }
 
     @Override
     public int hashCode() {
-        return getHash().hashCode();
+        return getHashKeccak().hashCode();
     }
 
     /**
