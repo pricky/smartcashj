@@ -276,7 +276,7 @@ public class SPVBlockStore implements BlockStore {
         lock.lock();
         try {
             lastChainHead = chainHead;
-            byte[] headHash = chainHead.getHeader().getHash().getBytes();
+            byte[] headHash = chainHead.getHeader().getHashKeccak().getBytes();
             buffer.position(8);
             buffer.put(headHash);
         } finally { lock.unlock(); }

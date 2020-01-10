@@ -18,6 +18,7 @@ package cc.smartcashj.examples;
 
 import cc.smartcash.smartcashj.core.*;
 import cc.smartcash.smartcashj.kits.WalletAppKit;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import cc.smartcash.smartcashj.params.TestNet3Params;
 import cc.smartcash.smartcashj.script.Script;
 import cc.smartcash.smartcashj.wallet.Wallet;
@@ -50,11 +51,11 @@ public class Kit {
         // To test you app with a real network you can use the testnet. The testnet is an alternative bitcoin network that follows the same rules as main network. Coins are worth nothing and you can get coins for example from http://faucet.xeno-genesis.com/
         // 
         // For more information have a look at: https://bitcoinj.github.io/testing and https://bitcoin.org/en/developer-examples#testing-applications
-        NetworkParameters params = TestNet3Params.get();
+        NetworkParameters params = MainNetParams.get();
 
         // Now we initialize a new WalletAppKit. The kit handles all the boilerplate for us and is the easiest way to get everything up and running.
         // Have a look at the WalletAppKit documentation and its source to understand what's happening behind the scenes: https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/kits/WalletAppKit.java
-        WalletAppKit kit = new WalletAppKit(params, new File("."), "walletappkit-example");
+        WalletAppKit kit = new WalletAppKit(params, new File("C:\\Users\\leoreinaux\\Documents\\smartcashjtest"), "walletappkit-example");
 
         // In case you want to connect with your local bitcoind tell the kit to connect to localhost.
         // You must do that in reg test mode.
