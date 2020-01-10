@@ -29,8 +29,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import fr.cryptohash.Keccak256;
-
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**

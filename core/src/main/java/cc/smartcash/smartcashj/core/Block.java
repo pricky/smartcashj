@@ -21,7 +21,6 @@ import com.google.common.annotations.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import cc.smartcash.smartcashj.script.*;
-import fr.cryptohash.Keccak256;
 import org.slf4j.*;
 
 import javax.annotation.*;

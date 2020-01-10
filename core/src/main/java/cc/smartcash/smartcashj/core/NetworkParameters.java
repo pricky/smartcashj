@@ -100,7 +100,7 @@ public abstract class NetworkParameters {
     protected int subsidyDecreaseBlockCount;
 
     protected String[] dnsSeeds;
-    protected int[] addrSeeds;
+    protected String[] addrSeeds;
     protected HttpDiscovery.Details[] httpSeeds = {};
     protected Map<Integer, Keccak256Hash> checkpoints = new HashMap<>();
     protected volatile transient MessageSerializer defaultSerializer = null;
@@ -241,7 +241,7 @@ public abstract class NetworkParameters {
     }
 
     /** Returns IP address of active peers. */
-    public int[] getAddrSeeds() {
+    public String[] getAddrSeeds() {
         return addrSeeds;
     }
 
