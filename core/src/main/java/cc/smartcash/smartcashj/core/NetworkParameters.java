@@ -100,7 +100,7 @@ public abstract class NetworkParameters {
     protected int subsidyDecreaseBlockCount;
 
     protected String[] dnsSeeds;
-    protected String[] addrSeeds;
+    protected int[] addrSeeds;
     protected HttpDiscovery.Details[] httpSeeds = {};
     protected Map<Integer, Keccak256Hash> checkpoints = new HashMap<>();
     protected volatile transient MessageSerializer defaultSerializer = null;
@@ -241,7 +241,7 @@ public abstract class NetworkParameters {
     }
 
     /** Returns IP address of active peers. */
-    public String[] getAddrSeeds() {
+    public int[] getAddrSeeds() {
         return addrSeeds;
     }
 
@@ -486,11 +486,11 @@ public abstract class NetworkParameters {
     public abstract int getProtocolVersionNum(final ProtocolVersion version);
 
     public static enum ProtocolVersion {
-        MINIMUM(90013),
-        PONG(90013),
-        BLOOM_FILTER(90013), // BIP37
-        BLOOM_FILTER_BIP111(90013), // BIP111
-        WITNESS_VERSION(90013),
+        MINIMUM(90028),
+        PONG(90028),
+        BLOOM_FILTER(90028), // BIP37
+        BLOOM_FILTER_BIP111(90028), // BIP111
+        WITNESS_VERSION(90028),
         CURRENT(90028);
 
         private final int bitcoinProtocol;

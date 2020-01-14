@@ -1325,7 +1325,7 @@ public class ECKey implements EncryptableItem {
 
     /**
      * <p>Given a textual message, returns a byte buffer formatted as follows:</p>
-     * <p>{@code [24] "Bitcoin Signed Message:\n" [message.length as a varint] message}</p>
+     * <p>{@code [24] "SmartCash Signed Message:\n" [message.length as a varint] message}</p>
      */
     private static byte[] formatMessageForSigning(String message) {
         try {

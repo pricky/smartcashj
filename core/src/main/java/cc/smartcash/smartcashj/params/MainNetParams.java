@@ -88,16 +88,8 @@ public class MainNetParams extends AbstractBitcoinNetParams {
 
         // These are in big-endian format, which is what the SeedPeers code expects.
         // Updated Apr. 11th 2019
-        addrSeeds = new String[] {
-                "seed.smrt.cash",
-                "seed1.smrt.cash",
-                "seed2.smrt.cash",
-                "seed1.smartcash.org",
-                "seed2.smartcash.org",
-                "seed.smartcash.cc",
-                "seed2.smartcash.cc",
-                "seed3.smartcash.cc",
-                "seed4.smartcash.cc"
+        addrSeeds = new int[] {
+                0xa75647ab,
         };
     }
 

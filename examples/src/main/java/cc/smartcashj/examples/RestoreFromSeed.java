@@ -19,6 +19,7 @@ package cc.smartcashj.examples;
 import cc.smartcash.smartcashj.core.listeners.DownloadProgressTracker;
 import cc.smartcash.smartcashj.core.*;
 import cc.smartcash.smartcashj.net.discovery.DnsDiscovery;
+import cc.smartcash.smartcashj.params.MainNetParams;
 import cc.smartcash.smartcashj.params.TestNet3Params;
 import cc.smartcash.smartcashj.store.SPVBlockStore;
 import cc.smartcash.smartcashj.wallet.DeterministicSeed;
@@ -33,9 +34,9 @@ import java.io.File;
 public class RestoreFromSeed {
 
     public static void main(String[] args) throws Exception {
-        NetworkParameters params = TestNet3Params.get();
+        NetworkParameters params = MainNetParams.get();
 
-        // Bitcoinj supports hierarchical deterministic wallets (or "HD Wallets"): https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+        // SmartCashj supports hierarchical deterministic wallets (or "HD Wallets"): https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
         // HD wallets allow you to restore your wallet simply from a root seed. This seed can be represented using a short mnemonic sentence as described in BIP 39: https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
 
         // Here we restore our wallet from a seed with no passphrase. Also have a look at the BackupToMnemonicSeed.java example that shows how to backup a wallet by creating a mnemonic sentence.
