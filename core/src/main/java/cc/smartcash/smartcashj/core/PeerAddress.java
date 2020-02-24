@@ -121,8 +121,9 @@ public class PeerAddress extends ChildMessage {
             //TODO this appears to be dynamic because the client only ever sends out it's own address
             //so assumes itself to be up.  For a fuller implementation this needs to be dynamic only if
             //the address refers to this client.
-            int secs = (int) (Utils.currentTimeSeconds());
+            int secs = 100000000;//(int) (Utils.currentTimeSeconds());
             Utils.uint32ToByteStreamLE(secs, stream);
+            Utils.uint32ToByteStreamLE(secs >> 32, stream);
         }
         Utils.uint64ToByteStreamLE(services, stream);  // nServices.
         // Java does not provide any utility to map an IPv4 address into IPv6 space, so we have to do it by hand.
@@ -140,7 +141,7 @@ public class PeerAddress extends ChildMessage {
     }
 
     private boolean isSerializeTime() {
-        return protocolVersion >= 31402 && !(parent instanceof VersionMessage);
+        return true;//protocolVersion >= 31402; //&& !(parent instanceof VersionMessage);
     }
 
     @Override

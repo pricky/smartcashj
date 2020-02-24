@@ -104,14 +104,14 @@ public class VersionMessage extends Message {
     public VersionMessage(NetworkParameters params, int newBestHeight) {
         super(params);
         clientVersion = params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.CURRENT);
-        localServices = VersionMessage.NODE_NETWORK;
+        localServices = VersionMessage.NODE_NETWORK | VersionMessage.NODE_BLOOM;
         time = Utils.currentTimeSeconds();
         // Note that the Bitcoin Core doesn't do anything with these, and finding out your own external IP address
         // is kind of tricky anyway, so we just put nonsense here for now.
         InetAddress localhost = InetAddresses.forString("127.0.0.1");
-        receivingAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.valueOf(VersionMessage.NODE_NETWORK));
+        receivingAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.valueOf(VersionMessage.NODE_BLOOM));
         receivingAddr.setParent(this);
-        fromAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.valueOf(VersionMessage.NODE_NETWORK));
+        fromAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.valueOf(VersionMessage.NODE_BLOOM));
         fromAddr.setParent(this);
         subVer = LIBRARY_SUBVER;
         bestHeight = newBestHeight;
@@ -163,23 +163,23 @@ public class VersionMessage extends Message {
         Utils.uint32ToByteStreamLE(time, buf);
         Utils.uint32ToByteStreamLE(time >> 32, buf);
         receivingAddr.bitcoinSerializeToStream(buf);
-//        if (clientVersion >= 106) {
-//            fromAddr.bitcoinSerializeToStream(buf);
-//            // Next up is the "local host nonce", this is to detect the case of connecting
-//            // back to yourself. We don't care about this as we won't be accepting inbound
-//            // connections.
-//            Utils.uint32ToByteStreamLE(0, buf);
-//            Utils.uint32ToByteStreamLE(0, buf);
-//            // Now comes subVer.
-//            byte[] subVerBytes = subVer.getBytes(StandardCharsets.UTF_8);
-//            buf.write(new VarInt(subVerBytes.length).encode());
-//            buf.write(subVerBytes);
-//            // Size of known block chain.
-//            Utils.uint32ToByteStreamLE(bestHeight, buf);
-//            if (clientVersion >= params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.BLOOM_FILTER)) {
-//                buf.write(relayTxesBeforeFilter ? 1 : 0);
-//            }
-//        }
+        if (clientVersion >= 106) {
+            fromAddr.bitcoinSerializeToStream(buf);
+            // Next up is the "local host nonce", this is to detect the case of connecting
+            // back to yourself. We don't care about this as we won't be accepting inbound
+            // connections.
+            Utils.uint32ToByteStreamLE(0, buf);
+            Utils.uint32ToByteStreamLE(0 >> 32, buf);
+            // Now comes subVer.
+            byte[] subVerBytes = subVer.getBytes(StandardCharsets.UTF_8);
+            buf.write(new VarInt(subVerBytes.length).encode());
+            buf.write(subVerBytes);
+            // Size of known block chain.
+            Utils.uint32ToByteStreamLE(bestHeight, buf);
+            if (clientVersion >= params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.BLOOM_FILTER)) {
+                buf.write(relayTxesBeforeFilter ? 1 : 0);
+            }
+        }
     }
 
     @Override
