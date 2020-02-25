@@ -27,7 +27,7 @@ import java.util.List;
  * <p>Instances of this class are not safe for use by multiple threads.</p>
  */
 public class GetHeadersMessage extends GetBlocksMessage {
-    public GetHeadersMessage(NetworkParameters params, BlockLocator locator, Sha256Hash stopHash) {
+    public GetHeadersMessage(NetworkParameters params, BlockLocator locator, Keccak256Hash stopHash) {
         super(params, locator, stopHash);
     }
 

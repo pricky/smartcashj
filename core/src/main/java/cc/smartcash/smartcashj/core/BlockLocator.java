@@ -24,7 +24,7 @@ import java.util.List;
  * Represents Block Locator in GetBlocks and GetHeaders messages
  **/
 public final class BlockLocator {
-    private final ImmutableList<Sha256Hash> hashes;
+    private final ImmutableList<Keccak256Hash> hashes;
 
     public BlockLocator() {
         hashes = ImmutableList.of();
@@ -33,15 +33,15 @@ public final class BlockLocator {
     /**
      * Creates a Block locator with defined list of hashes.
      */
-    public BlockLocator(ImmutableList<Sha256Hash> hashes) {
+    public BlockLocator(ImmutableList<Keccak256Hash> hashes) {
         this.hashes = hashes;
     }
 
     /**
      * Add a {@link Sha256Hash} to a newly created block locator.
      */
-    public BlockLocator add(Sha256Hash hash) {
-        return new BlockLocator(new ImmutableList.Builder<Sha256Hash>().addAll(this.hashes).add(hash).build());
+    public BlockLocator add(Keccak256Hash hash) {
+        return new BlockLocator(new ImmutableList.Builder<Keccak256Hash>().addAll(this.hashes).add(hash).build());
     }
 
     /**
@@ -54,14 +54,14 @@ public final class BlockLocator {
     /**
      * Returns List of Block locator hashes.
      */
-    public List<Sha256Hash> getHashes() {
+    public List<Keccak256Hash> getHashes() {
         return hashes;
     }
 
     /**
      * Get hash by index from this block locator.
      */
-    public Sha256Hash get(int i) {
+    public Keccak256Hash get(int i) {
         return hashes.get(i);
     }
 
@@ -73,7 +73,7 @@ public final class BlockLocator {
     @Override
     public int hashCode() {
         int hashCode = 0;
-        for (Sha256Hash i : hashes) {
+        for (Keccak256Hash i : hashes) {
             hashCode ^= i.hashCode();
         }
         return hashCode;

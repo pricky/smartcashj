@@ -32,9 +32,9 @@ public class GetBlocksMessage extends Message {
 
     protected long version;
     protected BlockLocator locator;
-    protected Sha256Hash stopHash;
+    protected Keccak256Hash stopHash;
 
-    public GetBlocksMessage(NetworkParameters params, BlockLocator locator, Sha256Hash stopHash) {
+    public GetBlocksMessage(NetworkParameters params, BlockLocator locator, Keccak256Hash stopHash) {
         super(params);
         this.version = protocolVersion;
         this.locator = locator;
@@ -55,16 +55,16 @@ public class GetBlocksMessage extends Message {
         length = cursor - offset + ((startCount + 1) * 32);
         locator = new BlockLocator();
         for (int i = 0; i < startCount; i++) {
-            locator = locator.add(readHash());
+            locator = locator.add(readHashKeccak());
         }
-        stopHash = readHash();
+        stopHash = readHashKeccak();
     }
 
     public BlockLocator getLocator() {
         return locator;
     }
 
-    public Sha256Hash getStopHash() {
+    public Keccak256Hash getStopHash() {
         return stopHash;
     }
 
@@ -81,7 +81,7 @@ public class GetBlocksMessage extends Message {
         // identifiers that spans the entire chain with exponentially increasing gaps between
         // them, until we end up at the genesis block. See CBlockLocator::Set()
         stream.write(new VarInt(locator.size()).encode());
-        for (Sha256Hash hash : locator.getHashes()) {
+        for (Keccak256Hash hash : locator.getHashes()) {
             // Have to reverse as wire format is little endian.
             stream.write(hash.getReversedBytes());
         }

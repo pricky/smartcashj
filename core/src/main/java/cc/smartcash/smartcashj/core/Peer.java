@@ -122,7 +122,7 @@ public class Peer extends PeerSocketHandler {
     //
     // It is important to avoid a nasty edge case where we can end up with parallel chain downloads proceeding
     // simultaneously if we were to receive a newly solved block whilst parts of the chain are streaming to us.
-    private final HashSet<Sha256Hash> pendingBlockDownloads = new HashSet<>();
+    private final HashSet<Keccak256Hash> pendingBlockDownloads = new HashSet<>();
     // Keep references to TransactionConfidence objects for transactions that were announced by a remote peer, but
     // which we haven't downloaded yet. These objects are de-duplicated by the TxConfidenceTable class.
     // Once the tx is downloaded (by some peer), the Transaction object that is created will have a reference to
@@ -711,8 +711,8 @@ public class Peer extends PeerSocketHandler {
                                 m.getBlockHeaders().size() - i);
                         this.downloadBlockBodies = true;
                         // Prevent this request being seen as a duplicate.
-                        this.lastGetBlocksBegin = Sha256Hash.ZERO_HASH;
-                        blockChainDownloadLocked(Sha256Hash.ZERO_HASH);
+                        this.lastGetBlocksBegin = Keccak256Hash.ZERO_HASH;
+                        blockChainDownloadLocked(Keccak256Hash.ZERO_HASH);
                     } finally {
                         lock.unlock();
                     }
@@ -724,7 +724,7 @@ public class Peer extends PeerSocketHandler {
             if (m.getBlockHeaders().size() >= HeadersMessage.MAX_HEADERS) {
                 lock.lock();
                 try {
-                    blockChainDownloadLocked(Sha256Hash.ZERO_HASH);
+                    blockChainDownloadLocked(Keccak256Hash.ZERO_HASH);
                 } finally {
                     lock.unlock();
                 }
@@ -1014,7 +1014,7 @@ public class Peer extends PeerSocketHandler {
                 try {
                     if (downloadBlockBodies) {
                         final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(m.getHash()));
-                        blockChainDownloadLocked(orphanRoot.getHash());
+                        blockChainDownloadLocked(orphanRoot.getHashKeccak());
                     } else {
                         log.info("Did not start chain download on solved block due to in-flight header download.");
                     }
@@ -1116,7 +1116,7 @@ public class Peer extends PeerSocketHandler {
                 lock.lock();
                 try {
                     final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(m.getHash()));
-                    blockChainDownloadLocked(orphanRoot.getHash());
+                    blockChainDownloadLocked(orphanRoot.getHashKeccak());
                 } finally {
                     lock.unlock();
                 }
@@ -1254,7 +1254,7 @@ public class Peer extends PeerSocketHandler {
                         // If an orphan was re-advertised, ask for more blocks unless we are not currently downloading
                         // full block data because we have a getheaders outstanding.
                         final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(item.hash));
-                        blockChainDownloadLocked(orphanRoot.getHash());
+                        blockChainDownloadLocked(orphanRoot.getHashKeccak());
                     } else {
                         // Don't re-request blocks we already requested. Normally this should not happen. However there is
                         // an edge case: if a block is solved and we complete the inv<->getdata<->block<->getblocks cycle
@@ -1268,14 +1268,14 @@ public class Peer extends PeerSocketHandler {
                         // part of chain download with newly announced blocks, so it should always be taken care of by
                         // the duplicate check in blockChainDownloadLocked(). But Bitcoin Core may change in future so
                         // it's better to be safe here.
-                        if (!pendingBlockDownloads.contains(item.hash)) {
+                        if (!pendingBlockDownloads.contains(item.hashKeccak)) {
                             if (vPeerVersionMessage.isBloomFilteringSupported() && useFilteredBlocks) {
                                 getdata.addFilteredBlock(item.hashKeccak);
                                 pingAfterGetData = true;
                             } else {
                                 getdata.addBlock(item.hashKeccak, vPeerVersionMessage.isWitnessSupported());
                             }
-                            pendingBlockDownloads.add(item.hash);
+                            pendingBlockDownloads.add(item.hashKeccak);
                         }
                     }
                 }
@@ -1398,10 +1398,10 @@ public class Peer extends PeerSocketHandler {
     // Keep track of the last request we made to the peer in blockChainDownloadLocked so we can avoid redundant and harmful
     // getblocks requests.
     @GuardedBy("lock")
-    private Sha256Hash lastGetBlocksBegin, lastGetBlocksEnd;
+    private Keccak256Hash lastGetBlocksBegin, lastGetBlocksEnd;
 
     @GuardedBy("lock")
-    private void blockChainDownloadLocked(Sha256Hash toHash) {
+    private void blockChainDownloadLocked(Keccak256Hash toHash) {
         checkState(lock.isHeldByCurrentThread());
         // The block chain download process is a bit complicated. Basically, we start with one or more blocks in a
         // chain that we have from a previous session. We want to catch up to the head of the chain BUT we don't know
@@ -1446,11 +1446,11 @@ public class Peer extends PeerSocketHandler {
         // must always put the genesis block as the first entry.
         BlockStore store = checkNotNull(blockChain).getBlockStore();
         StoredBlock chainHead = blockChain.getChainHead();
-        Sha256Hash chainHeadHash = chainHead.getHeader().getHash();
+        Keccak256Hash chainHeadHash = chainHead.getHeader().getHashKeccak();
         // Did we already make this request? If so, don't do it again.
         if (Objects.equals(lastGetBlocksBegin, chainHeadHash) && Objects.equals(lastGetBlocksEnd, toHash)) {
             log.info("blockChainDownloadLocked({}): ignoring duplicated request: {}", toHash, chainHeadHash);
-            for (Sha256Hash hash : pendingBlockDownloads)
+            for (Keccak256Hash hash : pendingBlockDownloads)
                 log.info("Pending block download: {}", hash);
             log.info(Throwables.getStackTraceAsString(new Throwable()));
             return;
@@ -1460,7 +1460,7 @@ public class Peer extends PeerSocketHandler {
                     this, toHash, chainHead.getHeader().getHashAsString());
         StoredBlock cursor = chainHead;
         for (int i = 100; cursor != null && i > 0; i--) {
-            blockLocator = blockLocator.add(cursor.getHeader().getHash());
+            blockLocator = blockLocator.add(cursor.getHeader().getHashKeccak());
             try {
                 cursor = cursor.getPrev(store);
             } catch (BlockStoreException e) {
@@ -1470,7 +1470,7 @@ public class Peer extends PeerSocketHandler {
         }
         // Only add the locator if we didn't already do so. If the chain is < 50 blocks we already reached it.
         if (cursor != null)
-            blockLocator = blockLocator.add(params.getGenesisBlock().getHash());
+            blockLocator = blockLocator.add(params.getGenesisBlock().getHashKeccak());
 
         // Record that we requested this range of blocks so we can filter out duplicate requests in the event of a
         // block being solved during chain download.
@@ -1508,7 +1508,7 @@ public class Peer extends PeerSocketHandler {
             // When we just want as many blocks as possible, we can set the target hash to zero.
             lock.lock();
             try {
-                blockChainDownloadLocked(Sha256Hash.ZERO_HASH);
+                blockChainDownloadLocked(Keccak256Hash.ZERO_HASH);
             } finally {
                 lock.unlock();
             }

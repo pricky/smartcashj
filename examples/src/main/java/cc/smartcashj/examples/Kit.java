@@ -55,11 +55,11 @@ public class Kit {
 
         // Now we initialize a new WalletAppKit. The kit handles all the boilerplate for us and is the easiest way to get everything up and running.
         // Have a look at the WalletAppKit documentation and its source to understand what's happening behind the scenes: https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/kits/WalletAppKit.java
-        WalletAppKit kit = new WalletAppKit(params, new File("C:\\Users\\leoreinaux\\Documents\\smartcashjtest"), "walletappkit-example");
+        WalletAppKit kit = new WalletAppKit(params, new File("."), "walletappkit-example");
 
         // In case you want to connect with your local bitcoind tell the kit to connect to localhost.
         // You must do that in reg test mode.
-        //kit.connectToLocalHost();
+        kit.connectToLocalHost();
 
         // Now we start the kit and sync the blockchain.
         // smartcashj is working a lot with the Google Guava libraries. The WalletAppKit extends the AbstractIdleService. Have a look at the introduction to Guava services: https://github.com/google/guava/wiki/ServiceExplained

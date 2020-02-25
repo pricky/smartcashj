@@ -233,6 +233,8 @@ public class BitcoinSerializer extends MessageSerializer {
             return new GetUTXOsMessage(params, payloadBytes);
         } else if (command.equals("sendheaders")) {
             return new SendHeadersMessage(params, payloadBytes);
+        }else if (command.equals("getsporks")){
+            return null;
         } else {
             log.warn("No support for deserializing message with name {}", command);
             return new UnknownMessage(params, command, payloadBytes);

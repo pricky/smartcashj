@@ -41,11 +41,10 @@ public class FetchTransactions {
         BlockChain chain = new BlockChain(params, blockStore);
         PeerGroup peerGroup = new PeerGroup(params, chain);
         peerGroup.start();
-//        peerGroup.addAddress(new PeerAddress(params, InetAddress.getLocalHost()));
-        peerGroup.waitForPeers(1).get();
-        Peer peer = peerGroup.getConnectedPeers().get(0);
+        peerGroup.waitForPeers(4).get();
+        Peer peer = peerGroup.getConnectedPeers().get(3);
 
-        Sha256Hash txHash = Sha256Hash.wrap(args[0]);
+        Sha256Hash txHash = Sha256Hash.wrap("929d03a27ef73cf626d5c9245d4ca90a1d179845153162a2e7c65645f81fbe82");
         ListenableFuture<Transaction> future = peer.getPeerMempoolTransaction(txHash);
         System.out.println("Waiting for node to send us the requested transaction: " + txHash);
         Transaction tx = future.get();

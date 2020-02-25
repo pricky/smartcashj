@@ -104,14 +104,14 @@ public class VersionMessage extends Message {
     public VersionMessage(NetworkParameters params, int newBestHeight) {
         super(params);
         clientVersion = params.getProtocolVersionNum(NetworkParameters.ProtocolVersion.CURRENT);
-        localServices = VersionMessage.NODE_NETWORK | VersionMessage.NODE_BLOOM;
+        localServices = 0;
         time = Utils.currentTimeSeconds();
         // Note that the Bitcoin Core doesn't do anything with these, and finding out your own external IP address
         // is kind of tricky anyway, so we just put nonsense here for now.
         InetAddress localhost = InetAddresses.forString("127.0.0.1");
-        receivingAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.valueOf(VersionMessage.NODE_BLOOM));
+        receivingAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.ZERO);
         receivingAddr.setParent(this);
-        fromAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.valueOf(VersionMessage.NODE_BLOOM));
+        fromAddr = new PeerAddress(params, localhost, params.getPort(), clientVersion, BigInteger.ZERO);
         fromAddr.setParent(this);
         subVer = LIBRARY_SUBVER;
         bestHeight = newBestHeight;
