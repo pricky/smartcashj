@@ -30,7 +30,24 @@ public class InventoryItem {
         // BIP37 extension:
         FILTERED_BLOCK(0x3),
         // BIP44 extensions:
-        WITNESS_TRANSACTION(0x40000001), WITNESS_BLOCK(0x40000002), WITNESS_FILTERED_BLOCK(0x40000003);
+        WITNESS_TRANSACTION(0x40000001), WITNESS_BLOCK(0x40000002), WITNESS_FILTERED_BLOCK(0x40000003),
+        MSG_TXLOCK_REQUEST(0x5),
+        MSG_TXLOCK_VOTE(0x6),
+        MSG_SPORK(0x7),
+        MSG_SMARTNODE_PAYMENT_VOTE(0x8),
+        MSG_SMARTNODE_PAYMENT_BLOCK(0x9), // reusing, was MSG_SMARTNODE_SCANNING_ERROR previousely, was NOT used in 12.0
+        MSG_BUDGET_VOTE(0x9), // depreciated since 12.1
+        MSG_BUDGET_PROPOSAL(0x10), // depreciated since 12.1
+        MSG_BUDGET_FINALIZED(0x11), // depreciated since 12.1
+        MSG_BUDGET_FINALIZED_VOTE(0x12), // depreciated since 12.1
+        MSG_SMARTNODE_QUORUM(0x13), // not implemented
+        MSG_SMARTNODE_ANNOUNCE(0x14),
+        MSG_SMARTNODE_PING(0x15),
+        MSG_DSTX(0x16),
+        MSG_GOVERNANCE_OBJECT(0x17),
+        MSG_GOVERNANCE_OBJECT_VOTE(0x18),
+        MSG_SMARTNODE_VERIFY(0x19)
+        ;
 
         public final int code;
 
