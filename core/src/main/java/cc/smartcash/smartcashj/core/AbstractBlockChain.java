@@ -818,7 +818,7 @@ public abstract class AbstractBlockChain {
      * Returns the set of contiguous blocks between 'higher' and 'lower'. Higher is included, lower is not.
      */
     private static LinkedList<StoredBlock> getPartialChain(StoredBlock higher, StoredBlock lower, BlockStore store) throws BlockStoreException {
-        checkArgument(higher.getHeight() > lower.getHeight(), "higher and lower are reversed");
+        //checkArgument(higher.getHeight() > lower.getHeight(), "higher and lower are reversed");
         LinkedList<StoredBlock> results = new LinkedList<>();
         StoredBlock cursor = higher;
         while (true) {
@@ -954,7 +954,7 @@ public abstract class AbstractBlockChain {
      * @return from or one of froms parents, or null if "from" does not identify an orphan block
      */
     @Nullable
-    public Block getOrphanRoot(Sha256Hash from) {
+    public Block getOrphanRoot(Keccak256Hash from) {
         lock.lock();
         try {
             OrphanBlock cursor = orphanBlocks.get(from);

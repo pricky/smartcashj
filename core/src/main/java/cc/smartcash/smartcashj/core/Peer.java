@@ -1013,7 +1013,7 @@ public class Peer extends PeerSocketHandler {
                 lock.lock();
                 try {
                     if (downloadBlockBodies) {
-                        final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(m.getHash()));
+                        final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(m.getHashKeccak()));
                         blockChainDownloadLocked(orphanRoot.getHashKeccak());
                     } else {
                         log.info("Did not start chain download on solved block due to in-flight header download.");
@@ -1115,7 +1115,7 @@ public class Peer extends PeerSocketHandler {
                 // no matter how many blocks are solved, and therefore that the (2) duplicate filtering can work.
                 lock.lock();
                 try {
-                    final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(m.getHash()));
+                    final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(m.getHashKeccak()));
                     blockChainDownloadLocked(orphanRoot.getHashKeccak());
                 } finally {
                     lock.unlock();
@@ -1253,7 +1253,7 @@ public class Peer extends PeerSocketHandler {
                     if (blockChain.isOrphan(item.hash) && downloadBlockBodies) {
                         // If an orphan was re-advertised, ask for more blocks unless we are not currently downloading
                         // full block data because we have a getheaders outstanding.
-                        final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(item.hash));
+                        final Block orphanRoot = checkNotNull(blockChain.getOrphanRoot(item.hashKeccak));
                         blockChainDownloadLocked(orphanRoot.getHashKeccak());
                     } else {
                         // Don't re-request blocks we already requested. Normally this should not happen. However there is

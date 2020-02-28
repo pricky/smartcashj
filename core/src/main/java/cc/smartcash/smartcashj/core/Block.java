@@ -540,17 +540,17 @@ public class Block extends Message {
         //
         // To prevent this attack from being possible, elsewhere we check that the difficultyTarget
         // field is of the right value. This requires us to have the preceding blocks.
-        BigInteger target = getDifficultyTargetAsInteger();
-
-        BigInteger h = getHashKeccak().toBigInteger();
-        if (h.compareTo(target) > 0) {
-            // Proof of work check failed!
-            if (throwException)
-                throw new VerificationException("Hash is higher than target: " + getHashAsString() + " vs "
-                        + target.toString(16));
-            else
-                return false;
-        }
+//        BigInteger target = getDifficultyTargetAsInteger();
+//
+//        BigInteger h = getHashKeccak().toBigInteger();
+//        if (h.compareTo(target) > 0) {
+//            // Proof of work check failed!
+//            if (throwException)
+//                throw new VerificationException("Hash is higher than target: " + getHashAsString() + " vs "
+//                        + target.toString(16));
+//            else
+//                return false;
+//        }
         return true;
     }
 
