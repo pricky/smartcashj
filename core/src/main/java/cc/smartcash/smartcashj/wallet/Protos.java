@@ -7784,7 +7784,15 @@ public final class Protos {
 
       public final int getNumber() { return value; }
 
-      public static Type valueOf(int value) {
+      /**
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Type valueOf(int value) {
+        return forNumber(value);
+      }
+
+      public static cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Type forNumber(int value) {
         switch (value) {
           case 0: return UNKNOWN;
           case 1: return BUILDING;

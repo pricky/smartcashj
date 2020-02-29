@@ -75,7 +75,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class WalletProtobufSerializer {
     private static final Logger log = LoggerFactory.getLogger(WalletProtobufSerializer.class);
     /** Current version used for serializing wallets. A version higher than this is considered from the future. */
-    public static final int CURRENT_WALLET_VERSION = Protos.Wallet.getDefaultInstance().getVersion();
+    public static final int CURRENT_WALLET_VERSION = cc.smartcash.smartcashj.wallet.Protos.Wallet.getDefaultInstance().getVersion();
     // 512 MB
     private static final int WALLET_SIZE_LIMIT = 512 * 1024 * 1024;
     // Used for de-serialization
@@ -138,10 +138,10 @@ public class WalletProtobufSerializer {
     /**
      * Formats the given wallet (transactions and keys) to the given output stream in protocol buffer format.<p>
      *
-     * Equivalent to <tt>walletToProto(wallet).writeTo(output);</tt>
+     * Equivalent to {@code walletToProto(wallet).writeTo(output);}
      */
     public void writeWallet(Wallet wallet, OutputStream output) throws IOException {
-        Protos.Wallet walletProto = walletToProto(wallet);
+        cc.smartcash.smartcashj.wallet.Protos.Wallet walletProto = walletToProto(wallet);
         final CodedOutputStream codedOutput = CodedOutputStream.newInstance(output, this.walletWriteBufferSize);
         walletProto.writeTo(codedOutput);
         codedOutput.flush();
@@ -155,7 +155,7 @@ public class WalletProtobufSerializer {
      * mostly contain keys and hashes.
      */
     public String walletToText(Wallet wallet) {
-        Protos.Wallet walletProto = walletToProto(wallet);
+        cc.smartcash.smartcashj.wallet.Protos.Wallet walletProto = walletToProto(wallet);
         return TextFormat.printToString(walletProto);
     }
 
@@ -163,23 +163,23 @@ public class WalletProtobufSerializer {
      * Converts the given wallet to the object representation of the protocol buffers. This can be modified, or
      * additional data fields set, before serialization takes place.
      */
-    public Protos.Wallet walletToProto(Wallet wallet) {
-        Protos.Wallet.Builder walletBuilder = Protos.Wallet.newBuilder();
+    public cc.smartcash.smartcashj.wallet.Protos.Wallet walletToProto(Wallet wallet) {
+        cc.smartcash.smartcashj.wallet.Protos.Wallet.Builder walletBuilder = cc.smartcash.smartcashj.wallet.Protos.Wallet.newBuilder();
         walletBuilder.setNetworkIdentifier(wallet.getNetworkParameters().getId());
         if (wallet.getDescription() != null) {
             walletBuilder.setDescription(wallet.getDescription());
         }
 
         for (WalletTransaction wtx : wallet.getWalletTransactions()) {
-            Protos.Transaction txProto = makeTxProto(wtx);
+            cc.smartcash.smartcashj.wallet.Protos.Transaction txProto = makeTxProto(wtx);
             walletBuilder.addTransaction(txProto);
         }
 
         walletBuilder.addAllKey(wallet.serializeKeyChainGroupToProtobuf());
 
         for (Script script : wallet.getWatchedScripts()) {
-            Protos.Script protoScript =
-                    Protos.Script.newBuilder()
+            cc.smartcash.smartcashj.wallet.Protos.Script protoScript =
+                    cc.smartcash.smartcashj.wallet.Protos.Script.newBuilder()
                             .setProgram(ByteString.copyFrom(script.getProgram()))
                             .setCreationTimestamp(script.getCreationTimeSeconds() * 1000)
                             .build();
@@ -190,7 +190,7 @@ public class WalletProtobufSerializer {
         // Populate the lastSeenBlockHash field.
         Keccak256Hash lastSeenBlockHash = wallet.getLastBlockSeenHash();
         if (lastSeenBlockHash != null) {
-            walletBuilder.setLastSeenBlockHash(hashToByteStringKeccak(lastSeenBlockHash));
+            walletBuilder.setLastSeenBlockHash(hashToByteString(lastSeenBlockHash));
             walletBuilder.setLastSeenBlockHeight(wallet.getLastBlockSeenHeight());
         }
         if (wallet.getLastBlockSeenTimeSecs() > 0)
@@ -200,7 +200,7 @@ public class WalletProtobufSerializer {
         KeyCrypter keyCrypter = wallet.getKeyCrypter();
         if (keyCrypter == null) {
             // The wallet is unencrypted.
-            walletBuilder.setEncryptionType(EncryptionType.UNENCRYPTED);
+            walletBuilder.setEncryptionType(cc.smartcash.smartcashj.wallet.Protos.Wallet.EncryptionType.UNENCRYPTED);
         } else {
             // The wallet is encrypted.
             walletBuilder.setEncryptionType(keyCrypter.getUnderstoodEncryptionType());
@@ -221,7 +221,7 @@ public class WalletProtobufSerializer {
         populateExtensions(wallet, walletBuilder);
 
         for (Map.Entry<String, ByteString> entry : wallet.getTags().entrySet()) {
-            Protos.Tag.Builder tag = Protos.Tag.newBuilder().setTag(entry.getKey()).setData(entry.getValue());
+            cc.smartcash.smartcashj.wallet.Protos.Tag.Builder tag = cc.smartcash.smartcashj.wallet.Protos.Tag.newBuilder().setTag(entry.getKey()).setData(entry.getValue());
             walletBuilder.addTags(tag);
         }
 
@@ -231,9 +231,9 @@ public class WalletProtobufSerializer {
         return walletBuilder.build();
     }
 
-    private static void populateExtensions(Wallet wallet, Protos.Wallet.Builder walletBuilder) {
+    private static void populateExtensions(Wallet wallet, cc.smartcash.smartcashj.wallet.Protos.Wallet.Builder walletBuilder) {
         for (WalletExtension extension : wallet.getExtensions().values()) {
-            Protos.Extension.Builder proto = Protos.Extension.newBuilder();
+            cc.smartcash.smartcashj.wallet.Protos.Extension.Builder proto = cc.smartcash.smartcashj.wallet.Protos.Extension.newBuilder();
             proto.setId(extension.getWalletExtensionID());
             proto.setMandatory(extension.isWalletExtensionMandatory());
             proto.setData(ByteString.copyFrom(extension.serializeWalletExtension()));
@@ -241,13 +241,13 @@ public class WalletProtobufSerializer {
         }
     }
 
-    private static Protos.Transaction makeTxProto(WalletTransaction wtx) {
+    private static cc.smartcash.smartcashj.wallet.Protos.Transaction makeTxProto(WalletTransaction wtx) {
         Transaction tx = wtx.getTransaction();
-        Protos.Transaction.Builder txBuilder = Protos.Transaction.newBuilder();
+        cc.smartcash.smartcashj.wallet.Protos.Transaction.Builder txBuilder = cc.smartcash.smartcashj.wallet.Protos.Transaction.newBuilder();
 
         txBuilder.setPool(getProtoPool(wtx))
-                 .setHash(hashToByteString(tx.getHash()))
-                 .setVersion((int) tx.getVersion());
+                .setHash(hashToByteString(tx.getTxId()))
+                .setVersion((int) tx.getVersion());
 
         if (tx.getUpdateTime() != null) {
             txBuilder.setUpdatedAt(tx.getUpdateTime().getTime());
@@ -259,17 +259,17 @@ public class WalletProtobufSerializer {
 
         // Handle inputs.
         for (TransactionInput input : tx.getInputs()) {
-            Protos.TransactionInput.Builder inputBuilder = Protos.TransactionInput.newBuilder()
-                .setScriptBytes(ByteString.copyFrom(input.getScriptBytes()))
-                .setTransactionOutPointHash(hashToByteString(input.getOutpoint().getHash()))
-                .setTransactionOutPointIndex((int) input.getOutpoint().getIndex());
+            cc.smartcash.smartcashj.wallet.Protos.TransactionInput.Builder inputBuilder = cc.smartcash.smartcashj.wallet.Protos.TransactionInput.newBuilder()
+                    .setScriptBytes(ByteString.copyFrom(input.getScriptBytes()))
+                    .setTransactionOutPointHash(hashToByteString(input.getOutpoint().getHash()))
+                    .setTransactionOutPointIndex((int) input.getOutpoint().getIndex());
             if (input.hasSequence())
                 inputBuilder.setSequence((int) input.getSequenceNumber());
             if (input.getValue() != null)
                 inputBuilder.setValue(input.getValue().value);
             if (input.hasWitness()) {
                 TransactionWitness witness = input.getWitness();
-                Protos.ScriptWitness.Builder witnessBuilder = Protos.ScriptWitness.newBuilder();
+                cc.smartcash.smartcashj.wallet.Protos.ScriptWitness.Builder witnessBuilder = cc.smartcash.smartcashj.wallet.Protos.ScriptWitness.newBuilder();
                 int pushCount = witness.getPushCount();
                 for (int i = 0; i < pushCount; i++)
                     witnessBuilder.addData(ByteString.copyFrom(witness.getPush(i)));
@@ -280,15 +280,14 @@ public class WalletProtobufSerializer {
 
         // Handle outputs.
         for (TransactionOutput output : tx.getOutputs()) {
-            Protos.TransactionOutput.Builder outputBuilder = Protos.TransactionOutput.newBuilder()
-                .setScriptBytes(ByteString.copyFrom(output.getScriptBytes()))
-                .setValue(output.getValue().value);
+            cc.smartcash.smartcashj.wallet.Protos.TransactionOutput.Builder outputBuilder = cc.smartcash.smartcashj.wallet.Protos.TransactionOutput.newBuilder()
+                    .setScriptBytes(ByteString.copyFrom(output.getScriptBytes()))
+                    .setValue(output.getValue().value);
             final TransactionInput spentBy = output.getSpentBy();
             if (spentBy != null) {
-                Sha256Hash spendingHash = spentBy.getParentTransaction().getHash();
-                int spentByTransactionIndex = spentBy.getParentTransaction().getInputs().indexOf(spentBy);
+                Sha256Hash spendingHash = spentBy.getParentTransaction().getTxId();
                 outputBuilder.setSpentByTransactionHash(hashToByteString(spendingHash))
-                             .setSpentByTransactionIndex(spentByTransactionIndex);
+                        .setSpentByTransactionIndex(spentBy.getIndex());
             }
             txBuilder.addTransactionOutput(outputBuilder);
         }
@@ -297,26 +296,26 @@ public class WalletProtobufSerializer {
         final Map<Keccak256Hash, Integer> appearsInHashes = tx.getAppearsInHashes();
         if (appearsInHashes != null) {
             for (Map.Entry<Keccak256Hash, Integer> entry : appearsInHashes.entrySet()) {
-                txBuilder.addBlockHash(hashToByteStringKeccak(entry.getKey()));
+                txBuilder.addBlockHash(hashToByteString(entry.getKey()));
                 txBuilder.addBlockRelativityOffsets(entry.getValue());
             }
         }
 
         if (tx.hasConfidence()) {
             TransactionConfidence confidence = tx.getConfidence();
-            Protos.TransactionConfidence.Builder confidenceBuilder = Protos.TransactionConfidence.newBuilder();
+            cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Builder confidenceBuilder = cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.newBuilder();
             writeConfidence(txBuilder, confidence, confidenceBuilder);
         }
 
-        Protos.Transaction.Purpose purpose;
+        cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose purpose;
         switch (tx.getPurpose()) {
-            case UNKNOWN: purpose = Protos.Transaction.Purpose.UNKNOWN; break;
-            case USER_PAYMENT: purpose = Protos.Transaction.Purpose.USER_PAYMENT; break;
-            case KEY_ROTATION: purpose = Protos.Transaction.Purpose.KEY_ROTATION; break;
-            case ASSURANCE_CONTRACT_CLAIM: purpose = Protos.Transaction.Purpose.ASSURANCE_CONTRACT_CLAIM; break;
-            case ASSURANCE_CONTRACT_PLEDGE: purpose = Protos.Transaction.Purpose.ASSURANCE_CONTRACT_PLEDGE; break;
-            case ASSURANCE_CONTRACT_STUB: purpose = Protos.Transaction.Purpose.ASSURANCE_CONTRACT_STUB; break;
-            case RAISE_FEE: purpose = Protos.Transaction.Purpose.RAISE_FEE; break;
+            case UNKNOWN: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.UNKNOWN; break;
+            case USER_PAYMENT: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.USER_PAYMENT; break;
+            case KEY_ROTATION: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.KEY_ROTATION; break;
+            case ASSURANCE_CONTRACT_CLAIM: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.ASSURANCE_CONTRACT_CLAIM; break;
+            case ASSURANCE_CONTRACT_PLEDGE: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.ASSURANCE_CONTRACT_PLEDGE; break;
+            case ASSURANCE_CONTRACT_STUB: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.ASSURANCE_CONTRACT_STUB; break;
+            case RAISE_FEE: purpose = cc.smartcash.smartcashj.wallet.Protos.Transaction.Purpose.RAISE_FEE; break;
             default:
                 throw new RuntimeException("New tx purpose serialization not implemented.");
         }
@@ -324,7 +323,7 @@ public class WalletProtobufSerializer {
 
         ExchangeRate exchangeRate = tx.getExchangeRate();
         if (exchangeRate != null) {
-            Protos.ExchangeRate.Builder exchangeRateBuilder = Protos.ExchangeRate.newBuilder()
+            cc.smartcash.smartcashj.wallet.Protos.ExchangeRate.Builder exchangeRateBuilder = cc.smartcash.smartcashj.wallet.Protos.ExchangeRate.newBuilder()
                     .setCoinValue(exchangeRate.coin.value).setFiatValue(exchangeRate.fiat.value)
                     .setFiatCurrencyCode(exchangeRate.fiat.currencyCode);
             txBuilder.setExchangeRate(exchangeRateBuilder);
@@ -336,22 +335,22 @@ public class WalletProtobufSerializer {
         return txBuilder.build();
     }
 
-    private static Protos.Transaction.Pool getProtoPool(WalletTransaction wtx) {
+    private static cc.smartcash.smartcashj.wallet.Protos.Transaction.Pool getProtoPool(WalletTransaction wtx) {
         switch (wtx.getPool()) {
-            case UNSPENT: return Protos.Transaction.Pool.UNSPENT;
-            case SPENT: return Protos.Transaction.Pool.SPENT;
-            case DEAD: return Protos.Transaction.Pool.DEAD;
-            case PENDING: return Protos.Transaction.Pool.PENDING;
+            case UNSPENT: return cc.smartcash.smartcashj.wallet.Protos.Transaction.Pool.UNSPENT;
+            case SPENT: return cc.smartcash.smartcashj.wallet.Protos.Transaction.Pool.SPENT;
+            case DEAD: return cc.smartcash.smartcashj.wallet.Protos.Transaction.Pool.DEAD;
+            case PENDING: return cc.smartcash.smartcashj.wallet.Protos.Transaction.Pool.PENDING;
             default:
                 throw new RuntimeException("Unreachable");
         }
     }
 
-    private static void writeConfidence(Protos.Transaction.Builder txBuilder,
+    private static void writeConfidence(cc.smartcash.smartcashj.wallet.Protos.Transaction.Builder txBuilder,
                                         TransactionConfidence confidence,
-                                        Protos.TransactionConfidence.Builder confidenceBuilder) {
+                                        cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Builder confidenceBuilder) {
         synchronized (confidence) {
-            confidenceBuilder.setType(Protos.TransactionConfidence.Type.valueOf(confidence.getConfidenceType().getValue()));
+            confidenceBuilder.setType(cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Type.forNumber(confidence.getConfidenceType().getValue()));
             if (confidence.getConfidenceType() == ConfidenceType.BUILDING) {
                 confidenceBuilder.setAppearedAtHeight(confidence.getAppearedAtChainHeight());
                 confidenceBuilder.setDepth(confidence.getDepthInBlocks());
@@ -360,23 +359,23 @@ public class WalletProtobufSerializer {
                 // Copy in the overriding transaction, if available.
                 // (A dead coinbase transaction has no overriding transaction).
                 if (confidence.getOverridingTransaction() != null) {
-                    Sha256Hash overridingHash = confidence.getOverridingTransaction().getHash();
+                    Sha256Hash overridingHash = confidence.getOverridingTransaction().getTxId();
                     confidenceBuilder.setOverridingTransaction(hashToByteString(overridingHash));
                 }
             }
             TransactionConfidence.Source source = confidence.getSource();
             switch (source) {
-                case SELF: confidenceBuilder.setSource(Protos.TransactionConfidence.Source.SOURCE_SELF); break;
-                case NETWORK: confidenceBuilder.setSource(Protos.TransactionConfidence.Source.SOURCE_NETWORK); break;
+                case SELF: confidenceBuilder.setSource(cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Source.SOURCE_SELF); break;
+                case NETWORK: confidenceBuilder.setSource(cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Source.SOURCE_NETWORK); break;
                 case UNKNOWN:
                     // Fall through.
                 default:
-                    confidenceBuilder.setSource(Protos.TransactionConfidence.Source.SOURCE_UNKNOWN); break;
+                    confidenceBuilder.setSource(cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence.Source.SOURCE_UNKNOWN); break;
             }
         }
 
         for (PeerAddress address : confidence.getBroadcastBy()) {
-            Protos.PeerAddress proto = Protos.PeerAddress.newBuilder()
+            cc.smartcash.smartcashj.wallet.Protos.PeerAddress proto = cc.smartcash.smartcashj.wallet.Protos.PeerAddress.newBuilder()
                     .setIpAddress(ByteString.copyFrom(address.getAddr().getAddress()))
                     .setPort(address.getPort())
                     .setServices(address.getServices().longValue())
@@ -393,7 +392,7 @@ public class WalletProtobufSerializer {
         return ByteString.copyFrom(hash.getBytes());
     }
 
-    public static ByteString hashToByteStringKeccak(Keccak256Hash hash) {
+    public static ByteString hashToByteString(Keccak256Hash hash) {
         return ByteString.copyFrom(hash.getBytes());
     }
 
@@ -438,7 +437,7 @@ public class WalletProtobufSerializer {
      */
     public Wallet readWallet(InputStream input, boolean forceReset, @Nullable WalletExtension[] extensions) throws UnreadableWalletException {
         try {
-            Protos.Wallet walletProto = parseToProto(input);
+            cc.smartcash.smartcashj.wallet.Protos.Wallet walletProto = parseToProto(input);
             final String paramsID = walletProto.getNetworkIdentifier();
             NetworkParameters params = NetworkParameters.fromID(paramsID);
             if (params == null)
@@ -465,7 +464,7 @@ public class WalletProtobufSerializer {
      * @throws UnreadableWalletException thrown in various error conditions (see description).
      */
     public Wallet readWallet(NetworkParameters params, @Nullable WalletExtension[] extensions,
-                             Protos.Wallet walletProto) throws UnreadableWalletException {
+                             cc.smartcash.smartcashj.wallet.Protos.Wallet walletProto) throws UnreadableWalletException {
         return readWallet(params, extensions, walletProto, false);
     }
 
@@ -486,7 +485,7 @@ public class WalletProtobufSerializer {
      * @throws UnreadableWalletException thrown in various error conditions (see description).
      */
     public Wallet readWallet(NetworkParameters params, @Nullable WalletExtension[] extensions,
-                             Protos.Wallet walletProto, boolean forceReset) throws UnreadableWalletException {
+                             cc.smartcash.smartcashj.wallet.Protos.Wallet walletProto, boolean forceReset) throws UnreadableWalletException {
         if (walletProto.getVersion() > CURRENT_WALLET_VERSION)
             throw new UnreadableWalletException.FutureVersion();
         if (!walletProto.getNetworkIdentifier().equals(params.getId()))
@@ -495,7 +494,7 @@ public class WalletProtobufSerializer {
         // Read the scrypt parameters that specify how encryption and decryption is performed.
         KeyChainGroup keyChainGroup;
         if (walletProto.hasEncryptionParameters()) {
-            Protos.ScryptParameters encryptionParameters = walletProto.getEncryptionParameters();
+            cc.smartcash.smartcashj.wallet.Protos.ScryptParameters encryptionParameters = walletProto.getEncryptionParameters();
             final KeyCrypterScrypt keyCrypter = new KeyCrypterScrypt(encryptionParameters);
             keyChainGroup = KeyChainGroup.fromProtobufEncrypted(params, walletProto.getKeyList(), keyCrypter, keyChainFactory);
         } else {
@@ -503,8 +502,8 @@ public class WalletProtobufSerializer {
         }
         Wallet wallet = factory.create(params, keyChainGroup);
 
-        List<Script> scripts = Lists.newArrayList();
-        for (Protos.Script protoScript : walletProto.getWatchedScriptList()) {
+        List<Script> scripts = new ArrayList<>();
+        for (cc.smartcash.smartcashj.wallet.Protos.Script protoScript : walletProto.getWatchedScriptList()) {
             try {
                 Script script =
                         new Script(protoScript.getProgram().toByteArray(),
@@ -528,12 +527,12 @@ public class WalletProtobufSerializer {
             wallet.setLastBlockSeenTimeSecs(0);
         } else {
             // Read all transactions and insert into the txMap.
-            for (Protos.Transaction txProto : walletProto.getTransactionList()) {
+            for (cc.smartcash.smartcashj.wallet.Protos.Transaction txProto : walletProto.getTransactionList()) {
                 readTransaction(txProto, wallet.getParams());
             }
 
             // Update transaction outputs to point to inputs that spend them
-            for (Protos.Transaction txProto : walletProto.getTransactionList()) {
+            for (cc.smartcash.smartcashj.wallet.Protos.Transaction txProto : walletProto.getTransactionList()) {
                 WalletTransaction wtx = connectTransactionOutputs(params, txProto);
                 wallet.addWalletTransaction(wtx);
             }
@@ -559,7 +558,7 @@ public class WalletProtobufSerializer {
 
         loadExtensions(wallet, extensions != null ? extensions : new WalletExtension[0], walletProto);
 
-        for (Protos.Tag tag : walletProto.getTagsList()) {
+        for (cc.smartcash.smartcashj.wallet.Protos.Tag tag : walletProto.getTagsList()) {
             wallet.setTag(tag.getTag(), tag.getData());
         }
 
@@ -573,14 +572,14 @@ public class WalletProtobufSerializer {
         return wallet;
     }
 
-    private void loadExtensions(Wallet wallet, WalletExtension[] extensionsList, Protos.Wallet walletProto) throws UnreadableWalletException {
+    private void loadExtensions(Wallet wallet, WalletExtension[] extensionsList, cc.smartcash.smartcashj.wallet.Protos.Wallet walletProto) throws UnreadableWalletException {
         final Map<String, WalletExtension> extensions = new HashMap<>();
         for (WalletExtension e : extensionsList)
             extensions.put(e.getWalletExtensionID(), e);
         // The Wallet object, if subclassed, might have added some extensions to itself already. In that case, don't
         // expect them to be passed in, just fetch them here and don't re-add.
         extensions.putAll(wallet.getExtensions());
-        for (Protos.Extension extProto : walletProto.getExtensionList()) {
+        for (cc.smartcash.smartcashj.wallet.Protos.Extension extProto : walletProto.getExtensionList()) {
             String id = extProto.getId();
             WalletExtension extension = extensions.get(id);
             if (extension == null) {
@@ -616,13 +615,13 @@ public class WalletProtobufSerializer {
      * {@link Wallet#loadFromFile(File, WalletExtension...)} instead - this method is designed for low level
      * work involving the wallet file format itself.
      */
-    public static Protos.Wallet parseToProto(InputStream input) throws IOException {
+    public static cc.smartcash.smartcashj.wallet.Protos.Wallet parseToProto(InputStream input) throws IOException {
         CodedInputStream codedInput = CodedInputStream.newInstance(input);
         codedInput.setSizeLimit(WALLET_SIZE_LIMIT);
-        return Protos.Wallet.parseFrom(codedInput);
+        return cc.smartcash.smartcashj.wallet.Protos.Wallet.parseFrom(codedInput);
     }
 
-    private void readTransaction(Protos.Transaction txProto, NetworkParameters params) throws UnreadableWalletException {
+    private void readTransaction(cc.smartcash.smartcashj.wallet.Protos.Transaction txProto, NetworkParameters params) throws UnreadableWalletException {
         Transaction tx = new Transaction(params);
 
         tx.setVersion(txProto.getVersion());
@@ -631,14 +630,14 @@ public class WalletProtobufSerializer {
             tx.setUpdateTime(new Date(txProto.getUpdatedAt()));
         }
 
-        for (Protos.TransactionOutput outputProto : txProto.getTransactionOutputList()) {
+        for (cc.smartcash.smartcashj.wallet.Protos.TransactionOutput outputProto : txProto.getTransactionOutputList()) {
             Coin value = Coin.valueOf(outputProto.getValue());
             byte[] scriptBytes = outputProto.getScriptBytes().toByteArray();
             TransactionOutput output = new TransactionOutput(params, tx, value, scriptBytes);
             tx.addOutput(output);
         }
 
-        for (Protos.TransactionInput inputProto : txProto.getTransactionInputList()) {
+        for (cc.smartcash.smartcashj.wallet.Protos.TransactionInput inputProto : txProto.getTransactionInputList()) {
             byte[] scriptBytes = inputProto.getScriptBytes().toByteArray();
             TransactionOutPoint outpoint = new TransactionOutPoint(params,
                     inputProto.getTransactionOutPointIndex() & 0xFFFFFFFFL,
@@ -649,7 +648,7 @@ public class WalletProtobufSerializer {
             if (inputProto.hasSequence())
                 input.setSequenceNumber(0xffffffffL & inputProto.getSequence());
             if (inputProto.hasWitness()) {
-                Protos.ScriptWitness witnessProto = inputProto.getWitness();
+                cc.smartcash.smartcashj.wallet.Protos.ScriptWitness witnessProto = inputProto.getWitness();
                 if (witnessProto.getDataCount() > 0) {
                     TransactionWitness witness = new TransactionWitness(witnessProto.getDataCount());
                     for (int j = 0; j < witnessProto.getDataCount(); j++)
@@ -689,7 +688,7 @@ public class WalletProtobufSerializer {
         }
 
         if (txProto.hasExchangeRate()) {
-            Protos.ExchangeRate exchangeRateProto = txProto.getExchangeRate();
+            cc.smartcash.smartcashj.wallet.Protos.ExchangeRate exchangeRateProto = txProto.getExchangeRate();
             tx.setExchangeRate(new ExchangeRate(Coin.valueOf(exchangeRateProto.getCoinValue()), Fiat.valueOf(
                     exchangeRateProto.getFiatCurrencyCode(), exchangeRateProto.getFiatValue())));
         }
@@ -699,8 +698,8 @@ public class WalletProtobufSerializer {
 
         // Transaction should now be complete.
         Sha256Hash protoHash = byteStringToHash(txProto.getHash());
-        if (!tx.getHash().equals(protoHash))
-            throw new UnreadableWalletException(String.format(Locale.US, "Transaction did not deserialize completely: %s vs %s", tx.getHash(), protoHash));
+        if (!tx.getTxId().equals(protoHash))
+            throw new UnreadableWalletException(String.format(Locale.US, "Transaction did not deserialize completely: %s vs %s", tx.getTxId(), protoHash));
         if (txMap.containsKey(txProto.getHash()))
             throw new UnreadableWalletException("Wallet contained duplicate transaction " + byteStringToHash(txProto.getHash()));
         txMap.put(txProto.getHash(), tx);
@@ -728,13 +727,13 @@ public class WalletProtobufSerializer {
         }
         for (int i = 0 ; i < tx.getOutputs().size() ; i++) {
             TransactionOutput output = tx.getOutputs().get(i);
-            final Protos.TransactionOutput transactionOutput = txProto.getTransactionOutput(i);
+            final cc.smartcash.smartcashj.wallet.Protos.TransactionOutput transactionOutput = txProto.getTransactionOutput(i);
             if (transactionOutput.hasSpentByTransactionHash()) {
                 final ByteString spentByTransactionHash = transactionOutput.getSpentByTransactionHash();
                 Transaction spendingTx = txMap.get(spentByTransactionHash);
                 if (spendingTx == null) {
                     throw new UnreadableWalletException(String.format(Locale.US, "Could not connect %s to %s",
-                            tx.getHashAsString(), byteStringToHash(spentByTransactionHash)));
+                            tx.getTxId(), byteStringToHash(spentByTransactionHash)));
                 }
                 final int spendingIndex = transactionOutput.getSpentByTransactionIndex();
                 TransactionInput input = checkNotNull(spendingTx.getInput(spendingIndex));
@@ -743,7 +742,7 @@ public class WalletProtobufSerializer {
         }
 
         if (txProto.hasConfidence()) {
-            Protos.TransactionConfidence confidenceProto = txProto.getConfidence();
+            cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence confidenceProto = txProto.getConfidence();
             TransactionConfidence confidence = tx.getConfidence();
             readConfidence(params, tx, confidenceProto, confidence);
         }
@@ -752,12 +751,12 @@ public class WalletProtobufSerializer {
     }
 
     private void readConfidence(final NetworkParameters params, final Transaction tx,
-                                final Protos.TransactionConfidence confidenceProto,
+                                final cc.smartcash.smartcashj.wallet.Protos.TransactionConfidence confidenceProto,
                                 final TransactionConfidence confidence) throws UnreadableWalletException {
         // We are lenient here because tx confidence is not an essential part of the wallet.
         // If the tx has an unknown type of confidence, ignore.
         if (!confidenceProto.hasType()) {
-            log.warn("Unknown confidence type for tx {}", tx.getHashAsString());
+            log.warn("Unknown confidence type for tx {}", tx.getTxId());
             return;
         }
         ConfidenceType confidenceType;
@@ -776,32 +775,32 @@ public class WalletProtobufSerializer {
         confidence.setConfidenceType(confidenceType);
         if (confidenceProto.hasAppearedAtHeight()) {
             if (confidence.getConfidenceType() != ConfidenceType.BUILDING) {
-                log.warn("Have appearedAtHeight but not BUILDING for tx {}", tx.getHashAsString());
+                log.warn("Have appearedAtHeight but not BUILDING for tx {}", tx.getTxId());
                 return;
             }
             confidence.setAppearedAtChainHeight(confidenceProto.getAppearedAtHeight());
         }
         if (confidenceProto.hasDepth()) {
             if (confidence.getConfidenceType() != ConfidenceType.BUILDING) {
-                log.warn("Have depth but not BUILDING for tx {}", tx.getHashAsString());
+                log.warn("Have depth but not BUILDING for tx {}", tx.getTxId());
                 return;
             }
             confidence.setDepthInBlocks(confidenceProto.getDepth());
         }
         if (confidenceProto.hasOverridingTransaction()) {
             if (confidence.getConfidenceType() != ConfidenceType.DEAD) {
-                log.warn("Have overridingTransaction but not OVERRIDDEN for tx {}", tx.getHashAsString());
+                log.warn("Have overridingTransaction but not OVERRIDDEN for tx {}", tx.getTxId());
                 return;
             }
             Transaction overridingTransaction =
-                txMap.get(confidenceProto.getOverridingTransaction());
+                    txMap.get(confidenceProto.getOverridingTransaction());
             if (overridingTransaction == null) {
-                log.warn("Have overridingTransaction that is not in wallet for tx {}", tx.getHashAsString());
+                log.warn("Have overridingTransaction that is not in wallet for tx {}", tx.getTxId());
                 return;
             }
             confidence.setOverridingTransaction(overridingTransaction);
         }
-        for (Protos.PeerAddress proto : confidenceProto.getBroadcastByList()) {
+        for (cc.smartcash.smartcashj.wallet.Protos.PeerAddress proto : confidenceProto.getBroadcastByList()) {
             InetAddress ip;
             try {
                 ip = InetAddress.getByAddress(proto.getIpAddress().toByteArray());
