@@ -83,7 +83,7 @@ public class InventoryItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InventoryItem other = (InventoryItem) o;
-        return type == other.type && hash.equals(other.hash);
+        return type == other.type && (hash.equals(other.hash) || hashKeccak.equals(other.hashKeccak));
     }
 
     @Override

@@ -29,6 +29,11 @@ import java.nio.ByteBuffer;
  */
 public abstract class MessageSerializer {
 
+
+    /**
+     * Get the protocol version of this serializer.
+     */
+    public abstract int getProtocolVersion();
     /**
      * Reads a message from the given ByteBuffer and returns it.
      */

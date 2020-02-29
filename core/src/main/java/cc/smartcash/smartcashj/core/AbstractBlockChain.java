@@ -389,7 +389,7 @@ public abstract class AbstractBlockChain {
             } catch (BlockStoreException e1) {
                 throw new RuntimeException(e1);
             }
-            throw new VerificationException("Could not verify block " + block.getHash().toString() + "\n" +
+            throw new VerificationException("Could not verify block " + block.getHashKeccak().toString() + "\n" +
                     block.toString(), e);
         }
     }
@@ -919,12 +919,12 @@ public abstract class AbstractBlockChain {
                 StoredBlock prev = getStoredBlockInCurrentScope(orphanBlock.block.getPrevBlockHash());
                 if (prev == null) {
                     // This is still an unconnected/orphan block.
-                    log.debug("Orphan block {} is not connectable right now", orphanBlock.block.getHash());
+                    log.debug("Orphan block {} is not connectable right now", orphanBlock.block.getHashKeccak());
                     continue;
                 }
                 // Otherwise we can connect it now.
                 // False here ensures we don't recurse infinitely downwards when connecting huge chains.
-                log.info("Connected orphan {}", orphanBlock.block.getHash());
+                log.info("Connected orphan {}", orphanBlock.block.getHashKeccak());
                 add(orphanBlock.block, false, orphanBlock.filteredTxHashes, orphanBlock.filteredTxn);
                 iter.remove();
                 blocksConnectedThisRound++;

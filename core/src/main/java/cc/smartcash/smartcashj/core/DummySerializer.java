@@ -34,6 +34,11 @@ class DummySerializer extends MessageSerializer {
     }
 
     @Override
+    public int getProtocolVersion() {
+        return 0;
+    }
+
+    @Override
     public Message deserialize(ByteBuffer in) throws UnsupportedOperationException {
         throw new UnsupportedOperationException(DEFAULT_EXCEPTION_MESSAGE);
     }

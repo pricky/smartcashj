@@ -36,7 +36,7 @@ public class GetBlocksMessage extends Message {
 
     public GetBlocksMessage(NetworkParameters params, BlockLocator locator, Keccak256Hash stopHash) {
         super(params);
-        this.version = protocolVersion;
+        this.version = serializer.getProtocolVersion();
         this.locator = locator;
         this.stopHash = stopHash;
     }

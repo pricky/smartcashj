@@ -88,8 +88,13 @@ public abstract class ListMessage extends Message {
             InventoryItem.Type type = InventoryItem.Type.ofCode(typeCode);
 //            if (type == null)
 //                throw new ProtocolException("Unknown CInv type: " + typeCode);
-//            InventoryItem item = new InventoryItem(type, readHash(), null);
-//            items.add(item);
+            InventoryItem item;
+            if(type == InventoryItem.Type.BLOCK){
+                item = new InventoryItem(type, null, readHashKeccak());
+            }else{
+                item = new InventoryItem(type, readHash(), null);
+            }
+            items.add(item);
         }
         payload = null;
     }
@@ -101,7 +106,11 @@ public abstract class ListMessage extends Message {
             // Write out the type code.
             Utils.uint32ToByteStreamLE(i.type.code, stream);
             // And now the hash.
-            stream.write(i.hash.getReversedBytes());
+            if(i.hash != null) {
+                stream.write(i.hash.getReversedBytes());
+            }else if(i.hashKeccak != null){
+                stream.write(i.hashKeccak.getReversedBytes());
+            }
         }
     }
 

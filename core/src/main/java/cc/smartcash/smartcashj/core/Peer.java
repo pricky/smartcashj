@@ -1048,7 +1048,7 @@ public class Peer extends PeerSocketHandler {
         // Note that we currently do nothing about peers which maliciously do not include transactions which
         // actually match our filter or which simply do not send us all the transactions we need: it can be fixed
         // by cross-checking peers against each other.
-        pendingBlockDownloads.remove(m.getBlockHeader().getHash());
+        pendingBlockDownloads.remove(m.getBlockHeader().getHashKeccak());
         try {
             // It's a block sent to us because the peer thought we needed it, so maybe add it to the block chain.
             // The FilteredBlock m here contains a list of hashes, and may contain Transaction objects for a subset
@@ -1177,15 +1177,17 @@ public class Peer extends PeerSocketHandler {
         List<InventoryItem> blocks = new LinkedList<>();
 
         for (InventoryItem item : items) {
-            switch (item.type) {
-                case TRANSACTION:
-                    transactions.add(item);
-                    break;
-                case BLOCK:
-                    blocks.add(item);
-                    break;
-                default:
-                    throw new IllegalStateException("Not implemented: " + item.type);
+            if(item.type != null){
+                switch (item.type) {
+                    case TRANSACTION:
+                        transactions.add(item);
+                        break;
+                    case BLOCK:
+                        blocks.add(item);
+                        break;
+                    default:
+                        throw new IllegalStateException("Not implemented: " + item.type);
+                }
             }
         }
 
